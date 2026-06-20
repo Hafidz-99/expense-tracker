@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: expense_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: expense_tracker
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3306:3306"
