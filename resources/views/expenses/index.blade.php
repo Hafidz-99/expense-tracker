@@ -47,7 +47,7 @@
                 <h3 class="font-bold text-slate-900 mb-4">Filter Expenses</h3>
 
                 <form method="GET" action="{{ route('expenses.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="month" name="month" value="{{ request('month') }}"
+                    <input type="month" name="month" value="{{ request('month', $selectedMonth) }}"
                         class="rounded-lg border-slate-300">
 
                     <select name="category_id" class="rounded-lg border-slate-300">
@@ -107,20 +107,20 @@
                                 </p>
                             </div>
                             <div class="flex gap-4 items-center">
-    <a href="{{ route('expenses.edit', $expense) }}"
-        class="text-blue-600 hover:text-blue-700 font-medium">
-        Edit
-    </a>
+                                <a href="{{ route('expenses.edit', $expense) }}"
+                                    class="text-blue-600 hover:text-blue-700 font-medium">
+                                    Edit
+                                </a>
 
-    <form method="POST" action="{{ route('expenses.destroy', $expense) }}">
-        @csrf
-        @method('DELETE')
+                                <form method="POST" action="{{ route('expenses.destroy', $expense) }}">
+                                    @csrf
+                                    @method('DELETE')
 
-        <button class="text-red-500 hover:underline">
-            Delete
-        </button>
-    </form>
-</div>
+                                    <button class="text-red-500 hover:underline">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     @empty
                         <p class="text-slate-500">No expenses found.</p>

@@ -7,31 +7,21 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $categories = Category::where('user_id', auth()->id())->get();
+        $categories = Category::where('user_id', auth()->id())
+            ->latest()
+            ->get();
 
         return view('categories.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'color' => 'nullable|string|max:50',
+            'icon' => 'nullable|string|max:50',
         ]);
 
         Category::create([
@@ -41,36 +31,37 @@ class CategoryController extends Controller
             'icon' => $request->icon,
         ]);
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')
+            ->with('success', 'Category created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Category $category)
     {
-        //
+        abort_if($category->user_id !== auth()->id(), 403);
+
+        return view('categories.edit', compact('category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Category $category)
     {
-        //
+        abort_if($category->user_id !== auth()->id(), 403);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'nullable|string|max:50',
+            'icon' => 'nullable|string|max:50',
+        ]);
+
+        $category->update([
+            'name' => $request->name,
+            'color' => $request->color,
+            'icon' => $request->icon,
+        ]);
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Category $category)
     {
         abort_if($category->user_id !== auth()->id(), 403);

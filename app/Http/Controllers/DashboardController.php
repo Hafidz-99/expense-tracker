@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -21,9 +22,21 @@ class DashboardController extends Controller
 
         $totalTransactions = Expense::where('user_id', $userId)->count();
 
+        $topCategory = Expense::select(
+                'category_id',
+                DB::raw('SUM(amount) as total')
+            )
+            ->with('category')
+            ->where('user_id', $userId)
+            ->whereMonth('expense_date', now()->month)
+            ->whereYear('expense_date', now()->year)
+            ->groupBy('category_id')
+            ->orderByDesc('total')
+            ->first();
+
         $recentExpenses = Expense::with('category')
             ->where('user_id', $userId)
-            ->latest()
+            ->latest('expense_date')
             ->take(5)
             ->get();
 
@@ -31,6 +44,7 @@ class DashboardController extends Controller
             'monthlyTotal',
             'todayTotal',
             'totalTransactions',
+            'topCategory',
             'recentExpenses'
         ));
     }
