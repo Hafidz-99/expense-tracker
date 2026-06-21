@@ -75,8 +75,12 @@ class CategoryController extends Controller
     {
         abort_if($category->user_id !== auth()->id(), 403);
 
+        if ($category->expenses()->exists()) {
+            return back()->with('error', 'This category has expenses and cannot be deleted.');
+        }
+
         $category->delete();
 
-        return back();
+        return back()->with('success', 'Category deleted successfully.');
     }
 }
