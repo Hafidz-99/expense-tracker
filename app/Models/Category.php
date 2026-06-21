@@ -10,7 +10,6 @@ class Category extends Model
         'user_id',
         'name',
         'color',
-        'icon',
     ];
 
     public function user()

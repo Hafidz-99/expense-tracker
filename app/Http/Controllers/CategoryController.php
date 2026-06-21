@@ -20,15 +20,13 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'color' => 'nullable|string|max:50',
-            'icon' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:20',
         ]);
 
         Category::create([
             'user_id' => auth()->id(),
             'name' => $request->name,
-            'color' => $request->color,
-            'icon' => $request->icon,
+            'color' => $request->color ?? '#2563EB',
         ]);
 
         return redirect()->route('categories.index')
@@ -48,14 +46,12 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'color' => 'nullable|string|max:50',
-            'icon' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:20',
         ]);
 
         $category->update([
             'name' => $request->name,
-            'color' => $request->color,
-            'icon' => $request->icon,
+            'color' => $request->color ?? '#2563EB',
         ]);
 
         return redirect()->route('categories.index')
