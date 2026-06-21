@@ -1,179 +1,302 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Expense Tracker') }}</title>
-    <meta name="description" content="Track and manage your personal expenses.">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-slate-100 text-slate-700">
+<body class="font-sans antialiased bg-slate-50 text-slate-700">
     <div class="min-h-screen flex">
 
-        <!-- Sidebar -->
-        <aside class="hidden lg:flex w-64 flex-col bg-slate-900 text-white fixed inset-y-0 left-0 z-50">
+        <aside class="hidden lg:flex fixed inset-y-0 left-0 z-50 w-72 flex-col bg-white border-r border-slate-200">
+            <div class="h-20 flex items-center px-6 border-b border-slate-200 bg-blue-50/40">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-sm">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"/>
+                        </svg>
+                    </div>
 
-            <!-- Logo -->
-            <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-700/50">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                    </svg>
-                </div>
-                <span class="text-base font-bold text-white tracking-tight">ExpenseTracker</span>
+                    <div>
+                        <p class="text-lg font-extrabold text-slate-900 leading-tight">ExpenseTracker</p>
+                        <p class="text-xs font-medium text-slate-500">Personal Finance</p>
+                    </div>
+                </a>
             </div>
 
-            <!-- Nav links -->
-            <nav class="flex-1 px-3 py-4 space-y-1">
-                <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-widest text-slate-500">Menu</p>
+            <nav class="flex-1 px-4 py-6">
+                <p class="px-3 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">
+                    Main Menu
+                </p>
 
-                <a href="{{ route('dashboard') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                          {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    Dashboard
-                </a>
-
-                <a href="{{ route('expenses.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                          {{ request()->routeIs('expenses.*') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                    Expenses
-                </a>
-
-                <a href="{{ route('categories.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                          {{ request()->routeIs('categories.*') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                    </svg>
-                    Categories
-                </a>
-
-                <div class="pt-4 mt-4 border-t border-slate-700/50">
-                    <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-widest text-slate-500">Account</p>
-
-                    <a href="{{ route('profile.edit') }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                              {{ request()->routeIs('profile.*') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        Profile
+                <div class="space-y-1">
+                    <a href="{{ route('dashboard') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
+                       {{ request()->routeIs('dashboard') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        Dashboard
                     </a>
 
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-colors text-left">
-                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                            </svg>
-                            Log Out
-                        </button>
-                    </form>
+                    <a href="{{ route('expenses.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
+                       {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        Expenses
+                    </a>
+
+                    <a href="{{ route('categories.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
+                       {{ request()->routeIs('categories.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        Categories
+                    </a>
+                </div>
+
+                <div class="mt-12">
+                    <p class="px-3 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">
+                        Account
+                    </p>
+
+                    <a href="{{ route('profile.edit') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
+                       {{ request()->routeIs('profile.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        Profile
+                    </a>
                 </div>
             </nav>
 
-            <!-- User info -->
-            <div class="px-4 py-4 border-t border-slate-700/50">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white shrink-0">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-sm font-semibold text-white truncate">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-slate-400 truncate">{{ Auth::user()->email }}</p>
-                    </div>
-                </div>
+            <div class="p-4 border-t border-slate-200">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+
+                    <button type="submit"
+                            class="w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-red-50 hover:text-red-600 transition text-left">
+                        Log Out
+                    </button>
+                </form>
             </div>
         </aside>
 
-        <!-- Main area -->
-        <div class="flex-1 lg:ml-64 flex flex-col min-h-screen">
+        <div class="flex-1 lg:ml-72 min-h-screen flex flex-col">
+            <header class="sticky top-0 z-40 h-20 bg-white/90 backdrop-blur border-b border-slate-200">
+                <div class="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+                    <div class="flex items-center gap-4 min-w-0">
+                        <button type="button"
+                                id="mobileMenuBtn"
+                                class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+                            ☰
+                        </button>
 
-            <!-- Top bar -->
-            <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
-                <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
-
-                    <!-- Mobile menu button -->
-                    <button type="button" id="mobileMenuBtn"
-                            class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
-
-                    @isset($header)
-                        <div class="flex items-center">
-                            {!! $header !!}
+                        <div class="min-w-0">
+                            @isset($header)
+                                {!! $header !!}
+                            @else
+                                <h1 class="text-lg font-bold text-slate-900">Dashboard</h1>
+                                <p class="mt-1 text-sm text-slate-500">
+                                    Manage your expenses and monitor your spending.
+                                </p>
+                            @endisset
                         </div>
-                    @endisset
+                    </div>
 
-                    <!-- Right side -->
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                        </div>
-                        <span class="hidden sm:block text-sm font-medium text-slate-700">{{ Auth::user()->name }}</span>
+                        <button type="button"
+                                id="openExpenseModal"
+                                class="hidden sm:inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
+                            + Add Expense
+                        </button>
+
+                        <a href="{{ route('profile.edit') }}"
+                           class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 hover:bg-blue-50 hover:border-blue-100 transition">
+                            <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </div>
+
+                            <div class="hidden md:block text-left min-w-0">
+                                <p class="text-sm font-bold text-slate-900 leading-tight truncate max-w-32">
+                                    {{ Auth::user()->name }}
+                                </p>
+                                <p class="text-xs text-slate-500 leading-tight truncate max-w-40">
+                                    {{ Auth::user()->email }}
+                                </p>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </header>
 
-            <!-- Mobile sidebar drawer -->
             <div id="mobileSidebar" class="lg:hidden fixed inset-0 z-50 hidden">
-                <div class="fixed inset-0 bg-black/50" id="sidebarBackdrop"></div>
-                <aside class="fixed inset-y-0 left-0 w-64 bg-slate-900 flex flex-col">
-                    <div class="flex items-center justify-between px-6 py-5 border-b border-slate-700/50">
-                        <span class="text-base font-bold text-white">ExpenseTracker</span>
-                        <button id="closeMobileMenu" class="text-slate-400 hover:text-white">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
+                <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900/50"></div>
+
+                <aside class="fixed inset-y-0 left-0 w-72 bg-white border-r border-slate-200 flex flex-col">
+                    <div class="h-20 flex items-center justify-between px-6 border-b border-slate-200 bg-blue-50/40">
+                        <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center">
+                                <span class="text-white font-bold">+</span>
+                            </div>
+
+                            <div>
+                                <p class="text-lg font-extrabold text-slate-900 leading-tight">ExpenseTracker</p>
+                                <p class="text-xs font-medium text-slate-500">Personal Finance</p>
+                            </div>
+                        </a>
+
+                        <button type="button" id="closeMobileMenu" class="w-9 h-9 rounded-xl text-slate-500 hover:bg-slate-100">
+                            ✕
                         </button>
                     </div>
-                    <nav class="flex-1 px-3 py-4 space-y-1">
-                        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">Dashboard</a>
-                        <a href="{{ route('expenses.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('expenses.*') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">Expenses</a>
-                        <a href="{{ route('categories.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('categories.*') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">Categories</a>
-                        <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('profile.*') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">Profile</a>
+
+                    <nav class="flex-1 px-4 py-6">
+                        <p class="px-3 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">
+                            Main Menu
+                        </p>
+
+                        <div class="space-y-1">
+                            <a href="{{ route('dashboard') }}"
+                               class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('dashboard') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Dashboard
+                            </a>
+
+                            <a href="{{ route('expenses.index') }}"
+                               class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Expenses
+                            </a>
+
+                            <a href="{{ route('categories.index') }}"
+                               class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('categories.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Categories
+                            </a>
+                        </div>
+
+                        <div class="mt-12">
+                            <p class="px-3 mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">
+                                Account
+                            </p>
+
+                            <a href="{{ route('profile.edit') }}"
+                               class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('profile.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Profile
+                            </a>
+                        </div>
+                    </nav>
+
+                    <div class="p-4 border-t border-slate-200">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white">Log Out</button>
+
+                            <button type="submit"
+                                    class="w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-red-50 hover:text-red-600 text-left">
+                                Log Out
+                            </button>
                         </form>
-                    </nav>
+                    </div>
                 </aside>
             </div>
 
-            <!-- Page content -->
-            <main class="flex-1 px-4 sm:px-6 lg:px-8 py-8">
-                {{ $slot }}
-            </main>
+            <main class="flex-1 px-4 sm:px-6 lg:px-8 py-8 w-full">
+    {{ $slot }}
+</main>
+        </div>
+    </div>
+
+    <div id="expenseModal" class="fixed inset-0 z-50 hidden">
+        <div id="expenseModalBackdrop" class="fixed inset-0 bg-slate-900/50"></div>
+
+        <div class="fixed inset-0 flex items-center justify-center px-4">
+            <div class="w-full max-w-lg bg-white rounded-2xl border border-slate-200 shadow-xl">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Add Expense</h2>
+                        <p class="text-sm text-slate-500">Record a new transaction.</p>
+                    </div>
+
+                    <button type="button" id="closeExpenseModal" class="text-slate-400 hover:text-slate-600">
+                        ✕
+                    </button>
+                </div>
+
+                <form method="POST" action="{{ route('expenses.store') }}" class="p-6 space-y-4">
+                    @csrf
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">Category</label>
+                        <select name="category_id" required class="mt-2 w-full rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
+                            <option value="">Select category</option>
+                            @foreach ($layoutCategories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">Amount</label>
+                        <input type="number" step="0.01" name="amount" required placeholder="0.00"
+                               class="mt-2 w-full rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">Description</label>
+                        <input type="text" name="description" placeholder="What was this for?"
+                               class="mt-2 w-full rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">Date</label>
+                        <input type="date" name="expense_date" required value="{{ now()->format('Y-m-d') }}"
+                               class="mt-2 w-full rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" id="cancelExpenseModal"
+                                class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">
+                            Save Expense
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <script>
-        const btn = document.getElementById('mobileMenuBtn');
-        const drawer = document.getElementById('mobileSidebar');
-        const backdrop = document.getElementById('sidebarBackdrop');
-        const closeBtn = document.getElementById('closeMobileMenu');
-        if (btn) btn.addEventListener('click', () => drawer.classList.remove('hidden'));
-        if (backdrop) backdrop.addEventListener('click', () => drawer.classList.add('hidden'));
-        if (closeBtn) closeBtn.addEventListener('click', () => drawer.classList.add('hidden'));
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        mobileMenuBtn?.addEventListener('click', () => mobileSidebar.classList.remove('hidden'));
+        sidebarBackdrop?.addEventListener('click', () => mobileSidebar.classList.add('hidden'));
+        closeMobileMenu?.addEventListener('click', () => mobileSidebar.classList.add('hidden'));
+
+        const expenseModal = document.getElementById('expenseModal');
+        const openExpenseModal = document.getElementById('openExpenseModal');
+        const closeExpenseModal = document.getElementById('closeExpenseModal');
+        const cancelExpenseModal = document.getElementById('cancelExpenseModal');
+        const expenseModalBackdrop = document.getElementById('expenseModalBackdrop');
+
+        function openModal() {
+            expenseModal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal() {
+            expenseModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        openExpenseModal?.addEventListener('click', openModal);
+        closeExpenseModal?.addEventListener('click', closeModal);
+        cancelExpenseModal?.addEventListener('click', closeModal);
+        expenseModalBackdrop?.addEventListener('click', closeModal);
     </script>
 </body>
-
 </html>

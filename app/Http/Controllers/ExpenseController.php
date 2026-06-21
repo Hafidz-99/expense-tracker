@@ -17,16 +17,18 @@ class ExpenseController extends Controller
             ->get();
 
         $request->validate([
-            'month' => 'nullable|date_format:Y-m',
+            'month' => 'nullable|integer|min:1|max:12',
+            'year' => 'nullable|integer|min:2000|max:' . now()->year,
             'category_id' => 'nullable|integer',
         ]);
 
-        $selectedMonth = $request->month ?? now()->format('Y-m');
+        $selectedMonth = (int) ($request->month ?? now()->month);
+        $selectedYear = (int) ($request->year ?? now()->year);
 
         $expenses = Expense::with('category')
             ->where('user_id', $userId)
-            ->whereYear('expense_date', date('Y', strtotime($selectedMonth)))
-            ->whereMonth('expense_date', date('m', strtotime($selectedMonth)))
+            ->whereMonth('expense_date', $selectedMonth)
+            ->whereYear('expense_date', $selectedYear)
             ->when($request->category_id, function ($query) use ($request, $userId) {
                 $query->whereHas('category', function ($categoryQuery) use ($request, $userId) {
                     $categoryQuery->where('id', $request->category_id)
@@ -34,21 +36,24 @@ class ExpenseController extends Controller
                 });
             })
             ->latest('expense_date')
+            ->latest()
             ->get();
 
         $monthlySummary = Expense::selectRaw('category_id, SUM(amount) as total')
             ->with('category')
             ->where('user_id', $userId)
-            ->whereYear('expense_date', date('Y', strtotime($selectedMonth)))
-            ->whereMonth('expense_date', date('m', strtotime($selectedMonth)))
+            ->whereMonth('expense_date', $selectedMonth)
+            ->whereYear('expense_date', $selectedYear)
             ->groupBy('category_id')
+            ->orderByDesc('total')
             ->get();
 
         return view('expenses.index', compact(
             'expenses',
             'categories',
             'monthlySummary',
-            'selectedMonth'
+            'selectedMonth',
+            'selectedYear'
         ));
     }
 
