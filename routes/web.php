@@ -21,7 +21,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('categories', CategoryController::class);
+    Route::resource('categories', CategoryController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
     Route::resource('expenses', ExpenseController::class);
 });
 

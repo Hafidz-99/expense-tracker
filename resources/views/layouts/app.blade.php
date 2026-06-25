@@ -15,6 +15,7 @@
 </head>
 
 <body class="font-sans antialiased bg-slate-50 text-slate-700">
+    <x-toast />
     <div class="flex min-h-screen">
 
         <aside class="fixed inset-y-0 left-0 z-50 flex-col hidden bg-white border-r lg:flex w-72 border-slate-200">
