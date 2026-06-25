@@ -5,7 +5,7 @@
                 Categories
             </h1>
             <p class="mt-1 text-sm text-slate-500">
-                Organize your expenses using simple icons and colors.
+                Organize your expenses using simple colors.
             </p>
         </div>
     </x-slot>
@@ -25,18 +25,18 @@
     <div class="space-y-6">
 
         @if (session('success'))
-            <div class="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
+            <div class="px-4 py-3 text-sm font-semibold text-green-700 border border-green-200 rounded-2xl bg-green-50">
                 {{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
-            <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+            <div class="px-4 py-3 text-sm font-semibold text-red-700 border border-red-200 rounded-2xl bg-red-50">
                 {{ session('error') }}
             </div>
         @endif
 
-        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-hidden bg-white border shadow-sm border-slate-200 rounded-2xl">
             <div class="px-6 py-4 border-b border-slate-200">
                 <h2 class="text-base font-bold text-slate-900">
                     Add Category
@@ -49,7 +49,7 @@
             <form method="POST" action="{{ route('categories.store') }}" class="p-6">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700">
                             Category Name
@@ -59,7 +59,7 @@
                                name="name"
                                value="{{ old('name') }}"
                                placeholder="e.g. Food"
-                               class="mt-2 w-full rounded-xl border-slate-300 text-slate-700 shadow-sm focus:border-blue-600 focus:ring-blue-600">
+                               class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
 
                         @error('name')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -72,7 +72,7 @@
                         </label>
 
                         <select name="color"
-                                class="mt-2 w-full rounded-xl border-slate-300 text-slate-700 shadow-sm focus:border-blue-600 focus:ring-blue-600">
+                                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
                             @foreach ($colors as $hex => $label)
                                 <option value="{{ $hex }}" @selected(old('color', '#2563EB') === $hex)>
                                     {{ $label }}
@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                <div class="mt-5 flex justify-end">
+                <div class="flex justify-end mt-5">
                     <button type="submit"
                             class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
                         Add Category
@@ -95,8 +95,8 @@
             </form>
         </div>
 
-        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+        <div class="overflow-hidden bg-white border shadow-sm border-slate-200 rounded-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
                 <div>
                     <h2 class="text-base font-bold text-slate-900">
                         Category List
@@ -109,16 +109,16 @@
 
             <div class="divide-y divide-slate-100">
                 @forelse ($categories as $category)
-                    <div class="px-6 py-4 flex items-center justify-between gap-4 hover:bg-slate-50 transition">
-                        <div class="flex items-center gap-4 min-w-0">
+                    <div class="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-slate-50">
+                        <div class="flex items-center min-w-0 gap-4">
                             <div
-                                class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold border border-slate-200 shrink-0"
+                                class="flex items-center justify-center font-bold text-white border w-11 h-11 rounded-xl border-slate-200 shrink-0"
                                 style="background-color: {{ $category->color ?? '#2563EB' }}">
                                 {{ strtoupper(substr($category->name, 0, 1)) }}
                             </div>
 
                             <div class="min-w-0">
-                                <p class="text-sm font-bold text-slate-900 truncate">
+                                <p class="text-sm font-bold truncate text-slate-900">
                                     {{ $category->name }}
                                 </p>
 
@@ -144,8 +144,8 @@
                         </div>
                     </div>
                 @empty
-                    <div class="px-6 py-14 text-center">
-                        <div class="mx-auto w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <div class="px-6 text-center py-14">
+                        <div class="flex items-center justify-center w-12 h-12 mx-auto text-blue-600 rounded-2xl bg-blue-50">
                             +
                         </div>
 
