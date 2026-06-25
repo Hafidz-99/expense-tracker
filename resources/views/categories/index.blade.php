@@ -55,11 +55,8 @@
                             Category Name
                         </label>
 
-                        <input type="text"
-                               name="name"
-                               value="{{ old('name') }}"
-                               placeholder="e.g. Food"
-                               class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                        <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Food"
+                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
 
                         @error('name')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -71,14 +68,23 @@
                             Color
                         </label>
 
-                        <select name="color"
-                                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                            @foreach ($colors as $hex => $label)
-                                <option value="{{ $hex }}" @selected(old('color', '#2563EB') === $hex)>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="relative mt-2">
+                            <div id="selectedColorPreview"
+                                class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300"
+                                style="background-color: {{ old('color', '#2563EB') }}">
+                            </div>
+
+                            <select name="color" id="colorSelect"
+                                class="w-full pl-10 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+
+                                @foreach ($colors as $hex => $label)
+                                    <option value="{{ $hex }}" @selected(old('color', '#2563EB') === $hex)>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+
+                            </select>
+                        </div>
 
                         @error('color')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -88,7 +94,7 @@
 
                 <div class="flex justify-end mt-5">
                     <button type="submit"
-                            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
+                        class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
                         Add Category
                     </button>
                 </div>
@@ -111,8 +117,7 @@
                 @forelse ($categories as $category)
                     <div class="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-slate-50">
                         <div class="flex items-center min-w-0 gap-4">
-                            <div
-                                class="flex items-center justify-center font-bold text-white border w-11 h-11 rounded-xl border-slate-200 shrink-0"
+                            <div class="flex items-center justify-center font-bold text-white border w-11 h-11 rounded-xl border-slate-200 shrink-0"
                                 style="background-color: {{ $category->color ?? '#2563EB' }}">
                                 {{ strtoupper(substr($category->name, 0, 1)) }}
                             </div>
@@ -127,7 +132,7 @@
 
                         <div class="flex items-center gap-2 shrink-0">
                             <a href="{{ route('categories.edit', $category) }}"
-                               class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                                class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
                                 Edit
                             </a>
 
@@ -136,8 +141,8 @@
                                 @method('DELETE')
 
                                 <button type="submit"
-                                        onclick="return confirm('Delete this category? This cannot be undone.')"
-                                        class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
+                                    onclick="return confirm('Delete this category? This cannot be undone.')"
+                                    class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
                                     Delete
                                 </button>
                             </form>
@@ -145,7 +150,8 @@
                     </div>
                 @empty
                     <div class="px-6 text-center py-14">
-                        <div class="flex items-center justify-center w-12 h-12 mx-auto text-blue-600 rounded-2xl bg-blue-50">
+                        <div
+                            class="flex items-center justify-center w-12 h-12 mx-auto text-blue-600 rounded-2xl bg-blue-50">
                             +
                         </div>
 
@@ -162,4 +168,20 @@
         </div>
 
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const colorSelect = document.getElementById('colorSelect');
+            const preview = document.getElementById('selectedColorPreview');
+
+            function updateColor() {
+                preview.style.backgroundColor = colorSelect.value;
+            }
+
+            updateColor();
+
+            colorSelect.addEventListener('change', updateColor);
+
+        });
+    </script>
 </x-app-layout>
