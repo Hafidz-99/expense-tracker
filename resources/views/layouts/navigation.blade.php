@@ -27,6 +27,10 @@
                     <x-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')">
                         Budgets
                     </x-nav-link>
+
+                    <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
+                        Reports
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -101,6 +105,10 @@
 
             <x-responsive-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')">
                 {{ 'Budgets' }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
+                {{ 'Reports' }}
             </x-responsive-nav-link>
         </div>
 

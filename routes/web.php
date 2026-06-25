@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/budgets', [BudgetController::class, 'store'])->name('budgets.store');
     Route::put('/budgets/{budget}', [BudgetController::class, 'update'])->name('budgets.update');
     Route::delete('/budgets/{budget}', [BudgetController::class, 'destroy'])->name('budgets.destroy');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
+    Route::get('/reports/pdf', [ReportController::class, 'pdf'])->name('reports.pdf');
+    Route::get('/reports/excel', [ReportController::class, 'excel'])->name('reports.excel');
 });
 
 require __DIR__.'/auth.php';

@@ -60,11 +60,17 @@
                     </a>
 
                     <a href="{{ route('budgets.index') }}"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
                         {{ request()->routeIs('budgets.*')
-                            ? 'bg-blue-600 text-white'
-                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            ? 'border-blue-600 bg-blue-50 text-blue-600'
+                            : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Budgets
+                    </a>
+
+                    <a href="{{ route('reports.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
+                        {{ request()->routeIs('reports.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        Reports
                     </a>
                 </div>
 
