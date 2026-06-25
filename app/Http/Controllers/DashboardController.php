@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budget;
 use App\Models\Expense;
 use Illuminate\Support\Facades\DB;
 
@@ -48,13 +49,33 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        $currentBudget = Budget::where('user_id', $userId)
+            ->where('month', $currentMonth)
+            ->where('year', $currentYear)
+            ->first();
+
+        $budgetAmount = $currentBudget?->amount ?? 0;
+
+        $remainingBudget = max($budgetAmount - $monthlyTotal, 0);
+
+        $budgetUsedPercentage = $budgetAmount > 0
+            ? min(($monthlyTotal / $budgetAmount) * 100, 100)
+            : 0;
+
         return view('dashboard', compact(
             'monthlyTotal',
             'todayTotal',
             'totalTransactions',
             'topCategory',
             'categoryBreakdown',
-            'recentExpenses'
+            'recentExpenses',
+            'currentBudget',
+            'budgetAmount',
+            'remainingBudget',
+            'budgetUsedPercentage',
         ));
     }
 }

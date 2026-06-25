@@ -13,6 +13,8 @@
     <div class="space-y-8">
         @include('dashboard.partials.stat-cards')
 
+        @include('dashboard.partials.budget-progress')
+
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
             @include('dashboard.partials.recent-expenses')
 

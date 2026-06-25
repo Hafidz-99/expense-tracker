@@ -58,6 +58,14 @@
                        {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Expenses
                     </a>
+
+                    <a href="{{ route('budgets.index') }}"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition
+                        {{ request()->routeIs('budgets.*')
+                            ? 'bg-blue-600 text-white'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                        Budgets
+                    </a>
                 </div>
 
                 <div class="mt-12">
