@@ -34,7 +34,7 @@
 
         @if ($topCategory)
             <p class="mt-3 text-3xl font-extrabold text-slate-900">
-                {{ $topCategory->category->name }}
+                {{ $topCategory->category->name ?? 'Uncategorized' }}
             </p>
             <p class="mt-2 text-sm text-slate-500">
                 RM {{ number_format($topCategory->total, 2) }} this month

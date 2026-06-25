@@ -24,7 +24,7 @@
             <div>
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-sm font-semibold truncate text-slate-700">
-                        {{ $item->category->name }}
+                        {{ $item->category->name ?? 'Uncategorized' }}
                     </p>
 
                     <p class="text-sm font-bold text-slate-900 shrink-0">

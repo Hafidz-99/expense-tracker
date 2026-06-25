@@ -10,7 +10,7 @@
         </div>
     </x-slot>
 
-    <div class="space-y-6">
+    <div class="space-y-8">
         @include('dashboard.partials.stat-cards')
 
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">

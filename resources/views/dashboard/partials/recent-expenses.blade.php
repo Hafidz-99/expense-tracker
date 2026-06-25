@@ -25,7 +25,7 @@
                     <div class="flex flex-wrap items-center gap-2 mt-1">
                         <span
                             class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">
-                            {{ $expense->category->name }}
+                            {{ $expense->category->name ?? 'Uncategorized' }}
                         </span>
 
                         <span class="text-xs text-slate-500">
