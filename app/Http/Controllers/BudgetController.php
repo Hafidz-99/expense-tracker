@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
+use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BudgetController extends Controller
 {
@@ -14,15 +16,47 @@ class BudgetController extends Controller
             ->orderByDesc('month')
             ->get();
 
-        return view('budgets.index', compact('budgets'));
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        $currentBudget = Budget::where('user_id', auth()->id())
+            ->where('month', $currentMonth)
+            ->where('year', $currentYear)
+            ->first();
+
+        $currentSpending = Expense::where('user_id', auth()->id())
+            ->whereYear('expense_date', $currentYear)
+            ->whereMonth('expense_date', $currentMonth)
+            ->sum('amount');
+
+        $currentBudgetAmount = $currentBudget?->amount ?? 0;
+        $currentRemaining = $currentBudgetAmount - $currentSpending;
+
+        return view('budgets.index', compact(
+            'budgets',
+            'currentBudgetAmount',
+            'currentSpending',
+            'currentRemaining'
+        ));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
-            'month' => ['required', 'integer', 'between:1,12'],
+            'month' => [
+                'required',
+                'integer',
+                'between:1,12',
+                Rule::unique('budgets')->where(function ($query) use ($request) {
+                    return $query
+                        ->where('user_id', auth()->id())
+                        ->where('year', $request->year);
+                }),
+            ],
             'year' => ['required', 'integer', 'min:2020', 'max:2100'],
+        ], [
+            'month.unique' => 'A budget for this month and year already exists.',
         ]);
 
         Budget::updateOrCreate(
@@ -47,8 +81,19 @@ class BudgetController extends Controller
 
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
-            'month' => ['required', 'integer', 'between:1,12'],
+            'month' => [
+                'required',
+                'integer',
+                'between:1,12',
+                Rule::unique('budgets')->where(function ($query) use ($request) {
+                    return $query
+                        ->where('user_id', auth()->id())
+                        ->where('year', $request->year);
+                })->ignore($budget->id),
+            ],
             'year' => ['required', 'integer', 'min:2020', 'max:2100'],
+        ], [
+            'month.unique' => 'A budget for this month and year already exists.',
         ]);
 
         $budget->update($validated);

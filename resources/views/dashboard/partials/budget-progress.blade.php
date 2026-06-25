@@ -42,9 +42,12 @@
 
             <div>
                 <p class="text-sm text-slate-500">Remaining</p>
-                <p
-                    class="mt-1 text-xl font-bold {{ $monthlyTotal > $budgetAmount ? 'text-red-600' : 'text-slate-900' }}">
-                    RM {{ number_format($remainingBudget, 2) }}
+                <p class="mt-1 text-xl font-bold {{ $remainingBudget < 0 ? 'text-red-600' : 'text-slate-900' }}">
+                    @if ($remainingBudget < 0)
+                        -RM {{ number_format(abs($remainingBudget), 2) }}
+                    @else
+                        RM {{ number_format($remainingBudget, 2) }}
+                    @endif
                 </p>
             </div>
         </div>
@@ -68,6 +71,24 @@
                 <div class="h-3 rounded-full {{ $progressColor }}" style="width: {{ $budgetUsedPercentage }}%">
                 </div>
             </div>
+        </div>
+
+        <div
+            class="mt-4 rounded-xl p-4
+                {{ $budgetStatus === 'danger' ? 'bg-red-50 border border-red-100' : '' }}
+                {{ $budgetStatus === 'warning' ? 'bg-yellow-50 border border-yellow-100' : '' }}
+                {{ $budgetStatus === 'success' ? 'bg-green-50 border border-green-100' : '' }}
+                {{ $budgetStatus === 'none' ? 'bg-slate-50 border border-slate-200' : '' }}
+            ">
+            <p
+                class="text-sm font-semibold
+                    {{ $budgetStatus === 'danger' ? 'text-red-700' : '' }}
+                    {{ $budgetStatus === 'warning' ? 'text-yellow-700' : '' }}
+                    {{ $budgetStatus === 'success' ? 'text-green-700' : '' }}
+                    {{ $budgetStatus === 'none' ? 'text-slate-700' : '' }}
+                ">
+                {{ $budgetMessage }}
+            </p>
         </div>
     @else
         <div class="p-6 mt-6 text-center border border-dashed border-slate-300 rounded-2xl bg-slate-50">

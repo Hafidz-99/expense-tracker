@@ -59,11 +59,28 @@ class DashboardController extends Controller
 
         $budgetAmount = $currentBudget?->amount ?? 0;
 
-        $remainingBudget = max($budgetAmount - $monthlyTotal, 0);
+        $remainingBudget = $budgetAmount - $monthlyTotal;
 
         $budgetUsedPercentage = $budgetAmount > 0
             ? min(($monthlyTotal / $budgetAmount) * 100, 100)
             : 0;
+
+        $budgetMessage = 'No budget set for this month.';
+        $budgetStatus = 'none';
+
+        if ($currentBudget) {
+            if ($monthlyTotal > $budgetAmount) {
+                $overAmount = $monthlyTotal - $budgetAmount;
+                $budgetMessage = 'You are over budget by RM '.number_format($overAmount, 2).'.';
+                $budgetStatus = 'danger';
+            } elseif ($budgetUsedPercentage >= 80) {
+                $budgetMessage = 'You have used '.number_format($budgetUsedPercentage, 0).'% of your monthly budget.';
+                $budgetStatus = 'warning';
+            } else {
+                $budgetMessage = 'You are on track. RM '.number_format($remainingBudget, 2).' remaining.';
+                $budgetStatus = 'success';
+            }
+        }
 
         return view('dashboard', compact(
             'monthlyTotal',
@@ -76,6 +93,8 @@ class DashboardController extends Controller
             'budgetAmount',
             'remainingBudget',
             'budgetUsedPercentage',
+            'budgetMessage',
+            'budgetStatus',
         ));
     }
 }
