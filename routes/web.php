@@ -23,7 +23,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store', 'update', 'destroy']);
-    Route::resource('expenses', ExpenseController::class);
+    Route::resource('expenses', ExpenseController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 });
 
 require __DIR__.'/auth.php';

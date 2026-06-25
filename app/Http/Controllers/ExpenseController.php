@@ -18,7 +18,7 @@ class ExpenseController extends Controller
 
         $request->validate([
             'month' => 'nullable|integer|min:1|max:12',
-            'year' => 'nullable|integer|min:2000|max:' . now()->year,
+            'year' => 'nullable|integer|min:2000|max:'.now()->year,
             'category_id' => 'nullable|integer',
         ]);
 
@@ -82,17 +82,6 @@ class ExpenseController extends Controller
 
         return redirect()->route('expenses.index')
             ->with('success', 'Expense added successfully.');
-    }
-
-    public function edit(Expense $expense)
-    {
-        abort_if($expense->user_id !== auth()->id(), 403);
-
-        $categories = Category::where('user_id', auth()->id())
-            ->orderBy('name')
-            ->get();
-
-        return view('expenses.edit', compact('expense', 'categories'));
     }
 
     public function update(Request $request, Expense $expense)

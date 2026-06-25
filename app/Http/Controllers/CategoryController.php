@@ -33,13 +33,6 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
-    public function edit(Category $category)
-    {
-        abort_if($category->user_id !== auth()->id(), 403);
-
-        return view('categories.edit', compact('category'));
-    }
-
     public function update(Request $request, Category $category)
     {
         abort_if($category->user_id !== auth()->id(), 403);
