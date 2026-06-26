@@ -1,13 +1,33 @@
 <div class="overflow-hidden bg-white border shadow-sm lg:col-span-2 border-slate-200 rounded-2xl">
-    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+    <div class="flex flex-col gap-4 px-6 py-4 border-b border-slate-200 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h2 class="text-base font-bold text-slate-900">
                 Expense List
             </h2>
+
             <p class="mt-1 text-sm text-slate-500">
-                {{ $expenses->count() }} records found.
+                {{ $expenses->total() }} records found.
             </p>
         </div>
+
+        <form method="GET" action="{{ route('expenses.index') }}" class="flex items-center gap-2">
+            <input type="hidden" name="search" value="{{ request('search') }}">
+            <input type="hidden" name="month" value="{{ request('month', $selectedMonth) }}">
+            <input type="hidden" name="year" value="{{ request('year', $selectedYear) }}">
+            <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+
+            <label class="text-sm font-semibold text-slate-700">
+                Sort
+            </label>
+
+            <select name="sort" onchange="this.form.submit()"
+                class="text-sm shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                <option value="newest" @selected(request('sort', 'newest') === 'newest')>Newest</option>
+                <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
+                <option value="highest" @selected(request('sort') === 'highest')>Highest amount</option>
+                <option value="lowest" @selected(request('sort') === 'lowest')>Lowest amount</option>
+            </select>
+        </form>
     </div>
 
     <div class="divide-y divide-slate-100">
@@ -82,4 +102,9 @@
             </div>
         @endforelse
     </div>
+    @if ($expenses->hasPages())
+        <div class="px-6 py-4 border-t border-slate-200">
+            {{ $expenses->links('vendor.pagination.custom') }}
+        </div>
+    @endif
 </div>

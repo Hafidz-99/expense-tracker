@@ -10,7 +10,7 @@
         </div>
     </x-slot>
 
-    <div class="space-y-6">
+    <div class="space-y-4">
         @include('expenses.partials.create-form')
         @include('expenses.partials.filters')
 

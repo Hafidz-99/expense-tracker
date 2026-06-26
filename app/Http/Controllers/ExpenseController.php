@@ -17,27 +17,38 @@ class ExpenseController extends Controller
             ->get();
 
         $request->validate([
+            'search' => 'nullable|string|max:255',
             'month' => 'nullable|integer|min:1|max:12',
             'year' => 'nullable|integer|min:2000|max:'.now()->year,
             'category_id' => 'nullable|integer',
+            'sort' => 'nullable|in:newest,oldest,highest,lowest',
         ]);
 
         $selectedMonth = (int) ($request->month ?? now()->month);
         $selectedYear = (int) ($request->year ?? now()->year);
 
-        $expenses = Expense::with('category')
+        $expensesQuery = Expense::with('category')
             ->where('user_id', $userId)
             ->whereMonth('expense_date', $selectedMonth)
             ->whereYear('expense_date', $selectedYear)
-            ->when($request->category_id, function ($query) use ($request, $userId) {
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('description', 'like', '%'.$request->search.'%');
+            })
+            ->when($request->filled('category_id'), function ($query) use ($request, $userId) {
                 $query->whereHas('category', function ($categoryQuery) use ($request, $userId) {
                     $categoryQuery->where('id', $request->category_id)
                         ->where('user_id', $userId);
                 });
-            })
-            ->latest('expense_date')
-            ->latest()
-            ->get();
+            });
+
+        match ($request->sort) {
+            'oldest' => $expensesQuery->oldest('expense_date')->oldest(),
+            'highest' => $expensesQuery->orderByDesc('amount'),
+            'lowest' => $expensesQuery->orderBy('amount'),
+            default => $expensesQuery->latest('expense_date')->latest(),
+        };
+
+        $expenses = $expensesQuery->paginate(5)->withQueryString();
 
         $monthlySummary = Expense::selectRaw('category_id, SUM(amount) as total')
             ->with('category')

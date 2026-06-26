@@ -1,5 +1,5 @@
 <div class="overflow-hidden bg-white border shadow-sm border-slate-200 rounded-2xl">
-    <div class="px-6 py-4 border-b border-slate-200">
+    <div class="px-6 py-2 border-b border-slate-200">
         <h2 class="text-base font-bold text-slate-900">
             Add Expense
         </h2>
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <div class="flex justify-end mt-5">
+        <div class="flex justify-end mt-3">
             <button type="submit"
                 class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
                 Save Expense
