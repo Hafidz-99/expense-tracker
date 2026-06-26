@@ -47,10 +47,21 @@ class ReportController extends Controller
 
     private function getReportData(Request $request): array
     {
+        $request->validate([
+            'month' => ['nullable', 'date_format:Y-m'],
+            'category_id' => ['nullable', 'exists:categories,id'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'search' => ['nullable', 'string', 'max:255'],
+            'sort' => ['nullable', 'in:latest,oldest,highest,lowest'],
+        ]);
+
         $selectedMonth = $request->input('month', now()->format('Y-m'));
         $selectedCategory = $request->input('category_id');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'latest');
 
         $selectedDate = Carbon::createFromFormat('Y-m', $selectedMonth);
 
@@ -72,9 +83,23 @@ class ReportController extends Controller
             $query->where('category_id', $selectedCategory);
         }
 
-        $expenses = $query
-            ->latest('expense_date')
-            ->get();
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('description', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $query = match ($sort) {
+            'oldest' => $query->orderBy('expense_date'),
+            'highest' => $query->orderByDesc('amount'),
+            'lowest' => $query->orderBy('amount'),
+            default => $query->orderByDesc('expense_date'),
+        };
+
+        $expenses = $query->get();
 
         $totalSpending = $expenses->sum('amount');
         $totalTransactions = $expenses->count();
@@ -153,14 +178,16 @@ class ReportController extends Controller
             ->first();
 
         $reportPeriod = $startDate && $endDate
-    ? Carbon::parse($startDate)->format('d/m/Y').' - '.Carbon::parse($endDate)->format('d/m/Y')
-    : $selectedDate->format('F Y');
+            ? Carbon::parse($startDate)->format('d/m/Y').' - '.Carbon::parse($endDate)->format('d/m/Y')
+            : $selectedDate->format('F Y');
 
         return [
             'selectedMonth' => $selectedMonth,
             'selectedCategory' => $selectedCategory,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'search' => $search,
+            'sort' => $sort,
             'categories' => $categories,
             'expenses' => $expenses,
             'totalSpending' => $totalSpending,

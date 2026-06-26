@@ -15,7 +15,7 @@
         @include('reports.partials.summary-cards')
         @include('reports.partials.analytics-cards')
 
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
             @include('reports.partials.category-report')
             @include('reports.partials.report-insight')
         </div>

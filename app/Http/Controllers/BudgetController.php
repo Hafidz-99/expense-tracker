@@ -5,16 +5,80 @@ namespace App\Http\Controllers;
 use App\Models\Budget;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
 
 class BudgetController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $budgets = Budget::where('user_id', auth()->id())
-            ->orderByDesc('year')
-            ->orderByDesc('month')
-            ->get();
+        $request->validate([
+            'year' => ['nullable', 'integer', 'min:2020', 'max:2100'],
+            'status' => ['nullable', 'in:all,on_track,near_limit,over_budget'],
+            'sort' => ['nullable', 'in:latest,oldest,highest,lowest'],
+        ]);
+
+        $budgetCollection = Budget::where('user_id', auth()->id())
+            ->when($request->filled('year'), function ($query) use ($request) {
+                $query->where('year', $request->year);
+            })
+            ->get()
+            ->map(function ($budget) {
+                $spent = Expense::where('user_id', auth()->id())
+                    ->whereYear('expense_date', $budget->year)
+                    ->whereMonth('expense_date', $budget->month)
+                    ->sum('amount');
+
+                $percentage = $budget->amount > 0
+                    ? round(($spent / $budget->amount) * 100)
+                    : 0;
+
+                $budget->spent = $spent;
+                $budget->remaining = $budget->amount - $spent;
+                $budget->percentage = $percentage;
+
+                $budget->status = match (true) {
+                    $percentage >= 100 => 'over_budget',
+                    $percentage >= 80 => 'near_limit',
+                    default => 'on_track',
+                };
+
+                return $budget;
+            });
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $budgetCollection = $budgetCollection->where('status', $request->status);
+        }
+
+        $budgetCollection = match ($request->sort) {
+            'oldest' => $budgetCollection
+                ->sortBy('month')
+                ->sortBy('year'),
+
+            'highest' => $budgetCollection
+                ->sortByDesc('amount'),
+
+            'lowest' => $budgetCollection
+                ->sortBy('amount'),
+
+            default => $budgetCollection
+                ->sortByDesc('month')
+                ->sortByDesc('year'),
+        };
+
+        $perPage = 5;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        $budgets = new LengthAwarePaginator(
+            $budgetCollection->forPage($currentPage, $perPage),
+            $budgetCollection->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ]
+        );
 
         $currentMonth = now()->month;
         $currentYear = now()->year;
