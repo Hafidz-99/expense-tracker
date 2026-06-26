@@ -1,4 +1,4 @@
-<x-ui.card title="Search & Filter" description="Search, filter, sort, and export your report.">
+<x-ui.card title="Search & Filter" description="Search expenses, refine the report, and export the results.">
     <form method="GET" action="{{ route('reports.index') }}">
         <div class="grid grid-cols-1 gap-5 md:grid-cols-4">
             <div>

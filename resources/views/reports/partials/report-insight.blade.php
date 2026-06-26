@@ -1,10 +1,11 @@
-<div class="p-6 bg-white border shadow-sm border-slate-200 rounded-2xl">
-    <h2 class="text-lg font-bold text-slate-900">Report Insight</h2>
+<x-ui.card title="Report Insight" description="Quick highlights from the selected report.">
+    <div class="space-y-5">
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">
+                Selected Period
+            </span>
 
-    <div class="mt-6 space-y-4">
-        <div>
-            <p class="text-sm text-slate-500">Selected Period</p>
-            <p class="font-semibold text-slate-900">
+            <span class="text-sm font-semibold text-right text-slate-900">
                 @if ($startDate && $endDate)
                     {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }}
                     -
@@ -12,21 +13,47 @@
                 @else
                     {{ \Carbon\Carbon::createFromFormat('Y-m', $selectedMonth)->format('F Y') }}
                 @endif
-            </p>
+            </span>
         </div>
 
-        <div>
-            <p class="text-sm text-slate-500">Highest Spending Category</p>
-            <p class="font-semibold text-slate-900">
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">
+                Highest Category
+            </span>
+
+            <span class="text-sm font-semibold text-right text-slate-900">
                 {{ $topCategory['category']->name ?? 'No data' }}
-            </p>
+            </span>
         </div>
 
-        <div>
-            <p class="text-sm text-slate-500">Used Categories</p>
-            <p class="font-semibold text-slate-900">
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">
+                Used Categories
+            </span>
+
+            <span class="text-sm font-semibold text-slate-900">
                 {{ $categoryReports->count() }}
-            </p>
+            </span>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">
+                Average Transaction
+            </span>
+
+            <span class="text-sm font-semibold text-slate-900">
+                RM {{ number_format($averageTransaction, 2) }}
+            </span>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">
+                Largest Expense
+            </span>
+
+            <span class="text-sm font-semibold text-slate-900">
+                RM {{ number_format($largestExpense?->amount ?? 0, 2) }}
+            </span>
         </div>
     </div>
-</div>
+</x-ui.card>

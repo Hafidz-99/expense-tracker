@@ -43,15 +43,13 @@
                 </div>
 
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeEditBudgetModal()"
-                        class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                    <x-ui.button variant="secondary" type="button" onclick="closeEditBudgetModal()">
                         Cancel
-                    </button>
+                    </x-ui.button>
 
-                    <button type="submit"
-                        class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">
+                    <x-ui.button type="submit" loading loadingText="Updating...">
                         Save Changes
-                    </button>
+                    </x-ui.button>
                 </div>
             </form>
         </div>

@@ -1,20 +1,7 @@
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-    <div class="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
-        <p class="text-sm text-slate-500">Average Transaction</p>
-        <h2 class="mt-2 text-2xl font-bold text-slate-900">
-            RM {{ number_format($averageTransaction, 2) }}
-        </h2>
-    </div>
+    <x-ui.stat-card title="Average Transaction" :value="'RM ' . number_format($averageTransaction, 2)" />
 
-    <div class="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
-        <p class="text-sm text-slate-500">Largest Expense</p>
-        <h2 class="mt-2 text-2xl font-bold text-slate-900">
-            RM {{ number_format($largestExpense->amount ?? 0, 2) }}
-        </h2>
-        <p class="mt-1 text-sm text-slate-500">
-            {{ $largestExpense->category->name ?? 'No data' }}
-        </p>
-    </div>
+    <x-ui.stat-card title="Largest Expense" :value="'RM ' . number_format($largestExpense->amount ?? 0, 2)" :subtitle="$largestExpense->category->name ?? 'No data'" />
 
     <div class="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
         <p class="text-sm text-slate-500">Most Used Category</p>
@@ -57,13 +44,5 @@
             @endif
         </p>
     </div>
-    <div class="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
-        <p class="text-sm text-slate-500">Highest Spending Month</p>
-        <h2 class="mt-2 text-xl font-bold text-slate-900">
-            {{ $highestSpendingMonth['month'] ?? 'No data' }}
-        </h2>
-        <p class="mt-1 text-sm text-slate-500">
-            RM {{ number_format($highestSpendingMonth['total'] ?? 0, 2) }}
-        </p>
-    </div>
+    <x-ui.stat-card title="Highest Month" :value="$highestSpendingMonth['month'] ?? 'No data'" :subtitle="'RM ' . number_format($highestSpendingMonth['total'] ?? 0, 2)" />
 </div>

@@ -1,4 +1,4 @@
-<x-ui.card title="Expense List" :description="$expenses->count() . ' records found.'" bodyClass="p-0">
+<x-ui.card title="Expense List" :description="Str::plural('record', $expenses->count(), true) . ' found.'" bodyClass="p-0">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-slate-200">
             <thead class="bg-slate-50">

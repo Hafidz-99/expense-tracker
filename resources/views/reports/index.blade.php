@@ -15,12 +15,12 @@
         @include('reports.partials.summary-cards')
         @include('reports.partials.analytics-cards')
 
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
-            @include('reports.partials.category-report')
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
             @include('reports.partials.report-insight')
+            @include('reports.partials.monthly-trend')
         </div>
 
-        @include('reports.partials.monthly-trend')
+        @include('reports.partials.category-report')
         @include('reports.partials.expense-list')
     </div>
 </x-app-layout>
