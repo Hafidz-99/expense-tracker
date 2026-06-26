@@ -15,10 +15,9 @@
         </p>
 
         <div class="mt-5">
-            <button type="button" onclick="openDeleteAccountModal()"
-                class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
+            <x-ui.button variant="danger" type="button" onclick="openDeleteAccountModal()">
                 Delete Account
-            </button>
+            </x-ui.button>
         </div>
     </div>
 </section>
@@ -63,15 +62,13 @@
                     </div>
 
                     <div class="flex justify-end gap-3">
-                        <button type="button" onclick="closeDeleteAccountModal()"
-                            class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                        <x-ui.button variant="secondary" type="button" onclick="closeDeleteAccountModal()">
                             Cancel
-                        </button>
+                        </x-ui.button>
 
-                        <button type="submit"
-                            class="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold">
+                        <x-ui.button variant="danger" type="submit" loading loadingText="Deleting...">
                             Delete Account
-                        </button>
+                        </x-ui.button>
                     </div>
                 </div>
             </form>
