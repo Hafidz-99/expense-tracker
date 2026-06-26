@@ -1,14 +1,5 @@
-<div class="overflow-hidden bg-white border shadow-sm border-slate-200 rounded-2xl">
-    <div class="px-6 py-2 border-b border-slate-200">
-        <h2 class="text-base font-bold text-slate-900">
-            Add Expense
-        </h2>
-        <p class="mt-1 text-sm text-slate-500">
-            Record a new transaction.
-        </p>
-    </div>
-
-    <form method="POST" action="{{ route('expenses.store') }}" class="p-6">
+<x-ui.card title="Add Expense" description="Record a new transaction.">
+    <form method="POST" action="{{ route('expenses.store') }}">
         @csrf
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -74,11 +65,10 @@
             </div>
         </div>
 
-        <div class="flex justify-end mt-3">
-            <button type="submit"
-                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
+        <div class="flex justify-end mt-4">
+            <x-ui.button type="submit" loading loadingText="Saving...">
                 Save Expense
-            </button>
+            </x-ui.button>
         </div>
     </form>
-</div>
+</x-ui.card>

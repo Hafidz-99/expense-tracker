@@ -27,15 +27,13 @@
                     @method('DELETE')
 
                     <div class="flex justify-end gap-3">
-                        <button type="button" onclick="closeDeleteCategoryModal()"
-                            class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                        <x-ui.button variant="secondary" type="button" onclick="closeDeleteCategoryModal()">
                             Cancel
-                        </button>
+                        </x-ui.button>
 
-                        <button type="submit"
-                            class="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold">
+                        <x-ui.button variant="danger" type="submit" loading loadingText="Deleting...">
                             Delete Category
-                        </button>
+                        </x-ui.button>
                     </div>
                 </form>
             </div>

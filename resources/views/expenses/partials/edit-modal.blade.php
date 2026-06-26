@@ -2,7 +2,7 @@
     <div onclick="closeEditExpenseModal()" class="fixed inset-0 bg-slate-900/50"></div>
 
     <div class="fixed inset-0 flex items-center justify-center px-4">
-        <div class="w-full max-w-lg bg-white border shadow-xl rounded-2xl border-slate-200">
+        <div class="w-full max-w-lg overflow-hidden bg-white border shadow-xl rounded-2xl border-slate-200">
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
                 <div>
                     <h2 class="text-lg font-bold text-slate-900">
@@ -17,65 +17,64 @@
                     ✕
                 </button>
             </div>
+            <div class="p-6">
+                <form id="editExpenseForm" method="POST" class="space-y-5">
+                    @csrf
+                    @method('PUT')
 
-            <form id="editExpenseForm" method="POST" class="p-6 space-y-4">
-                @csrf
-                @method('PUT')
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">
+                            Category
+                        </label>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">
-                        Category
-                    </label>
+                        <select id="editExpenseCategory" name="category_id"
+                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                    <select id="editExpenseCategory" name="category_id"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">
+                            Amount
+                        </label>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">
-                        Amount
-                    </label>
+                        <input id="editExpenseAmount" type="number" step="0.01" name="amount"
+                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                    </div>
 
-                    <input id="editExpenseAmount" type="number" step="0.01" name="amount"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">
+                            Description
+                        </label>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">
-                        Description
-                    </label>
+                        <input id="editExpenseDescription" type="text" name="description"
+                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                    </div>
 
-                    <input id="editExpenseDescription" type="text" name="description"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700">
+                            Date
+                        </label>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">
-                        Date
-                    </label>
+                        <input id="editExpenseDate" type="date" name="expense_date"
+                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                    </div>
 
-                    <input id="editExpenseDate" type="date" name="expense_date"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                </div>
+                    <div class="flex justify-end gap-3 pt-2">
+                        <x-ui.button variant="secondary" type="button" onclick="closeEditExpenseModal()">
+                            Cancel
+                        </x-ui.button>
 
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeEditExpenseModal()"
-                        class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-                        Cancel
-                    </button>
-
-                    <button type="submit"
-                        class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+                        <x-ui.button type="submit" loading loadingText="Updating...">
+                            Save Changes
+                        </x-ui.button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

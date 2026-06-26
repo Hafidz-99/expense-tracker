@@ -7,11 +7,26 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::where('user_id', auth()->id())
-            ->latest()
-            ->get();
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+            'sort' => 'nullable|in:latest,oldest,az,za',
+        ]);
+
+        $categoriesQuery = Category::where('user_id', auth()->id())
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%'.$request->search.'%');
+            });
+
+        match ($request->sort) {
+            'oldest' => $categoriesQuery->oldest(),
+            'az' => $categoriesQuery->orderBy('name'),
+            'za' => $categoriesQuery->orderByDesc('name'),
+            default => $categoriesQuery->latest(),
+        };
+
+        $categories = $categoriesQuery->paginate(5)->withQueryString();
 
         return view('categories.index', compact('categories'));
     }

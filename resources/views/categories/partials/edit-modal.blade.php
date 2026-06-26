@@ -18,52 +18,54 @@
                 </button>
             </div>
 
-            <form id="editCategoryForm" method="POST" class="p-6 space-y-5">
-                @csrf
-                @method('PUT')
+            <div class="p-6">
+                <form id="editCategoryForm" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">
-                        Category Name
-                    </label>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700">
+                                Category Name
+                            </label>
 
-                    <input id="editCategoryName" type="text" name="name"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">
-                        Color
-                    </label>
-
-                    <div class="relative mt-2">
-                        <div id="editSelectedColorPreview"
-                            class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300">
+                            <input id="editCategoryName" type="text" name="name"
+                                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
                         </div>
 
-                        <select id="editCategoryColor" name="color"
-                            class="w-full pl-10 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                            @foreach ($colors as $hex => $label)
-                                <option value="{{ $hex }}">
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700">
+                                Color
+                            </label>
+
+                            <div class="relative mt-2">
+                                <div id="editSelectedColorPreview"
+                                    class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300">
+                                </div>
+
+                                <select id="editCategoryColor" name="color"
+                                    class="w-full pl-10 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                                    @foreach ($colors as $hex => $label)
+                                        <option value="{{ $hex }}">
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeEditCategoryModal()"
-                        class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-                        Cancel
-                    </button>
+                    <div class="flex justify-end gap-3 pt-2">
+                        <x-ui.button variant="secondary" type="button" onclick="closeEditCategoryModal()">
+                            Cancel
+                        </x-ui.button>
 
-                    <button type="submit"
-                        class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+                        <x-ui.button type="submit" loading loadingText="Updating...">
+                            Save Changes
+                        </x-ui.button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

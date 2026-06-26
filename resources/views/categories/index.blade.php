@@ -22,6 +22,7 @@
 
     <div class="space-y-6">
         @include('categories.partials.create-form')
+        @include('categories.partials.filters')
         @include('categories.partials.category-list')
         @include('categories.partials.edit-modal')
         @include('categories.partials.delete-modal')

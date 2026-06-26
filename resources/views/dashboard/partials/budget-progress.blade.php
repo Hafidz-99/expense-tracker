@@ -1,18 +1,15 @@
-<div class="p-6 bg-white border shadow-sm border-slate-200 rounded-2xl">
-    <div class="flex items-start justify-between gap-4">
-        <div>
-            <h3 class="text-lg font-bold text-slate-900">
-                Monthly Budget
-            </h3>
-            <p class="mt-1 text-sm text-slate-500">
-                Budget usage for {{ now()->format('F Y') }}.
-            </p>
-        </div>
-
-        <a href="{{ route('budgets.index') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-700">
+<x-ui.card
+    title="Monthly Budget"
+    :description="'Budget usage for ' . now()->format('F Y')"
+>
+    <x-slot:actions>
+        <x-ui.button
+            href="{{ route('budgets.index') }}"
+            variant="secondary"
+        >
             Manage
-        </a>
-    </div>
+        </x-ui.button>
+    </x-slot:actions>
 
     @if ($currentBudget)
         @php
@@ -25,22 +22,22 @@
             }
         @endphp
 
-        <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
-            <div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="p-4 border rounded-2xl bg-slate-50 border-slate-200">
                 <p class="text-sm text-slate-500">Budget</p>
                 <p class="mt-1 text-xl font-bold text-slate-900">
                     RM {{ number_format($budgetAmount, 2) }}
                 </p>
             </div>
 
-            <div>
+            <div class="p-4 border rounded-2xl bg-slate-50 border-slate-200">
                 <p class="text-sm text-slate-500">Spent</p>
                 <p class="mt-1 text-xl font-bold text-slate-900">
                     RM {{ number_format($monthlyTotal, 2) }}
                 </p>
             </div>
 
-            <div>
+            <div class="p-4 border rounded-2xl bg-slate-50 border-slate-200">
                 <p class="text-sm text-slate-500">Remaining</p>
                 <p class="mt-1 text-xl font-bold {{ $remainingBudget < 0 ? 'text-red-600' : 'text-slate-900' }}">
                     @if ($remainingBudget < 0)
@@ -59,50 +56,51 @@
                 </span>
 
                 @if ($budgetUsedPercentage >= 100)
-                    <span class="font-semibold text-red-600">Over budget</span>
+                    <x-ui.badge variant="danger">Over budget</x-ui.badge>
                 @elseif ($budgetUsedPercentage >= 80)
-                    <span class="font-semibold text-yellow-600">Almost reached</span>
+                    <x-ui.badge variant="warning">Almost reached</x-ui.badge>
                 @else
-                    <span class="font-semibold text-green-600">On track</span>
+                    <x-ui.badge variant="success">On track</x-ui.badge>
                 @endif
             </div>
 
             <div class="w-full h-3 mt-3 overflow-hidden rounded-full bg-slate-100">
-                <div class="h-3 rounded-full {{ $progressColor }}" style="width: {{ $budgetUsedPercentage }}%">
+                <div
+                    class="h-3 rounded-full transition-all duration-700 {{ $progressColor }}"
+                    style="width: {{ min($budgetUsedPercentage, 100) }}%">
                 </div>
             </div>
         </div>
 
         <div
-            class="mt-4 rounded-xl p-4
-                {{ $budgetStatus === 'danger' ? 'bg-red-50 border border-red-100' : '' }}
-                {{ $budgetStatus === 'warning' ? 'bg-yellow-50 border border-yellow-100' : '' }}
-                {{ $budgetStatus === 'success' ? 'bg-green-50 border border-green-100' : '' }}
-                {{ $budgetStatus === 'none' ? 'bg-slate-50 border border-slate-200' : '' }}
-            ">
+            class="p-4 mt-4 border rounded-xl
+                {{ $budgetStatus === 'danger' ? 'bg-red-50 border-red-100' : '' }}
+                {{ $budgetStatus === 'warning' ? 'bg-yellow-50 border-yellow-100' : '' }}
+                {{ $budgetStatus === 'success' ? 'bg-green-50 border-green-100' : '' }}
+                {{ $budgetStatus === 'none' ? 'bg-slate-50 border-slate-200' : '' }}
+            "
+        >
             <p
                 class="text-sm font-semibold
                     {{ $budgetStatus === 'danger' ? 'text-red-700' : '' }}
                     {{ $budgetStatus === 'warning' ? 'text-yellow-700' : '' }}
                     {{ $budgetStatus === 'success' ? 'text-green-700' : '' }}
                     {{ $budgetStatus === 'none' ? 'text-slate-700' : '' }}
-                ">
+                "
+            >
                 {{ $budgetMessage }}
             </p>
         </div>
     @else
-        <div class="p-6 mt-6 text-center border border-dashed border-slate-300 rounded-2xl bg-slate-50">
-            <p class="font-semibold text-slate-800">
-                No budget set for this month.
-            </p>
-            <p class="mt-1 text-sm text-slate-500">
-                Set a monthly budget to track how much you can still spend.
-            </p>
+        <x-ui.empty-state
+            title="No budget set"
+            description="Create a monthly budget to monitor your spending."
+        />
 
-            <a href="{{ route('budgets.index') }}"
-                class="inline-flex items-center px-4 py-2 mt-4 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700">
+        <div class="flex justify-center mt-5">
+            <x-ui.button href="{{ route('budgets.index') }}">
                 Set Budget
-            </a>
+            </x-ui.button>
         </div>
     @endif
-</div>
+</x-ui.card>

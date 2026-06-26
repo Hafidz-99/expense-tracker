@@ -14,7 +14,7 @@
         @include('expenses.partials.create-form')
         @include('expenses.partials.filters')
 
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
             @include('expenses.partials.expense-list')
             @include('expenses.partials.monthly-summary')
         </div>

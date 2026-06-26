@@ -40,6 +40,7 @@ class DashboardController extends Controller
             ->whereYear('expense_date', now()->year)
             ->groupBy('category_id')
             ->orderByDesc('total')
+            ->limit(4)
             ->get();
 
         $recentExpenses = Expense::with('category')

@@ -1,69 +1,71 @@
-<div class="overflow-hidden bg-white border shadow-sm border-slate-200 rounded-2xl">
-    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-        <div>
-            <h2 class="text-base font-bold text-slate-900">Category List</h2>
-            <p class="mt-1 text-sm text-slate-500">
-                {{ $categories->count() }} categories created.
-            </p>
+<x-ui.card bodyClass="p-0" title="Category List" :description="$categories->total() . ' categories found.'">
+    <x-slot:actions>
+        <form method="GET" action="{{ route('categories.index') }}">
+            <input type="hidden" name="search" value="{{ request('search') }}">
+
+            <div class="flex items-center gap-2">
+                <span class="hidden text-sm font-medium text-slate-500 sm:block">
+                    Sort
+                </span>
+
+                <select name="sort" onchange="this.form.submit()"
+                    class="text-sm shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                    <option value="latest" @selected(request('sort', 'latest') === 'latest')>Latest</option>
+                    <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
+                    <option value="az" @selected(request('sort') === 'az')>A–Z</option>
+                    <option value="za" @selected(request('sort') === 'za')>Z–A</option>
+                </select>
+            </div>
+        </form>
+    </x-slot:actions>
+
+    @forelse ($categories as $category)
+        <div
+            class="flex flex-col gap-4 px-6 py-4 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center min-w-0 gap-4">
+                <div class="flex items-center justify-center font-bold text-white shadow-sm w-11 h-11 rounded-xl"
+                    style="background-color: {{ $category->color ?? '#2563EB' }}">
+                    {{ strtoupper(Str::substr($category->name, 0, 1)) }}
+                </div>
+
+                <div class="min-w-0">
+                    <p class="text-sm font-bold truncate text-slate-900">
+                        {{ $category->name }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center self-end gap-2 shrink-0 sm:self-center">
+                <x-ui.button size="sm" variant="ghost" type="button"
+                    onclick="openEditCategoryModal(
+                        '{{ route('categories.update', $category) }}',
+                        '{{ addslashes($category->name) }}',
+                        '{{ $category->color ?? '#2563EB' }}'
+                    )">
+                    Edit
+                </x-ui.button>
+
+                <x-ui.button size="sm" variant="danger" type="button"
+                    onclick="openDeleteCategoryModal(
+                        '{{ route('categories.destroy', $category) }}',
+                        '{{ addslashes($category->name) }}'
+                    )">
+                    Delete
+                </x-ui.button>
+            </div>
         </div>
-    </div>
+    @empty
+        <div class="p-6">
+            <x-ui.empty-state title="No categories found"
+                description="Try changing your search keyword or create a new category." />
+        </div>
+    @endforelse
 
-    <div class="divide-y divide-slate-100">
-        @forelse ($categories as $category)
-            <div class="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-slate-50">
-                <div class="flex items-center min-w-0 gap-4">
-                    <div class="flex items-center justify-center font-bold text-white border w-11 h-11 rounded-xl border-slate-200 shrink-0"
-                        style="background-color: {{ $category->color ?? '#2563EB' }}">
-                        {{ strtoupper(substr($category->name, 0, 1)) }}
-                    </div>
-
-                    <div class="min-w-0">
-                        <p class="text-sm font-bold truncate text-slate-900">
-                            {{ $category->name }}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2 shrink-0">
-                    <button type="button"
-                        onclick="openEditCategoryModal(
-                                '{{ route('categories.update', $category) }}',
-                                '{{ addslashes($category->name) }}',
-                                '{{ $category->color ?? '#2563EB' }}'
-                            )"
-                        class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
-                        Edit
-                    </button>
-
-                    <form method="POST" action="{{ route('categories.destroy', $category) }}">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="button"
-                            onclick="openDeleteCategoryModal(
-                                '{{ route('categories.destroy', $category) }}',
-                                '{{ addslashes($category->name) }}'
-                            )"
-                            class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
-                            Delete
-                        </button>
-                    </form>
-                </div>
+    @if ($categories->hasPages())
+        <x-slot:footer>
+            <div class="flex justify-end">
+                {{ $categories->links('vendor.pagination.custom') }}
             </div>
-        @empty
-            <div class="px-6 text-center py-14">
-                <div class="flex items-center justify-center w-12 h-12 mx-auto text-blue-600 rounded-2xl bg-blue-50">
-                    +
-                </div>
-
-                <h3 class="mt-4 text-sm font-bold text-slate-900">
-                    No categories yet
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    Create your first category using the form above.
-                </p>
-            </div>
-        @endforelse
-    </div>
-</div>
+        </x-slot:footer>
+    @endif
+</x-ui.card>

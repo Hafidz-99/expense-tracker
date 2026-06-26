@@ -1,19 +1,10 @@
-<div class="p-6 bg-white border shadow-sm border-slate-200 rounded-2xl">
-    <div class="flex items-start justify-between gap-4">
-        <div>
-            <h2 class="text-base font-bold text-slate-900">
-                Monthly Summary
-            </h2>
-
-            <p class="mt-1 text-sm text-slate-500">
-                Spending by category.
-            </p>
-        </div>
-
-        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
-            {{ \Carbon\Carbon::create(null, (int) $selectedMonth, 1)->format('M') }} {{ $selectedYear }}
-        </span>
-    </div>
+<x-ui.card title="Monthly Summary" description="Spending by category.">
+    <x-slot:actions>
+        <x-ui.badge variant="blue">
+            {{ \Carbon\Carbon::create(null, (int) $selectedMonth, 1)->format('M') }}
+            {{ $selectedYear }}
+        </x-ui.badge>
+    </x-slot:actions>
 
     <div class="mt-6 space-y-5">
         @php
@@ -28,7 +19,7 @@
             <div>
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-sm font-semibold truncate text-slate-700">
-                        {{ $summary->category->name }}
+                        {{ $summary->category?->name ?? 'Unknown Category' }}
                     </p>
 
                     <p class="text-sm font-bold text-slate-900 shrink-0">
@@ -38,8 +29,11 @@
 
                 <div class="flex items-center gap-3 mt-2">
                     <div class="flex-1 h-2 overflow-hidden rounded-full bg-slate-100">
-                        <div class="h-full rounded-full"
-                            style="width: {{ $percentage }}%; background-color: {{ $summary->category->color ?? '#2563EB' }}">
+                        <div class="h-full transition-all duration-500 rounded-full"
+                            style="
+                                width: {{ min($percentage, 100) }}%;
+                                background-color: {{ $summary->category->color ?? '#2563EB' }};
+                            ">
                         </div>
                     </div>
 
@@ -49,19 +43,9 @@
                 </div>
             </div>
         @empty
-            <div class="py-10 text-center">
-                <div class="flex items-center justify-center w-12 h-12 mx-auto text-blue-600 rounded-2xl bg-blue-50">
-                    %
-                </div>
-
-                <h3 class="mt-4 text-sm font-bold text-slate-900">
-                    No summary yet
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    Add expenses to see category totals.
-                </p>
+            <div class="py-4">
+                <x-ui.empty-state title="No summary yet" description="Add expenses to see category totals." />
             </div>
         @endforelse
     </div>
-</div>
+</x-ui.card>

@@ -1,110 +1,88 @@
-<div class="overflow-hidden bg-white border shadow-sm lg:col-span-2 border-slate-200 rounded-2xl">
-    <div class="flex flex-col gap-4 px-6 py-4 border-b border-slate-200 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-base font-bold text-slate-900">
-                Expense List
-            </h2>
-
-            <p class="mt-1 text-sm text-slate-500">
-                {{ $expenses->total() }} records found.
-            </p>
-        </div>
-
-        <form method="GET" action="{{ route('expenses.index') }}" class="flex items-center gap-2">
-            <input type="hidden" name="search" value="{{ request('search') }}">
-            <input type="hidden" name="month" value="{{ request('month', $selectedMonth) }}">
-            <input type="hidden" name="year" value="{{ request('year', $selectedYear) }}">
-            <input type="hidden" name="category_id" value="{{ request('category_id') }}">
-
-            <label class="text-sm font-semibold text-slate-700">
+<x-ui.card class="lg:col-span-2" title="Expense List" :description="$expenses->total() . ' records found.'" bodyClass="p-0">
+    <x-slot:actions>
+        <div class="flex items-center gap-2">
+            <span class="hidden text-sm font-medium text-slate-500 sm:block">
                 Sort
-            </label>
+            </span>
 
-            <select name="sort" onchange="this.form.submit()"
-                class="text-sm shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                <option value="newest" @selected(request('sort', 'newest') === 'newest')>Newest</option>
-                <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
-                <option value="highest" @selected(request('sort') === 'highest')>Highest amount</option>
-                <option value="lowest" @selected(request('sort') === 'lowest')>Lowest amount</option>
-            </select>
-        </form>
-    </div>
+            <form method="GET" action="{{ route('expenses.index') }}">
+                <input type="hidden" name="search" value="{{ request('search') }}">
+                <input type="hidden" name="category_id" value="{{ request('category_id') }}">
 
-    <div class="divide-y divide-slate-100">
-        @forelse ($expenses as $expense)
-            <div class="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-slate-50">
-                <div class="min-w-0">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <p class="text-sm font-extrabold text-slate-900">
-                            RM {{ number_format($expense->amount, 2) }}
-                        </p>
+                <select name="sort" onchange="this.form.submit()"
+                    class="text-sm bg-white shadow-sm border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
+                    <option value="latest" @selected(request('sort', 'latest') === 'latest')>Latest</option>
+                    <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
+                    <option value="highest" @selected(request('sort') === 'highest')>Highest Amount</option>
+                    <option value="lowest" @selected(request('sort') === 'lowest')>Lowest Amount</option>
+                </select>
+            </form>
+        </div>
+    </x-slot:actions>
 
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
-                            style="background-color: {{ $expense->category->color ?? '#DBEAFE' }}20; color: {{ $expense->category->color ?? '#2563EB' }}">
-                            {{ $expense->category->name }}
-                        </span>
-                    </div>
+    @forelse ($expenses as $expense)
+        <div
+            class="flex flex-col gap-4 px-6 py-4 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between">
+            <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                    <p class="text-sm font-extrabold text-slate-900">
+                        RM {{ number_format($expense->amount, 2) }}
+                    </p>
 
-                    <div class="flex flex-wrap items-center gap-3 mt-1">
-                        <p class="text-xs text-slate-500">
-                            {{ \Carbon\Carbon::parse($expense->expense_date)->format('d/m/Y') }}
-                        </p>
-
-                        @if ($expense->description)
-                            <p class="max-w-sm text-xs truncate text-slate-500">
-                                {{ $expense->description }}
-                            </p>
-                        @else
-                            <p class="text-xs text-slate-400">
-                                No description
-                            </p>
-                        @endif
-                    </div>
+                    <x-ui.badge
+                        style="
+                                    background-color: {{ $expense->category?->color ?? '#2563EB' }}20;
+                                    color: {{ $expense->category?->color ?? '#2563EB' }};
+                                ">
+                        {{ $expense->category?->name ?? 'Unknown Category' }}
+                    </x-ui.badge>
                 </div>
 
-                <div class="flex items-center gap-2 shrink-0">
-                    <button type="button"
-                        onclick="openEditExpenseModal(
-                            '{{ route('expenses.update', $expense) }}',
-                            '{{ $expense->category_id }}',
-                            '{{ $expense->amount }}',
-                            '{{ addslashes($expense->description ?? '') }}',
-                            '{{ $expense->expense_date }}'
-                        )"
-                        class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
-                        Edit
-                    </button>
+                <div class="flex flex-wrap items-center gap-3 mt-1">
+                    <p class="text-xs text-slate-500">
+                        {{ \Carbon\Carbon::parse($expense->expense_date)->format('d/m/Y') }}
+                    </p>
 
-                    <button type="button"
-                        onclick="openDeleteExpenseModal(
+                    <p
+                        class="max-w-sm text-xs truncate {{ $expense->description ? 'text-slate-500' : 'text-slate-400' }}">
+                        {{ $expense->description ?: 'No description' }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center self-end gap-2 sm:self-center shrink-0">
+                <x-ui.button size="sm" variant="ghost" type="button"
+                    onclick="openEditExpenseModal(
+                                '{{ route('expenses.update', $expense) }}',
+                                '{{ $expense->category_id }}',
+                                '{{ $expense->amount }}',
+                                '{{ addslashes($expense->description ?? '') }}',
+                                '{{ $expense->expense_date }}'
+                            )">
+                    Edit
+                </x-ui.button>
+
+                <x-ui.button size="sm" variant="danger" type="button"
+                    onclick="openDeleteExpenseModal(
                                 '{{ route('expenses.destroy', $expense) }}',
                                 'RM {{ number_format($expense->amount, 2) }}',
-                                '{{ addslashes($expense->category->name) }}'
-                            )"
-                        class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
-                        Delete
-                    </button>
-                </div>
+                                '{{ addslashes($expense->category?->name ?? 'Unknown Category') }}'
+                            )">
+                    Delete
+                </x-ui.button>
             </div>
-        @empty
-            <div class="px-6 text-center py-14">
-                <div class="flex items-center justify-center w-12 h-12 mx-auto text-blue-600 rounded-2xl bg-blue-50">
-                    +
-                </div>
-
-                <h3 class="mt-4 text-sm font-bold text-slate-900">
-                    No expenses found
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    Add your first expense or adjust your filters.
-                </p>
-            </div>
-        @endforelse
-    </div>
-    @if ($expenses->hasPages())
-        <div class="px-6 py-4 border-t border-slate-200">
-            {{ $expenses->links('vendor.pagination.custom') }}
         </div>
+    @empty
+        <div class="p-6">
+            <x-ui.empty-state title="No expenses found"
+                description="Try adjusting your filters or add your first expense." />
+        </div>
+    @endforelse
+    @if ($expenses->hasPages())
+        <x-slot:footer>
+            <div class="flex justify-end">
+                {{ $expenses->links('vendor.pagination.custom') }}
+            </div>
+        </x-slot:footer>
     @endif
-</div>
+</x-ui.card>

@@ -1,4 +1,4 @@
-<div class="p-5 bg-white border shadow-sm border-slate-200 rounded-2xl">
+<x-ui.card title="Filters" description="Search and narrow down your expense records.">
     <form method="GET" action="{{ route('expenses.index') }}">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
 
@@ -60,16 +60,14 @@
             </div>
         </div>
 
-        <div class="flex flex-col gap-3 mt-3 sm:flex-row sm:justify-end">
-            <a href="{{ route('expenses.index') }}"
-                class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-xl border border-slate-200 text-center transition">
+        <div class="flex flex-col gap-3 mt-4 sm:flex-row sm:justify-end">
+            <x-ui.button href="{{ route('expenses.index') }}" variant="secondary">
                 Reset
-            </a>
+            </x-ui.button>
 
-            <button type="submit"
-                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition">
+            <x-ui.button type="submit">
                 Apply Filters
-            </button>
+            </x-ui.button>
         </div>
     </form>
-</div>
+</x-ui.card>
