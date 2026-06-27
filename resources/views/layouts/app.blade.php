@@ -42,27 +42,25 @@
                 <div class="space-y-1">
                     <a href="{{ route('dashboard') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
-                       {{ request()->routeIs('dashboard') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        {{ request()->routeIs('dashboard') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Dashboard
                     </a>
 
                     <a href="{{ route('categories.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
-                       {{ request()->routeIs('categories.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        {{ request()->routeIs('categories.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Categories
                     </a>
 
                     <a href="{{ route('expenses.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
-                       {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Expenses
                     </a>
 
                     <a href="{{ route('budgets.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
-                        {{ request()->routeIs('budgets.*')
-                            ? 'border-blue-600 bg-blue-50 text-blue-600'
-                            : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        {{ request()->routeIs('budgets.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Budgets
                     </a>
 
@@ -80,7 +78,7 @@
 
                     <a href="{{ route('profile.edit') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
-                       {{ request()->routeIs('profile.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        {{ request()->routeIs('profile.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Profile
                     </a>
                 </div>
@@ -98,47 +96,52 @@
             </div>
         </aside>
 
-        <div class="flex flex-col flex-1 min-h-screen lg:ml-72">
-            <header class="sticky top-0 z-40 h-20 border-b bg-white/90 backdrop-blur border-slate-200">
-                <div class="flex items-center justify-between h-full px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center min-w-0 gap-4">
-                        <button type="button" id="mobileMenuBtn"
-                            class="inline-flex items-center justify-center w-10 h-10 transition lg:hidden rounded-xl text-slate-600 hover:bg-slate-100">
-                            ☰
-                        </button>
+        <div class="flex flex-col flex-1 min-w-0 min-h-screen lg:ml-72">
 
-                        <div class="min-w-0">
-                            @isset($header)
-                                {!! $header !!}
-                            @else
-                                <h1 class="text-lg font-bold text-slate-900">Dashboard</h1>
-                                <p class="mt-1 text-sm text-slate-500">
-                                    Manage your expenses and monitor your spending.
-                                </p>
-                            @endisset
+            <header class="sticky top-0 z-40 border-b bg-white/90 backdrop-blur border-slate-200">
+                <div class="flex items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:px-8">
+
+                    {{-- Mobile menu --}}
+                    <button id="mobileMenuBtn" type="button"
+                        class="inline-flex items-center justify-center w-10 h-10 transition rounded-xl lg:hidden text-slate-600 hover:bg-slate-100">
+                        ☰
+                    </button>
+
+                    {{-- Desktop page header --}}
+                    <div class="flex-1 hidden min-w-0 lg:block">
+                        @isset($header)
+                            {{ $header }}
+                        @endisset
+                    </div>
+
+                    {{-- Profile --}}
+                    <a href="{{ route('profile.edit') }}"
+                        class="flex items-center gap-3 px-3 py-2 transition-all duration-200 bg-white border rounded-2xl border-slate-200 hover:bg-blue-50 hover:border-blue-100 hover:shadow-sm">
+
+                        <div
+                            class="flex items-center justify-center w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-full">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                         </div>
-                    </div>
 
-                    <div class="flex items-center gap-3">
-                        <a href="{{ route('profile.edit') }}"
-                            class="flex items-center gap-3 px-3 py-2 transition-all duration-200 bg-white border rounded-2xl border-slate-200 hover:bg-blue-50 hover:border-blue-100 hover:shadow-sm">
-                            <div
-                                class="flex items-center justify-center text-sm font-bold text-white bg-blue-600 rounded-full w-9 h-9">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
+                        <div class="hidden min-w-0 text-left md:block">
+                            <p class="text-sm font-bold leading-tight truncate max-w-32 text-slate-900">
+                                {{ Auth::user()->name }}
+                            </p>
 
-                            <div class="hidden min-w-0 text-left md:block">
-                                <p class="text-sm font-bold leading-tight truncate text-slate-900 max-w-32">
-                                    {{ Auth::user()->name }}
-                                </p>
-                                <p class="text-xs leading-tight truncate text-slate-500 max-w-40">
-                                    {{ Auth::user()->email }}
-                                </p>
-                            </div>
-                        </a>
-                    </div>
+                            <p class="text-xs leading-tight truncate max-w-40 text-slate-500">
+                                {{ Auth::user()->email }}
+                            </p>
+                        </div>
+                    </a>
+
                 </div>
             </header>
+
+            @isset($header)
+                <section class="px-4 py-6 lg:hidden sm:px-6">
+                    {{ $header }}
+                </section>
+            @endisset
 
             <div id="mobileSidebar" class="fixed inset-0 z-50 hidden transition-opacity duration-300 lg:hidden">
                 <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900/50"></div>
@@ -174,14 +177,14 @@
                                 Dashboard
                             </a>
 
-                            <a href="{{ route('expenses.index') }}"
-                                class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
-                                Expenses
-                            </a>
-
                             <a href="{{ route('categories.index') }}"
                                 class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('categories.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                                 Categories
+                            </a>
+
+                            <a href="{{ route('expenses.index') }}"
+                                class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('expenses.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Expenses
                             </a>
 
                             <a href="{{ route('budgets.index') }}"
@@ -212,7 +215,7 @@
                             @csrf
 
                             <button type="submit"
-                                class="w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-red-50 hover:text-red-600 text-left">
+                                class="w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-left transition-all duration-200 text-slate-600 hover:bg-red-50 hover:text-red-600">
                                 Log Out
                             </button>
                         </form>
@@ -220,7 +223,7 @@
                 </aside>
             </div>
 
-            <main class="flex-1 w-full px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <main class="flex-1 w-full min-w-0 px-4 pb-8 overflow-x-hidden sm:px-6 lg:px-8 lg:pt-6">
                 {{ $slot }}
             </main>
         </div>
@@ -229,11 +232,10 @@
     <x-ui.toast />
 
     <script>
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileSidebar = document.getElementById('mobileSidebar');
-        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-        const closeMobileMenu = document.getElementById('closeMobileMenu');
-
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const mobileSidebar = document.getElementById("mobileSidebar");
+        const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+        const closeMobileMenu = document.getElementById("closeMobileMenu");
         const mobileSidebarPanel = document.getElementById("mobileSidebarPanel");
 
         function openSidebar() {

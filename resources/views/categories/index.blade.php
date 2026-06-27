@@ -1,10 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
-            <h1 class="text-lg font-bold text-slate-900">Categories</h1>
-            <p class="mt-1 text-sm text-slate-500">
-                Organize your expenses using names and colors.
-            </p>
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900">
+                    Categories
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Organize your expenses using names and colors.
+                </p>
+            </div>
         </div>
     </x-slot>
 
