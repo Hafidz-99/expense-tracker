@@ -27,7 +27,7 @@
 
             <tbody class="bg-white divide-y divide-slate-200">
                 @forelse ($budgets as $budget)
-                    <tr class="transition-colors duration-150 hover:bg-slate-50">
+                    <tr class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm">
                         <td class="px-6 py-4 text-slate-700">
                             {{ \Carbon\Carbon::create()->month($budget->month)->format('F') }}
                         </td>
@@ -51,8 +51,8 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            <div class="flex justify-end gap-2">
-                                <x-ui.button size="sm" variant="ghost" type="button"
+                            <div class="flex justify-end gap-2 sm:flex-nowrap">
+                                <x-ui.button size="sm" variant="ghost" type="button" class="min-w-16"
                                     onclick="openEditBudgetModal(
                                         '{{ route('budgets.update', $budget) }}',
                                         '{{ $budget->amount }}',
@@ -62,7 +62,7 @@
                                     Edit
                                 </x-ui.button>
 
-                                <x-ui.button size="sm" variant="danger" type="button"
+                                <x-ui.button size="sm" variant="danger" type="button" class="min-w-16"
                                     onclick="openDeleteBudgetModal(
                                         '{{ route('budgets.destroy', $budget) }}',
                                         '{{ \Carbon\Carbon::create()->month($budget->month)->format('F') }} {{ $budget->year }}'

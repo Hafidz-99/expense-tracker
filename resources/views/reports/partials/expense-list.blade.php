@@ -23,7 +23,7 @@
 
             <tbody class="bg-white divide-y divide-slate-100">
                 @forelse ($expenses as $expense)
-                    <tr class="transition-colors duration-150 hover:bg-slate-50">
+                    <tr class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm">
                         <td class="px-6 py-4 text-sm text-slate-700">
                             {{ \Carbon\Carbon::parse($expense->expense_date)->format('d/m/Y') }}
                         </td>
@@ -33,7 +33,7 @@
                         </td>
 
                         <td
-                            class="px-6 py-4 text-sm {{ $expense->description ? 'text-slate-500' : 'italic text-slate-400' }}">
+                            class="px-6 py-4 text-sm break-words max-w-xs {{ $expense->description ? 'text-slate-500' : 'italic text-slate-400' }}">
                             {{ $expense->description ?: 'No description' }}
                         </td>
 

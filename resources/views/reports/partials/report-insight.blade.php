@@ -1,6 +1,6 @@
 <x-ui.card title="Report Insight" description="Quick highlights from the selected report.">
     <div class="space-y-5">
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between gap-4">
             <span class="text-sm text-slate-500">
                 Selected Period
             </span>
@@ -16,7 +16,7 @@
             </span>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between gap-4">
             <span class="text-sm text-slate-500">
                 Highest Category
             </span>
@@ -26,7 +26,7 @@
             </span>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between gap-4">
             <span class="text-sm text-slate-500">
                 Used Categories
             </span>
@@ -36,7 +36,7 @@
             </span>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between gap-4">
             <span class="text-sm text-slate-500">
                 Average Transaction
             </span>
@@ -46,7 +46,7 @@
             </span>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between gap-4">
             <span class="text-sm text-slate-500">
                 Largest Expense
             </span>

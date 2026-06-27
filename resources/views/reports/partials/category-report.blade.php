@@ -3,13 +3,13 @@
     <div class="space-y-5">
         @forelse ($categoryReports as $report)
             <div>
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center min-w-0 gap-3">
                         <span class="w-3 h-3 rounded-full shrink-0"
                             style="background-color: {{ $report['category']?->color ?? '#2563EB' }}"></span>
 
                         <div class="min-w-0">
-                            <p class="font-semibold truncate text-slate-900">
+                            <p class="font-semibold break-words text-slate-900">
                                 {{ $report['category']?->name ?? 'Uncategorized' }}
                             </p>
 
@@ -20,7 +20,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right shrink-0">
+                    <div class="text-left sm:text-right shrink-0">
                         <p class="font-bold text-slate-900">
                             RM {{ number_format($report['total'], 2) }}
                         </p>
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="w-full h-2 mt-3 overflow-hidden rounded-full bg-slate-100">
-                    <div class="h-2 rounded-full transition-all duration-700"
+                    <div class="h-2 transition-all duration-700 rounded-full"
                         style="
                             width: {{ min($report['percentage'], 100) }}%;
                             background-color: {{ $report['category']?->color ?? '#2563EB' }};

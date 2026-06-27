@@ -1,83 +1,67 @@
-<div id="editExpenseModal" class="fixed inset-0 z-50 hidden">
-    <div onclick="closeEditExpenseModal()" class="fixed inset-0 bg-slate-900/50"></div>
+<x-ui.modal id="editExpenseModal" title="Edit Expense" maxWidth="max-w-lg">
+    <form id="editExpenseForm" method="POST" class="space-y-5">
+        @csrf
+        @method('PUT')
 
-    <div class="fixed inset-0 flex items-center justify-center px-4">
-        <div class="w-full max-w-lg overflow-hidden bg-white border shadow-xl rounded-2xl border-slate-200">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900">
-                        Edit Expense
-                    </h2>
-                    <p class="text-sm text-slate-500">
-                        Update the expense details.
-                    </p>
-                </div>
+        <div>
+            <x-ui.label for="editExpenseCategory">
+                Category
+            </x-ui.label>
 
-                <button type="button" onclick="closeEditExpenseModal()" class="text-slate-400 hover:text-slate-600">
-                    ✕
-                </button>
-            </div>
-            <div class="p-6">
-                <form id="editExpenseForm" method="POST" class="space-y-5">
-                    @csrf
-                    @method('PUT')
+            <x-ui.select id="editExpenseCategory" name="category_id" required>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}">
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </x-ui.select>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">
-                            Category
-                        </label>
-
-                        <select id="editExpenseCategory" name="category_id"
-                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">
-                            Amount
-                        </label>
-
-                        <input id="editExpenseAmount" type="number" step="0.01" name="amount"
-                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">
-                            Description
-                        </label>
-
-                        <input id="editExpenseDescription" type="text" name="description"
-                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">
-                            Date
-                        </label>
-
-                        <input id="editExpenseDate" type="date" name="expense_date"
-                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                    </div>
-
-                    <div class="flex justify-end gap-3 pt-2">
-                        <x-ui.button variant="secondary" type="button" onclick="closeEditExpenseModal()">
-                            Cancel
-                        </x-ui.button>
-
-                        <x-ui.button type="submit" loading loadingText="Updating...">
-                            Save Changes
-                        </x-ui.button>
-                    </div>
-                </form>
-            </div>
+            <x-ui.form-error field="category_id" />
         </div>
-    </div>
-</div>
+
+        <div>
+            <x-ui.label for="editExpenseAmount">
+                Amount (RM)
+            </x-ui.label>
+
+            <x-ui.input id="editExpenseAmount" type="number" name="amount" step="0.01" min="0.01" required />
+
+            <x-ui.form-error field="amount" />
+        </div>
+
+        <div>
+            <x-ui.label for="editExpenseDescription">
+                Description
+            </x-ui.label>
+
+            <x-ui.input id="editExpenseDescription" type="text" name="description" placeholder="Optional note..." />
+
+            <x-ui.form-error field="description" />
+        </div>
+
+        <div>
+            <x-ui.label for="editExpenseDate">
+                Date
+            </x-ui.label>
+
+            <x-ui.input id="editExpenseDate" type="date" name="expense_date" required />
+
+            <x-ui.form-error field="expense_date" />
+        </div>
+
+        <x-slot:footer>
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <x-ui.button variant="secondary" type="button" onclick="closeEditExpenseModal()">
+                    Cancel
+                </x-ui.button>
+
+                <x-ui.button type="submit" loading loadingText="Updating...">
+                    Save Changes
+                </x-ui.button>
+            </div>
+        </x-slot:footer>
+    </form>
+</x-ui.modal>
 
 <script>
     const editExpenseModal = document.getElementById('editExpenseModal');
@@ -95,11 +79,13 @@
         editExpenseDate.value = date;
 
         editExpenseModal.classList.remove('hidden');
+        editExpenseModal.classList.add('flex');
         document.body.classList.add('overflow-hidden');
     }
 
     function closeEditExpenseModal() {
         editExpenseModal.classList.add('hidden');
+        editExpenseModal.classList.remove('flex');
         document.body.classList.remove('overflow-hidden');
     }
 

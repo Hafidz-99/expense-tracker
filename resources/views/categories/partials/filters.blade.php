@@ -2,24 +2,29 @@
     <form method="GET" action="{{ route('categories.index') }}">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
 
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto_auto] md:items-end">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-end">
             <div>
-                <label class="block text-sm font-semibold text-slate-700">
+                <x-ui.label for="search">
                     Search
-                </label>
+                </x-ui.label>
 
-                <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Search category name..."
-                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                <x-ui.input
+                    id="search"
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search category name..." />
             </div>
 
-            <x-ui.button href="{{ route('categories.index') }}" variant="secondary">
-                Reset
-            </x-ui.button>
+            <div class="flex flex-col-reverse gap-3 lg:flex-row">
+                <x-ui.button type="submit">
+                    Apply
+                </x-ui.button>
 
-            <x-ui.button type="submit">
-                Apply
-            </x-ui.button>
+                <x-ui.button href="{{ route('categories.index') }}" variant="secondary">
+                    Reset
+                </x-ui.button>
+            </div>
         </div>
     </form>
 </x-ui.card>

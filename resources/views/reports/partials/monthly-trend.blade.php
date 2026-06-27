@@ -15,7 +15,7 @@
 
             <tbody class="bg-white divide-y divide-slate-100">
                 @forelse ($monthlyTrend as $trend)
-                    <tr class="transition-colors duration-150 hover:bg-slate-50">
+                    <tr class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm">
                         <td class="px-6 py-4 text-sm font-medium text-slate-700">
                             {{ $trend['month'] }}
                         </td>

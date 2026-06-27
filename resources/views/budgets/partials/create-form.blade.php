@@ -4,57 +4,46 @@
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
             <div>
-                <label class="block text-sm font-medium text-slate-700">
+                <x-ui.label for="amount">
                     Amount (RM)
-                </label>
+                </x-ui.label>
 
-                <input type="number" name="amount" step="0.01" min="1" value="{{ old('amount') }}"
-                    class="block w-full mt-1 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500"
-                    required>
+                <x-ui.input id="amount" type="number" name="amount" step="0.01" min="1"
+                    value="{{ old('amount') }}" required />
 
-                @error('amount')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="amount" />
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">
+                <x-ui.label for="month">
                     Month
-                </label>
+                </x-ui.label>
 
-                <select name="month"
-                    class="block w-full mt-1 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500"
-                    required>
+                <x-ui.select id="month" name="month" required>
                     @for ($i = 1; $i <= 12; $i++)
                         <option value="{{ $i }}" @selected(old('month', now()->month) == $i)>
                             {{ \Carbon\Carbon::create()->month($i)->format('F') }}
                         </option>
                     @endfor
-                </select>
+                </x-ui.select>
 
-                @error('month')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="month" />
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">
+                <x-ui.label for="year">
                     Year
-                </label>
+                </x-ui.label>
 
-                <input type="number" name="year" min="2020" max="2100"
-                    value="{{ old('year', now()->year) }}"
-                    class="block w-full mt-1 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500"
-                    required>
+                <x-ui.input id="year" type="number" name="year" min="2020" max="2100"
+                    value="{{ old('year', now()->year) }}" required />
 
-                @error('year')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="year" />
             </div>
         </div>
 
         <div class="flex justify-end">
-            <x-ui.button type="submit" loading loadingText="Saving...">
+            <x-ui.button type="submit" class="w-full sm:w-auto" loading loadingText="Saving...">
                 Save Budget
             </x-ui.button>
         </div>

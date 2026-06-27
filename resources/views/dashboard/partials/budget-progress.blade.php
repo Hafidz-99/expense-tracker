@@ -1,12 +1,6 @@
-<x-ui.card
-    title="Monthly Budget"
-    :description="'Budget usage for ' . now()->format('F Y')"
->
+<x-ui.card title="Monthly Budget" :description="'Budget usage for ' . now()->format('F Y')">
     <x-slot:actions>
-        <x-ui.button
-            href="{{ route('budgets.index') }}"
-            variant="secondary"
-        >
+        <x-ui.button href="{{ route('budgets.index') }}" variant="secondary" class="w-full sm:w-auto">
             Manage
         </x-ui.button>
     </x-slot:actions>
@@ -22,7 +16,7 @@
             }
         @endphp
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div class="p-4 border rounded-2xl bg-slate-50 border-slate-200">
                 <p class="text-sm text-slate-500">Budget</p>
                 <p class="mt-1 text-xl font-bold text-slate-900">
@@ -65,8 +59,7 @@
             </div>
 
             <div class="w-full h-3 mt-3 overflow-hidden rounded-full bg-slate-100">
-                <div
-                    class="h-3 rounded-full transition-all duration-700 {{ $progressColor }}"
+                <div class="h-3 rounded-full transition-all duration-700 {{ $progressColor }}"
                     style="width: {{ min($budgetUsedPercentage, 100) }}%">
                 </div>
             </div>
@@ -78,27 +71,22 @@
                 {{ $budgetStatus === 'warning' ? 'bg-yellow-50 border-yellow-100' : '' }}
                 {{ $budgetStatus === 'success' ? 'bg-green-50 border-green-100' : '' }}
                 {{ $budgetStatus === 'none' ? 'bg-slate-50 border-slate-200' : '' }}
-            "
-        >
+            ">
             <p
                 class="text-sm font-semibold
                     {{ $budgetStatus === 'danger' ? 'text-red-700' : '' }}
                     {{ $budgetStatus === 'warning' ? 'text-yellow-700' : '' }}
                     {{ $budgetStatus === 'success' ? 'text-green-700' : '' }}
                     {{ $budgetStatus === 'none' ? 'text-slate-700' : '' }}
-                "
-            >
+                ">
                 {{ $budgetMessage }}
             </p>
         </div>
     @else
-        <x-ui.empty-state
-            title="No budget set"
-            description="Create a monthly budget to monitor your spending."
-        />
+        <x-ui.empty-state title="No budget set" description="Create a monthly budget to monitor your spending." />
 
         <div class="flex justify-center mt-5">
-            <x-ui.button href="{{ route('budgets.index') }}">
+            <x-ui.button href="{{ route('budgets.index') }}" class="w-full sm:w-auto">
                 Set Budget
             </x-ui.button>
         </div>

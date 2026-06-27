@@ -11,12 +11,12 @@
                 </p>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-col w-full gap-2 sm:w-auto sm:flex-row sm:items-center">
                 <x-ui.badge variant="blue">
                     {{ now()->format('d M Y') }}
                 </x-ui.badge>
 
-                <x-ui.button href="{{ route('expenses.index') }}">
+                <x-ui.button href="{{ route('expenses.index') }}" class="w-full sm:w-auto">
                     Add Expense
                 </x-ui.button>
             </div>

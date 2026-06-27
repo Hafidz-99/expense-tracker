@@ -10,8 +10,8 @@
         @endphp
 
         <div class="mb-5 last:mb-0">
-            <div class="flex items-center justify-between gap-3">
-                <p class="text-sm font-semibold truncate text-slate-700">
+            <div class="flex items-start justify-between gap-3">
+                <p class="text-sm font-semibold break-words text-slate-700">
                     {{ $category->category?->name ?? 'Unknown Category' }}
                 </p>
 

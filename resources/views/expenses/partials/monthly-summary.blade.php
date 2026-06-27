@@ -1,4 +1,4 @@
-<x-ui.card title="Monthly Summary" description="Spending by category.">
+<x-ui.card class="lg:sticky lg:top-6" title="Monthly Summary" description="Spending by category.">
     <x-slot:actions>
         <x-ui.badge variant="blue">
             {{ \Carbon\Carbon::create(null, (int) $selectedMonth, 1)->format('M') }}

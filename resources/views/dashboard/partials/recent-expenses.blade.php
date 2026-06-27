@@ -7,7 +7,7 @@
 
     @forelse ($recentExpenses as $expense)
         <div
-            class="flex items-center justify-between gap-4 py-4 border-b border-slate-100 last:border-b-0 last:pb-0 first:pt-0">
+            class="flex flex-col gap-4 py-4 transition-all duration-200 border-b border-slate-100 hover:bg-slate-50 last:border-b-0 last:pb-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
                 <div class="flex items-center gap-2">
                     <x-ui.badge
@@ -19,7 +19,7 @@
                     </x-ui.badge>
                 </div>
 
-                <p class="mt-2 text-sm font-medium truncate text-slate-700">
+                <p class="mt-2 text-sm font-medium break-words text-slate-700">
                     {{ $expense->description ?: 'No description' }}
                 </p>
 
@@ -28,7 +28,7 @@
                 </p>
             </div>
 
-            <p class="text-sm font-bold text-slate-900 shrink-0">
+            <p class="text-sm font-bold text-left text-slate-900 shrink-0 sm:text-right">
                 RM {{ number_format($expense->amount, 2) }}
             </p>
         </div>

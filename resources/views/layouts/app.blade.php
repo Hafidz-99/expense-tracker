@@ -91,7 +91,7 @@
                     @csrf
 
                     <button type="submit"
-                        class="w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-red-50 hover:text-red-600 transition text-left">
+                        class="w-full px-3 py-2.5 rounded-xl text-sm font-semibold text-left transition-all duration-200 text-slate-600 hover:bg-red-50 hover:text-red-600">
                         Log Out
                     </button>
                 </form>
@@ -120,13 +120,8 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <button type="button" id="openExpenseModal"
-                            class="hidden sm:inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm">
-                            + Add Expense
-                        </button>
-
                         <a href="{{ route('profile.edit') }}"
-                            class="flex items-center gap-3 px-3 py-2 transition bg-white border rounded-2xl border-slate-200 hover:bg-blue-50 hover:border-blue-100">
+                            class="flex items-center gap-3 px-3 py-2 transition-all duration-200 bg-white border rounded-2xl border-slate-200 hover:bg-blue-50 hover:border-blue-100 hover:shadow-sm">
                             <div
                                 class="flex items-center justify-center text-sm font-bold text-white bg-blue-600 rounded-full w-9 h-9">
                                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -145,10 +140,11 @@
                 </div>
             </header>
 
-            <div id="mobileSidebar" class="fixed inset-0 z-50 hidden lg:hidden">
+            <div id="mobileSidebar" class="fixed inset-0 z-50 hidden transition-opacity duration-300 lg:hidden">
                 <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900/50"></div>
 
-                <aside class="fixed inset-y-0 left-0 flex flex-col bg-white border-r w-72 border-slate-200">
+                <aside id="mobileSidebarPanel"
+                    class="fixed inset-y-0 left-0 flex flex-col transition-transform duration-300 -translate-x-full bg-white border-r w-80 max-w-[85vw] border-slate-200">
                     <div class="flex items-center justify-between h-20 px-6 border-b border-slate-200 bg-blue-50/40">
                         <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
                             <div class="flex items-center justify-center w-10 h-10 bg-blue-600 rounded-2xl">
@@ -187,6 +183,16 @@
                                 class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('categories.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                                 Categories
                             </a>
+
+                            <a href="{{ route('budgets.index') }}"
+                                class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('budgets.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Budgets
+                            </a>
+
+                            <a href="{{ route('reports.index') }}"
+                                class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('reports.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Reports
+                            </a>
                         </div>
 
                         <div class="mt-12">
@@ -214,75 +220,12 @@
                 </aside>
             </div>
 
-            <main class="flex-1 w-full px-4 py-8 sm:px-6 lg:px-8">
+            <main class="flex-1 w-full px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
                 {{ $slot }}
             </main>
         </div>
     </div>
 
-    <div id="expenseModal" class="fixed inset-0 z-50 hidden">
-        <div id="expenseModalBackdrop" class="fixed inset-0 bg-slate-900/50"></div>
-
-        <div class="fixed inset-0 flex items-center justify-center px-4">
-            <div class="w-full max-w-lg bg-white border shadow-xl rounded-2xl border-slate-200">
-                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-900">Add Expense</h2>
-                        <p class="text-sm text-slate-500">Record a new transaction.</p>
-                    </div>
-
-                    <button type="button" id="closeExpenseModal" class="text-slate-400 hover:text-slate-600">
-                        ✕
-                    </button>
-                </div>
-
-                <form method="POST" action="{{ route('expenses.store') }}" class="p-6 space-y-4">
-                    @csrf
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">Category</label>
-                        <select name="category_id" required
-                            class="w-full mt-2 rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
-                            <option value="">Select category</option>
-                            @foreach ($layoutCategories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">Amount</label>
-                        <input type="number" step="0.01" name="amount" required placeholder="0.00"
-                            class="w-full mt-2 rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">Description</label>
-                        <input type="text" name="description" placeholder="What was this for?"
-                            class="w-full mt-2 rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700">Date</label>
-                        <input type="date" name="expense_date" required value="{{ now()->format('Y-m-d') }}"
-                            class="w-full mt-2 rounded-xl border-slate-300 focus:border-blue-600 focus:ring-blue-600">
-                    </div>
-
-                    <div class="flex justify-end gap-3 pt-2">
-                        <button type="button" id="cancelExpenseModal"
-                            class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-                            Cancel
-                        </button>
-
-                        <button type="submit"
-                            class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">
-                            Save Expense
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
     <x-ui.toast />
 
     <script>
@@ -291,30 +234,31 @@
         const sidebarBackdrop = document.getElementById('sidebarBackdrop');
         const closeMobileMenu = document.getElementById('closeMobileMenu');
 
-        mobileMenuBtn?.addEventListener('click', () => mobileSidebar.classList.remove('hidden'));
-        sidebarBackdrop?.addEventListener('click', () => mobileSidebar.classList.add('hidden'));
-        closeMobileMenu?.addEventListener('click', () => mobileSidebar.classList.add('hidden'));
+        const mobileSidebarPanel = document.getElementById("mobileSidebarPanel");
 
-        const expenseModal = document.getElementById('expenseModal');
-        const openExpenseModal = document.getElementById('openExpenseModal');
-        const closeExpenseModal = document.getElementById('closeExpenseModal');
-        const cancelExpenseModal = document.getElementById('cancelExpenseModal');
-        const expenseModalBackdrop = document.getElementById('expenseModalBackdrop');
+        function openSidebar() {
+            mobileSidebar.classList.remove("hidden");
 
-        function openModal() {
-            expenseModal.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
+            requestAnimationFrame(() => {
+                mobileSidebarPanel.classList.remove("-translate-x-full");
+            });
+
+            document.body.classList.add("overflow-hidden");
         }
 
-        function closeModal() {
-            expenseModal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
+        function closeSidebar() {
+            mobileSidebarPanel.classList.add("-translate-x-full");
+
+            setTimeout(() => {
+                mobileSidebar.classList.add("hidden");
+            }, 300);
+
+            document.body.classList.remove("overflow-hidden");
         }
 
-        openExpenseModal?.addEventListener('click', openModal);
-        closeExpenseModal?.addEventListener('click', closeModal);
-        cancelExpenseModal?.addEventListener('click', closeModal);
-        expenseModalBackdrop?.addEventListener('click', closeModal);
+        mobileMenuBtn?.addEventListener("click", openSidebar);
+        sidebarBackdrop?.addEventListener("click", closeSidebar);
+        closeMobileMenu?.addEventListener("click", closeSidebar);
     </script>
 </body>
 

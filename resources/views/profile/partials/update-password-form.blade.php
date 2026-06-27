@@ -5,54 +5,45 @@
         @method('PUT')
 
         <div>
-            <label for="update_password_current_password" class="block text-sm font-semibold text-slate-700">
+            <x-ui.label for="update_password_current_password">
                 Current Password
-            </label>
+            </x-ui.label>
 
-            <input id="update_password_current_password" name="current_password" type="password"
-                autocomplete="current-password"
-                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+            <x-ui.input id="update_password_current_password" type="password" name="current_password"
+                autocomplete="current-password" />
 
-            @error('current_password', 'updatePassword')
-                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-            @enderror
+            <x-ui.form-error field="current_password" />
         </div>
 
         <div>
-            <label for="update_password_password" class="block text-sm font-semibold text-slate-700">
+            <x-ui.label for="update_password_password">
                 New Password
-            </label>
+            </x-ui.label>
 
-            <input id="update_password_password" name="password" type="password" autocomplete="new-password"
-                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+            <x-ui.input id="update_password_password" type="password" name="password" autocomplete="new-password" />
 
-            @error('password', 'updatePassword')
-                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-            @enderror
+            <x-ui.form-error field="password" />
         </div>
 
         <div>
-            <label for="update_password_password_confirmation" class="block text-sm font-semibold text-slate-700">
+            <x-ui.label for="update_password_password_confirmation">
                 Confirm Password
-            </label>
+            </x-ui.label>
 
-            <input id="update_password_password_confirmation" name="password_confirmation" type="password"
-                autocomplete="new-password"
-                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+            <x-ui.input id="update_password_password_confirmation" type="password" name="password_confirmation"
+                autocomplete="new-password" />
 
-            @error('password_confirmation', 'updatePassword')
-                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-            @enderror
+            <x-ui.form-error field="password_confirmation" />
         </div>
 
-        <div class="flex items-center justify-end gap-3 pt-2">
+        <div class="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
             @if (session('status') === 'password-updated')
                 <p class="text-sm font-semibold text-green-600">
                     Saved.
                 </p>
             @endif
 
-            <x-ui.button type="submit" loading loadingText="Updating...">
+            <x-ui.button type="submit" class="w-full sm:w-auto" loading loadingText="Updating...">
                 Update Password
             </x-ui.button>
         </div>

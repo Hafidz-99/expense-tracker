@@ -1,45 +1,30 @@
-<div id="deleteCategoryModal" class="fixed inset-0 z-50 hidden">
-    <div onclick="closeDeleteCategoryModal()" class="fixed inset-0 bg-slate-900/50"></div>
+<x-ui.modal id="deleteCategoryModal" title="Delete Category">
+    <form id="deleteCategoryForm" method="POST">
+        @csrf
+        @method('DELETE')
 
-    <div class="fixed inset-0 flex items-center justify-center px-4">
-        <div class="w-full max-w-md bg-white border shadow-xl rounded-2xl border-slate-200">
-            <div class="px-6 py-5 border-b border-slate-200">
-                <h2 class="text-lg font-bold text-slate-900">
+        <p class="text-sm text-slate-600">
+            Are you sure you want to delete
+            <span id="deleteCategoryName" class="font-semibold text-slate-900"></span>?
+        </p>
+
+        <p class="mt-2 text-sm text-red-600">
+            This action cannot be undone.
+        </p>
+
+        <x-slot:footer>
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <x-ui.button variant="secondary" type="button" onclick="closeDeleteCategoryModal()">
+                    Cancel
+                </x-ui.button>
+
+                <x-ui.button variant="danger" type="submit" loading loadingText="Deleting...">
                     Delete Category
-                </h2>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    Are you sure you want to delete this category?
-                </p>
+                </x-ui.button>
             </div>
-
-            <div class="p-6">
-                <div class="p-4 border border-red-100 rounded-2xl bg-red-50">
-                    <p class="text-sm text-red-700">
-                        You are about to delete
-                        <span id="deleteCategoryName" class="font-bold"></span>.
-                        This action cannot be undone.
-                    </p>
-                </div>
-
-                <form id="deleteCategoryForm" method="POST" class="mt-6">
-                    @csrf
-                    @method('DELETE')
-
-                    <div class="flex justify-end gap-3">
-                        <x-ui.button variant="secondary" type="button" onclick="closeDeleteCategoryModal()">
-                            Cancel
-                        </x-ui.button>
-
-                        <x-ui.button variant="danger" type="submit" loading loadingText="Deleting...">
-                            Delete Category
-                        </x-ui.button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+        </x-slot:footer>
+    </form>
+</x-ui.modal>
 
 <script>
     const deleteCategoryModal = document.getElementById('deleteCategoryModal');
@@ -48,14 +33,16 @@
 
     function openDeleteCategoryModal(action, name) {
         deleteCategoryForm.action = action;
-        deleteCategoryName.textContent = `"${name}"`;
+        deleteCategoryName.textContent = name;
 
         deleteCategoryModal.classList.remove('hidden');
+        deleteCategoryModal.classList.add('flex');
         document.body.classList.add('overflow-hidden');
     }
 
     function closeDeleteCategoryModal() {
         deleteCategoryModal.classList.add('hidden');
+        deleteCategoryModal.classList.remove('flex');
         document.body.classList.remove('overflow-hidden');
     }
 

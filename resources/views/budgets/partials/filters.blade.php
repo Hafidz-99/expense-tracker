@@ -2,45 +2,64 @@
     <form method="GET" action="{{ route('budgets.index') }}">
         <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
             <div>
-                <label class="block text-sm font-medium text-slate-700">
+                <x-ui.label for="year">
                     Year
-                </label>
+                </x-ui.label>
 
-                <input type="number" name="year" min="2020" max="2100" value="{{ request('year') }}"
-                    placeholder="{{ now()->year }}"
-                    class="block w-full mt-1 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
+                <x-ui.input id="year" type="number" name="year" min="2020" max="2100"
+                    value="{{ request('year') }}" placeholder="{{ now()->year }}" />
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">
+                <x-ui.label for="status">
                     Status
-                </label>
+                </x-ui.label>
 
-                <select name="status"
-                    class="block w-full mt-1 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
-                    <option value="all" @selected(request('status', 'all') === 'all')>All Status</option>
-                    <option value="on_track" @selected(request('status') === 'on_track')>On Track</option>
-                    <option value="near_limit" @selected(request('status') === 'near_limit')>Near Limit</option>
-                    <option value="over_budget" @selected(request('status') === 'over_budget')>Over Budget</option>
-                </select>
+                <x-ui.select id="status" name="status">
+                    <option value="all" @selected(request('status', 'all') === 'all')>
+                        All Status
+                    </option>
+
+                    <option value="on_track" @selected(request('status') === 'on_track')>
+                        On Track
+                    </option>
+
+                    <option value="near_limit" @selected(request('status') === 'near_limit')>
+                        Near Limit
+                    </option>
+
+                    <option value="over_budget" @selected(request('status') === 'over_budget')>
+                        Over Budget
+                    </option>
+                </x-ui.select>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">
+                <x-ui.label for="sort">
                     Sort
-                </label>
+                </x-ui.label>
 
-                <select name="sort"
-                    class="block w-full mt-1 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
-                    <option value="latest" @selected(request('sort', 'latest') === 'latest')>Latest</option>
-                    <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
-                    <option value="highest" @selected(request('sort') === 'highest')>Highest Budget</option>
-                    <option value="lowest" @selected(request('sort') === 'lowest')>Lowest Budget</option>
-                </select>
+                <x-ui.select id="sort" name="sort">
+                    <option value="latest" @selected(request('sort', 'latest') === 'latest')>
+                        Latest
+                    </option>
+
+                    <option value="oldest" @selected(request('sort') === 'oldest')>
+                        Oldest
+                    </option>
+
+                    <option value="highest" @selected(request('sort') === 'highest')>
+                        Highest Budget
+                    </option>
+
+                    <option value="lowest" @selected(request('sort') === 'lowest')>
+                        Lowest Budget
+                    </option>
+                </x-ui.select>
             </div>
         </div>
 
-        <div class="flex justify-end gap-3 mt-5">
+        <div class="flex flex-col-reverse gap-3 mt-5 sm:flex-row sm:justify-end">
             <x-ui.button href="{{ route('budgets.index') }}" variant="secondary">
                 Reset
             </x-ui.button>

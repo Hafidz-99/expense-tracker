@@ -48,7 +48,7 @@ class ExpenseController extends Controller
             default => $expensesQuery->latest('expense_date')->latest(),
         };
 
-        $expenses = $expensesQuery->paginate(6)->withQueryString();
+        $expenses = $expensesQuery->paginate(5)->withQueryString();
 
         $monthlySummary = Expense::selectRaw('category_id, SUM(amount) as total')
             ->with('category')

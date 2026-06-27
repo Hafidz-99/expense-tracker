@@ -1,74 +1,54 @@
-<div id="editCategoryModal" class="fixed inset-0 z-50 hidden">
-    <div onclick="closeEditCategoryModal()" class="fixed inset-0 bg-slate-900/50"></div>
+<x-ui.modal id="editCategoryModal" title="Edit Category" description="Update the category name and color.">
+    <form id="editCategoryForm" method="POST" class="space-y-5">
+        @csrf
+        @method('PUT')
 
-    <div class="fixed inset-0 flex items-center justify-center px-4">
-        <div class="w-full max-w-lg bg-white border shadow-xl rounded-2xl border-slate-200">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900">
-                        Edit Category
-                    </h2>
-                    <p class="text-sm text-slate-500">
-                        Update the category name and color.
-                    </p>
+        <div>
+            <x-ui.label for="editCategoryName">
+                Category Name
+            </x-ui.label>
+
+            <x-ui.input id="editCategoryName" type="text" name="name" required />
+
+            <x-ui.form-error field="name" />
+        </div>
+
+        <div>
+            <x-ui.label for="editCategoryColor">
+                Category Color
+            </x-ui.label>
+
+            <div class="relative mt-2">
+                <div id="editSelectedColorPreview"
+                    class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300">
                 </div>
 
-                <button type="button" onclick="closeEditCategoryModal()" class="text-slate-400 hover:text-slate-600">
-                    ✕
-                </button>
+                <select id="editCategoryColor" name="color"
+                    class="w-full pl-10 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                    @foreach ($colors as $hex => $label)
+                        <option value="{{ $hex }}">
+                            {{ $label }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
-            <div class="p-6">
-                <form id="editCategoryForm" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="space-y-5">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">
-                                Category Name
-                            </label>
-
-                            <input id="editCategoryName" type="text" name="name"
-                                class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">
-                                Color
-                            </label>
-
-                            <div class="relative mt-2">
-                                <div id="editSelectedColorPreview"
-                                    class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300">
-                                </div>
-
-                                <select id="editCategoryColor" name="color"
-                                    class="w-full pl-10 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                                    @foreach ($colors as $hex => $label)
-                                        <option value="{{ $hex }}">
-                                            {{ $label }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-end gap-3 pt-2">
-                        <x-ui.button variant="secondary" type="button" onclick="closeEditCategoryModal()">
-                            Cancel
-                        </x-ui.button>
-
-                        <x-ui.button type="submit" loading loadingText="Updating...">
-                            Save Changes
-                        </x-ui.button>
-                    </div>
-                </form>
-            </div>
+            <x-ui.form-error field="color" />
         </div>
-    </div>
-</div>
+
+        <x-slot:footer>
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <x-ui.button variant="secondary" type="button" onclick="closeEditCategoryModal()">
+                    Cancel
+                </x-ui.button>
+
+                <x-ui.button type="submit" loading loadingText="Updating...">
+                    Save Changes
+                </x-ui.button>
+            </div>
+        </x-slot:footer>
+    </form>
+</x-ui.modal>
 
 <script>
     const colorSelect = document.getElementById('colorSelect');
@@ -97,11 +77,13 @@
         updateEditCategoryColorPreview();
 
         editCategoryModal.classList.remove('hidden');
+        editCategoryModal.classList.add('flex');
         document.body.classList.add('overflow-hidden');
     }
 
     function closeEditCategoryModal() {
         editCategoryModal.classList.add('hidden');
+        editCategoryModal.classList.remove('flex');
         document.body.classList.remove('overflow-hidden');
     }
 

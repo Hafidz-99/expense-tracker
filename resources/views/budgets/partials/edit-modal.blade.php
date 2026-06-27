@@ -1,68 +1,60 @@
-<div id="editBudgetModal" class="fixed inset-0 z-50 hidden">
-    <div onclick="closeEditBudgetModal()" class="fixed inset-0 bg-slate-900/50"></div>
+<x-ui.modal id="editBudgetModal" title="Edit Budget" description="Update the budget amount, month, and year."
+    maxWidth="max-w-lg">
+    <form id="editBudgetForm" method="POST" class="space-y-5">
+        @csrf
+        @method('PUT')
 
-    <div class="fixed inset-0 flex items-center justify-center px-4">
-        <div class="w-full max-w-lg bg-white border shadow-xl rounded-2xl border-slate-200">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900">Edit Budget</h2>
-                    <p class="text-sm text-slate-500">Update the budget amount, month, and year.</p>
-                </div>
+        <div>
+            <x-ui.label for="editBudgetAmount">
+                Amount (RM)
+            </x-ui.label>
 
-                <button type="button" onclick="closeEditBudgetModal()" class="text-slate-400 hover:text-slate-600">
-                    ✕
-                </button>
-            </div>
+            <x-ui.input id="editBudgetAmount" type="number" name="amount" step="0.01" min="1" required />
 
-            <form id="editBudgetForm" method="POST" class="p-6 space-y-5">
-                @csrf
-                @method('PUT')
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">Amount (RM)</label>
-                    <input id="editBudgetAmount" type="number" name="amount" step="0.01" min="1"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">Month</label>
-                    <select id="editBudgetMonth" name="month"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                        @for ($i = 1; $i <= 12; $i++)
-                            <option value="{{ $i }}">
-                                {{ \Carbon\Carbon::create()->month($i)->format('F') }}
-                            </option>
-                        @endfor
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">Year</label>
-                    <input id="editBudgetYear" type="number" name="year" min="2020" max="2100"
-                        class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
-                </div>
-
-                <div class="flex justify-end gap-3 pt-2">
-                    <x-ui.button variant="secondary" type="button" onclick="closeEditBudgetModal()">
-                        Cancel
-                    </x-ui.button>
-
-                    <x-ui.button type="submit" loading loadingText="Updating...">
-                        Save Changes
-                    </x-ui.button>
-                </div>
-            </form>
+            <x-ui.form-error field="amount" />
         </div>
-    </div>
-</div>
+
+        <div>
+            <x-ui.label for="editBudgetMonth">
+                Month
+            </x-ui.label>
+
+            <x-ui.select id="editBudgetMonth" name="month" required>
+                @for ($i = 1; $i <= 12; $i++)
+                    <option value="{{ $i }}">
+                        {{ \Carbon\Carbon::create()->month($i)->format('F') }}
+                    </option>
+                @endfor
+            </x-ui.select>
+
+            <x-ui.form-error field="month" />
+        </div>
+
+        <div>
+            <x-ui.label for="editBudgetYear">
+                Year
+            </x-ui.label>
+
+            <x-ui.input id="editBudgetYear" type="number" name="year" min="2020" max="2100" required />
+
+            <x-ui.form-error field="year" />
+        </div>
+
+        <x-slot:footer>
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <x-ui.button variant="secondary" type="button" onclick="closeEditBudgetModal()">
+                    Cancel
+                </x-ui.button>
+
+                <x-ui.button type="submit" loading loadingText="Updating...">
+                    Save Changes
+                </x-ui.button>
+            </div>
+        </x-slot:footer>
+    </form>
+</x-ui.modal>
 
 <script>
-    const editBudgetModal = document.getElementById('editBudgetModal');
-    const editBudgetForm = document.getElementById('editBudgetForm');
-    const editBudgetAmount = document.getElementById('editBudgetAmount');
-    const editBudgetMonth = document.getElementById('editBudgetMonth');
-    const editBudgetYear = document.getElementById('editBudgetYear');
-
     function openEditBudgetModal(action, amount, month, year) {
         editBudgetForm.action = action;
         editBudgetAmount.value = amount;
@@ -70,17 +62,13 @@
         editBudgetYear.value = year;
 
         editBudgetModal.classList.remove('hidden');
+        editBudgetModal.classList.add('flex');
         document.body.classList.add('overflow-hidden');
     }
 
     function closeEditBudgetModal() {
         editBudgetModal.classList.add('hidden');
+        editBudgetModal.classList.remove('flex');
         document.body.classList.remove('overflow-hidden');
     }
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeEditBudgetModal();
-        }
-    });
 </script>

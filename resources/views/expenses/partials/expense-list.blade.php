@@ -1,6 +1,6 @@
 <x-ui.card class="lg:col-span-2" title="Expense List" :description="$expenses->total() . ' records found.'" bodyClass="p-0">
     <x-slot:actions>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
             <span class="hidden text-sm font-medium text-slate-500 sm:block">
                 Sort
             </span>
@@ -10,7 +10,7 @@
                 <input type="hidden" name="category_id" value="{{ request('category_id') }}">
 
                 <select name="sort" onchange="this.form.submit()"
-                    class="text-sm bg-white shadow-sm border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
+                    class="text-sm bg-white shadow-sm min-w-36 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
                     <option value="latest" @selected(request('sort', 'latest') === 'latest')>Latest</option>
                     <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
                     <option value="highest" @selected(request('sort') === 'highest')>Highest Amount</option>
@@ -22,7 +22,7 @@
 
     @forelse ($expenses as $expense)
         <div
-            class="flex flex-col gap-4 px-6 py-4 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between">
+            class="flex flex-col gap-4 px-5 py-5 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
                     <p class="text-sm font-extrabold text-slate-900">
@@ -44,14 +44,14 @@
                     </p>
 
                     <p
-                        class="max-w-sm text-xs truncate {{ $expense->description ? 'text-slate-500' : 'text-slate-400' }}">
+                        class="max-w-sm text-xs break-words {{ $expense->description ? 'text-slate-500' : 'text-slate-400' }}">
                         {{ $expense->description ?: 'No description' }}
                     </p>
                 </div>
             </div>
 
-            <div class="flex items-center self-end gap-2 sm:self-center shrink-0">
-                <x-ui.button size="sm" variant="ghost" type="button"
+            <div class="flex w-full gap-2 sm:w-auto sm:self-center shrink-0">
+                <x-ui.button class="flex-1 sm:flex-none" size="sm" variant="ghost" type="button"
                     onclick="openEditExpenseModal(
                                 '{{ route('expenses.update', $expense) }}',
                                 '{{ $expense->category_id }}',
@@ -62,7 +62,7 @@
                     Edit
                 </x-ui.button>
 
-                <x-ui.button size="sm" variant="danger" type="button"
+                <x-ui.button class="flex-1 sm:flex-none" size="sm" variant="danger" type="button"
                     onclick="openDeleteExpenseModal(
                                 '{{ route('expenses.destroy', $expense) }}',
                                 'RM {{ number_format($expense->amount, 2) }}',

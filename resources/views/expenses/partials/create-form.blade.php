@@ -4,12 +4,11 @@
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div>
-                <label class="block text-sm font-semibold text-slate-700">
+                <x-ui.label for="category_id">
                     Category
-                </label>
+                </x-ui.label>
 
-                <select name="category_id"
-                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                <x-ui.select id="category_id" name="category_id" required>
                     <option value="">Select category</option>
 
                     @foreach ($categories as $category)
@@ -17,38 +16,31 @@
                             {{ $category->name }}
                         </option>
                     @endforeach
-                </select>
+                </x-ui.select>
 
-                @error('category_id')
-                    <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="category_id" />
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-slate-700">
-                    Amount
-                </label>
+                <x-ui.label for="amount">
+                    Amount (RM)
+                </x-ui.label>
 
-                <input type="number" step="0.01" name="amount" value="{{ old('amount') }}" placeholder="0.00"
-                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                <x-ui.input id="amount" type="number" name="amount" step="0.01" min="0.01"
+                    value="{{ old('amount') }}" placeholder="0.00" required />
 
-                @error('amount')
-                    <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="amount" />
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-slate-700">
+                <x-ui.label for="description">
                     Description
-                </label>
+                </x-ui.label>
 
-                <input type="text" name="description" value="{{ old('description') }}"
-                    placeholder="What was this for?"
-                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                <x-ui.input id="description" type="text" name="description" value="{{ old('description') }}"
+                    placeholder="Optional note..." />
 
-                @error('description')
-                    <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="description" />
             </div>
 
             <div>

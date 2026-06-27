@@ -15,83 +15,103 @@
         </p>
 
         <div class="mt-5">
-            <x-ui.button variant="danger" type="button" onclick="openDeleteAccountModal()">
+            <x-ui.button variant="danger" type="button" class="w-full sm:w-auto" onclick="openDeleteAccountModal()">
                 Delete Account
             </x-ui.button>
         </div>
     </div>
 </section>
 
-<div id="deleteAccountModal" class="fixed inset-0 z-50 hidden">
-    <div onclick="closeDeleteAccountModal()" class="fixed inset-0 bg-slate-900/50"></div>
+<x-ui.modal id="deleteAccountModal" title="Delete Account"
+    description="Confirm your password before permanently deleting your account." maxWidth="max-w-lg">
+    <form method="POST" action="{{ route('profile.destroy') }}" class="space-y-5">
+        @csrf
+        @method('DELETE')
 
-    <div class="fixed inset-0 flex items-center justify-center px-4">
-        <div class="w-full max-w-md bg-white border shadow-xl rounded-2xl border-slate-200">
-            <form method="POST" action="{{ route('profile.destroy') }}">
-                @csrf
-                @method('DELETE')
+        <div class="p-4 border border-red-200 rounded-xl bg-red-50">
+            <div class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v4m0 4h.01M10.29 3.86l-7.5 13A2 2 0 004.5 20h15a2 2 0 001.71-3.14l-7.5-13a2 2 0 00-3.42 0z" />
+                </svg>
 
-                <div class="px-6 py-5 border-b border-slate-200">
-                    <h2 class="text-lg font-bold text-slate-900">
-                        Delete Account
-                    </h2>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Enter your password to confirm account deletion.
+                <div>
+                    <h3 class="font-semibold text-red-700">
+                        This action is permanent
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-red-700">
+                        Deleting your account will permanently remove:
+
+                        <span class="block mt-2">
+                            • Profile information
+                        </span>
+
+                        <span class="block">
+                            • Categories
+                        </span>
+
+                        <span class="block">
+                            • Budgets
+                        </span>
+
+                        <span class="block">
+                            • Expenses
+                        </span>
+
+                        <span class="block">
+                            • Reports and history
+                        </span>
+
+                        <span class="block mt-3 font-medium">
+                            This action cannot be undone.
+                        </span>
                     </p>
                 </div>
-
-                <div class="p-6 space-y-5">
-                    <div class="px-4 py-3 border border-red-100 rounded-2xl bg-red-50">
-                        <p class="text-sm text-red-700">
-                            This will permanently delete your account and all related data.
-                        </p>
-                    </div>
-
-                    <div>
-                        <label for="delete_account_password" class="block text-sm font-semibold text-slate-700">
-                            Password
-                        </label>
-
-                        <input id="delete_account_password" name="password" type="password"
-                            placeholder="Enter your password"
-                            class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-red-500 focus:ring-red-500">
-
-                        @error('password', 'userDeletion')
-                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="flex justify-end gap-3">
-                        <x-ui.button variant="secondary" type="button" onclick="closeDeleteAccountModal()">
-                            Cancel
-                        </x-ui.button>
-
-                        <x-ui.button variant="danger" type="submit" loading loadingText="Deleting...">
-                            Delete Account
-                        </x-ui.button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+
+        <div>
+            <x-ui.label for="password">
+                Password
+            </x-ui.label>
+
+            <x-ui.input id="password" type="password" name="password" placeholder="Enter your password" />
+
+            <x-ui.form-error field="userDeletion.password" />
+        </div>
+
+        <x-slot:footer>
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <x-ui.button variant="secondary" type="button" class="w-full sm:w-auto"
+                    onclick="closeDeleteAccountModal()">
+                    Cancel
+                </x-ui.button>
+
+                <x-ui.button variant="danger" type="submit" class="w-full sm:w-auto" loading loadingText="Deleting...">
+                    Delete Account
+                </x-ui.button>
+            </div>
+        </x-slot:footer>
+    </form>
+</x-ui.modal>
 
 <script>
     const deleteAccountModal = document.getElementById('deleteAccountModal');
+    const deleteAccountForm = deleteAccountModal.querySelector('form');
 
     function openDeleteAccountModal() {
         deleteAccountModal.classList.remove('hidden');
+        deleteAccountModal.classList.add('flex');
         document.body.classList.add('overflow-hidden');
     }
 
     function closeDeleteAccountModal() {
         deleteAccountModal.classList.add('hidden');
+        deleteAccountModal.classList.remove('flex');
         document.body.classList.remove('overflow-hidden');
-    }
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeDeleteAccountModal();
-        }
-    });
+        deleteAccountForm.reset();
+    }
 </script>
