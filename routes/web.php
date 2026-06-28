@@ -15,6 +15,8 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::put('/dashboard/preferences', [DashboardController::class, 'updatePreferences'])
+        ->name('dashboard.preferences.update');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -34,11 +36,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
     Route::get('/reports/pdf', [ReportController::class, 'pdf'])->name('reports.pdf');
     Route::get('/reports/excel', [ReportController::class, 'excel'])->name('reports.excel');
+    Route::post('/reports/import', [ReportController::class, 'import'])
+        ->name('reports.import');
+    Route::get('/reports/import/template', [ReportController::class, 'downloadImportTemplate'])
+        ->name('reports.import.template');
 
     Route::get('/settings', [SettingController::class, 'index'])
         ->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])
         ->name('settings.update');
+    Route::delete('/settings/reset/expenses', [SettingController::class, 'resetExpenses'])
+        ->name('settings.reset.expenses');
+
+    Route::delete('/settings/reset/budgets', [SettingController::class, 'resetBudgets'])
+        ->name('settings.reset.budgets');
+
+    Route::delete('/settings/reset/all', [SettingController::class, 'resetAll'])
+        ->name('settings.reset.all');
 });
 
 require __DIR__.'/auth.php';

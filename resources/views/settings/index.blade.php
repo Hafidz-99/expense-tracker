@@ -15,8 +15,6 @@
     <div class="flex justify-center">
         <div class="w-full max-w-4xl space-y-5 sm:space-y-6">
             @include('settings.partials.preferences-card')
-            @include('settings.partials.expense-preferences-card')
-            @include('settings.partials.dashboard-preferences-card')
             @include('settings.partials.data-management-card')
         </div>
     </div>

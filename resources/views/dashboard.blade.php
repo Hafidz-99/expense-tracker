@@ -12,7 +12,11 @@
                 </p>
             </div>
 
-            <div class="flex flex-col w-full gap-3 sm:w-auto sm:flex-row">
+            <div class="flex flex-col my-2 w-full gap-3 sm:w-auto sm:flex-row">
+                <x-ui.button variant="secondary" type="button" onclick="openDashboardPreferencesModal()">
+                    Customize
+                </x-ui.button>
+
                 <div
                     class="px-4 py-2 text-sm font-semibold text-center text-blue-600 border border-blue-200 rounded-xl bg-blue-50">
                     {{ now()->format('d M Y') }}
@@ -29,16 +33,37 @@
     <div class="space-y-6">
         @include('dashboard.partials.stat-cards')
 
-        <div class="grid items-stretch grid-cols-1 gap-6 xl:grid-cols-3">
-            <div class="flex xl:col-span-2">
-                @include('dashboard.partials.budget-progress')
-            </div>
+        @php
+            $showBudgetProgress = $setting?->show_budget_progress ?? true;
+            $showCategoryBreakdown = $setting?->show_category_breakdown ?? true;
+        @endphp
 
-            <div class="flex">
-                @include('dashboard.partials.category-breakdown')
-            </div>
-        </div>
+        @if ($showBudgetProgress || $showCategoryBreakdown)
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                @if ($showBudgetProgress && $showCategoryBreakdown)
+                    <div class="lg:col-span-2">
+                        @include('dashboard.partials.budget-progress')
+                    </div>
 
-        @include('dashboard.partials.recent-expenses')
+                    <div>
+                        @include('dashboard.partials.category-breakdown')
+                    </div>
+                @elseif ($showBudgetProgress)
+                    <div class="lg:col-span-3">
+                        @include('dashboard.partials.budget-progress')
+                    </div>
+                @elseif ($showCategoryBreakdown)
+                    <div class="lg:col-span-3">
+                        @include('dashboard.partials.category-breakdown')
+                    </div>
+                @endif
+            </div>
+        @endif
+
+        @if ($setting?->show_recent_expenses ?? true)
+            @include('dashboard.partials.recent-expenses')
+        @endif
     </div>
+
+    @include('dashboard.partials.view-options-modal')
 </x-app-layout>

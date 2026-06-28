@@ -7,23 +7,29 @@ use App\Models\Category;
 use App\Models\Expense;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         return view('reports.index', $this->getReportData($request));
     }
 
-    public function print(Request $request)
+    public function print(Request $request): View
     {
         return view('reports.print', $this->getReportData($request));
     }
 
-    public function pdf(Request $request)
+    public function pdf(Request $request): Response
     {
         $data = $this->getReportData($request);
 
@@ -35,7 +41,7 @@ class ReportController extends Controller
         return $pdf->download($filename);
     }
 
-    public function excel(Request $request)
+    public function excel(Request $request): BinaryFileResponse
     {
         $data = $this->getReportData($request);
 
@@ -205,5 +211,110 @@ class ReportController extends Controller
             'highestSpendingMonth' => $highestSpendingMonth,
             'reportPeriod' => $reportPeriod,
         ];
+    }
+
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:csv,txt'],
+        ]);
+
+        $user = $request->user();
+
+        $rows = array_map(
+            'str_getcsv',
+            file($request->file('file')->getRealPath())
+        );
+
+        if (count($rows) < 2) {
+            return back()->withErrors([
+                'file' => 'The uploaded CSV file is empty.',
+            ]);
+        }
+
+        $header = array_map('trim', array_map('strtolower', $rows[0]));
+
+        $required = ['date', 'category', 'amount', 'note'];
+
+        foreach ($required as $column) {
+            if (! in_array($column, $header)) {
+                return back()->withErrors([
+                    'file' => "Missing required column: {$column}.",
+                ]);
+            }
+        }
+
+        $indexes = array_flip($header);
+
+        DB::transaction(function () use ($rows, $indexes, $user) {
+
+            foreach (array_slice($rows, 1) as $row) {
+
+                if (count($row) === 0 || empty(array_filter($row))) {
+                    continue;
+                }
+
+                Validator::make([
+                    'date' => $row[$indexes['date']] ?? null,
+                    'category' => $row[$indexes['category']] ?? null,
+                    'amount' => $row[$indexes['amount']] ?? null,
+                ], [
+                    'date' => ['required', 'date'],
+                    'category' => ['required', 'string', 'max:255'],
+                    'amount' => ['required', 'numeric', 'min:0'],
+                ])->validate();
+
+                $category = Category::firstOrCreate(
+                    [
+                        'user_id' => $user->id,
+                        'name' => trim($row[$indexes['category']]),
+                    ],
+                    [
+                        'color' => '#2563EB',
+                    ]
+                );
+
+                Expense::create([
+                    'user_id' => $user->id,
+                    'category_id' => $category->id,
+                    'amount' => $row[$indexes['amount']],
+                    'expense_date' => $row[$indexes['date']],
+                    'description' => $row[$indexes['note']] ?? null,
+                ]);
+            }
+        });
+
+        return back()->with(
+            'success',
+            'Expenses imported successfully.'
+        );
+    }
+
+    public function downloadImportTemplate()
+    {
+        $filename = 'expense-import-template.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ];
+
+        $rows = [
+            ['date', 'category', 'amount', 'note'],
+            ['2026-06-28', 'Food', '15.50', 'Lunch'],
+            ['2026-06-28', 'Transport', '8.20', 'Bus fare'],
+        ];
+
+        $callback = function () use ($rows) {
+            $file = fopen('php://output', 'w');
+
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

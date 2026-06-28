@@ -23,7 +23,7 @@
                     Category
                 </x-ui.label>
 
-                <x-ui.select id="category_id" name="category_id">
+                <x-ui.select id="category_id" name="category_id" onchange="this.form.submit()">
                     <option value="">All Categories</option>
 
                     @foreach ($categories as $category)
@@ -39,7 +39,7 @@
                     Sort
                 </x-ui.label>
 
-                <x-ui.select id="sort" name="sort" class="min-w-36">
+                <x-ui.select id="sort" name="sort" class="min-w-36" onchange="this.form.submit()">
                     <option value="latest" @selected(request('sort', 'latest') === 'latest')>
                         Latest
                     </option>
@@ -70,18 +70,13 @@
                 </x-ui.button>
             </div>
 
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <x-ui.button href="{{ route('reports.print', request()->query()) }}" variant="secondary"
-                    target="_blank">
-                    Print
+            <div class="flex flex-wrap items-center gap-3">
+                <x-ui.button type="button" variant="secondary" onclick="openReportExportModal()">
+                    Export
                 </x-ui.button>
 
-                <x-ui.button href="{{ route('reports.pdf', request()->query()) }}" variant="secondary">
-                    PDF
-                </x-ui.button>
-
-                <x-ui.button href="{{ route('reports.excel', request()->query()) }}" variant="secondary">
-                    Excel
+                <x-ui.button type="button" variant="secondary" onclick="openReportImportModal()">
+                    Import
                 </x-ui.button>
             </div>
         </div>

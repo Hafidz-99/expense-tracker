@@ -20,7 +20,7 @@
                     Cancel
                 </x-ui.button>
 
-                <x-ui.button variant="danger" type="submit" loading loadingText="Deleting...">
+                <x-ui.button variant="danger" type="submit" form="deleteBudgetForm">
                     Delete Budget
                 </x-ui.button>
             </div>

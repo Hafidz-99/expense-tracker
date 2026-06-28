@@ -9,13 +9,13 @@
                 <input type="hidden" name="search" value="{{ request('search') }}">
                 <input type="hidden" name="category_id" value="{{ request('category_id') }}">
 
-                <select name="sort" onchange="this.form.submit()"
+                <x-ui.select name="sort" onchange="this.form.submit()"
                     class="text-sm bg-white shadow-sm min-w-36 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
                     <option value="latest" @selected(request('sort', 'latest') === 'latest')>Latest</option>
                     <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
                     <option value="highest" @selected(request('sort') === 'highest')>Highest Amount</option>
                     <option value="lowest" @selected(request('sort') === 'lowest')>Lowest Amount</option>
-                </select>
+                </x-ui.select>
             </form>
         </div>
     </x-slot:actions>

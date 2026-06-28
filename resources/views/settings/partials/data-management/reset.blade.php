@@ -18,7 +18,12 @@
                 </p>
             </div>
 
-            <x-ui.button type="button" variant="danger" class="justify-center mt-4" disabled>
+            <x-ui.button variant="danger" type="button" class="justify-center mt-4"
+                onclick="openResetModal(
+                    '{{ route('settings.reset.expenses') }}',
+                    'Reset Expenses',
+                    'This will permanently delete all your expenses. This action cannot be undone.'
+                )">
                 Reset Expenses
             </x-ui.button>
         </div>
@@ -33,7 +38,12 @@
                 </p>
             </div>
 
-            <x-ui.button type="button" variant="danger" class="justify-center mt-4" disabled>
+            <x-ui.button variant="danger" type="button" class="justify-center mt-4"
+                onclick="openResetModal(
+                    '{{ route('settings.reset.budgets') }}',
+                    'Reset Budgets',
+                    'This will permanently delete all your budgets. This action cannot be undone.'
+                )">
                 Reset Budgets
             </x-ui.button>
         </div>
@@ -44,17 +54,20 @@
                     Reset Everything
                 </h4>
                 <p class="mt-1 text-sm text-red-600">
-                    Delete categories, expenses, budgets, and settings while keeping your account.
+                    Delete categories, expenses, budgets, and reset preferences while keeping your account.
                 </p>
             </div>
 
-            <x-ui.button type="button" variant="danger" class="justify-center mt-4" disabled>
+            <x-ui.button variant="danger" type="button" class="justify-center mt-4"
+                onclick="openResetModal(
+                    '{{ route('settings.reset.all') }}',
+                    'Reset Everything',
+                    'This will permanently delete all categories, expenses, budgets and reset your preferences. This action cannot be undone.'
+                )">
                 Reset Everything
             </x-ui.button>
         </div>
     </div>
 
-    <p class="mt-3 text-xs text-slate-500">
-        Reset actions are disabled for now and will be completed with confirmation modals and backend protection.
-    </p>
+    @include('settings.partials.data-management.reset-modal')
 </div>

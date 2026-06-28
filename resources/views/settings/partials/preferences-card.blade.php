@@ -40,6 +40,16 @@
             </div>
 
             <div>
+                <x-ui.label for="first_day_of_week">First Day of Week</x-ui.label>
+                <x-ui.select id="first_day_of_week" name="first_day_of_week">
+                    <option value="0" @selected(old('first_day_of_week', $setting->first_day_of_week) == 0)>Sunday</option>
+                    <option value="1" @selected(old('first_day_of_week', $setting->first_day_of_week) == 1)>Monday</option>
+                    <option value="6" @selected(old('first_day_of_week', $setting->first_day_of_week) == 6)>Saturday</option>
+                </x-ui.select>
+                <x-ui.form-error field="first_day_of_week" />
+            </div>
+
+            <div>
                 <x-ui.label for="time_format">Time Format</x-ui.label>
                 <x-ui.select id="time_format" name="time_format">
                     <option value="24" @selected(old('time_format', $setting->time_format) === '24')>24-hour</option>
@@ -48,7 +58,7 @@
                 <x-ui.form-error field="time_format" />
             </div>
 
-            <div class="md:col-span-2">
+            <div>
                 <x-ui.label for="timezone">Timezone</x-ui.label>
                 <x-ui.select id="timezone" name="timezone">
                     <option value="Asia/Kuala_Lumpur" @selected(old('timezone', $setting->timezone) === 'Asia/Kuala_Lumpur')>Asia/Kuala_Lumpur</option>
@@ -97,6 +107,19 @@
 
                 <div>
                     <dt class="text-xs uppercase tracking-wide text-slate-500">
+                        First Day of Week
+                    </dt>
+                    <dd class="mt-1 text-sm font-medium text-slate-800">
+                        {{ [
+                            0 => 'Sunday',
+                            1 => 'Monday',
+                            6 => 'Saturday',
+                        ][$setting->first_day_of_week] ?? 'Monday' }}
+                    </dd>
+                </div>
+
+                <div>
+                    <dt class="text-xs uppercase tracking-wide text-slate-500">
                         Time Format
                     </dt>
                     <dd class="mt-1 text-sm font-medium text-slate-800">
@@ -104,7 +127,7 @@
                     </dd>
                 </div>
 
-                <div class="sm:col-span-2">
+                <div>
                     <dt class="text-xs uppercase tracking-wide text-slate-500">
                         Timezone
                     </dt>

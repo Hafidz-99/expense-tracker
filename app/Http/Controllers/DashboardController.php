@@ -4,13 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Budget;
 use App\Models\Expense;
+use App\Models\Setting;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $userId = auth()->id();
+        $userId = Auth::id();
+
+        $setting = Setting::where('user_id', $userId)->first();
 
         $monthlyTotal = Expense::where('user_id', $userId)
             ->whereMonth('expense_date', now()->month)
@@ -47,7 +54,7 @@ class DashboardController extends Controller
             ->where('user_id', $userId)
             ->latest('expense_date')
             ->latest()
-            ->take(5)
+            ->take($setting?->recent_expenses_count ?? 5)
             ->get();
 
         $currentMonth = now()->month;
@@ -96,6 +103,24 @@ class DashboardController extends Controller
             'budgetUsedPercentage',
             'budgetMessage',
             'budgetStatus',
+            'setting',
         ));
+    }
+
+    public function updatePreferences(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'recent_expenses_count' => ['required', 'integer', 'min:3', 'max:10'],
+        ]);
+
+        $validated['show_budget_progress'] = $request->boolean('show_budget_progress');
+        $validated['show_category_breakdown'] = $request->boolean('show_category_breakdown');
+        $validated['show_recent_expenses'] = $request->boolean('show_recent_expenses');
+
+        $request->user()
+            ->setting()
+            ->update($validated);
+
+        return back()->with('success', 'Dashboard preferences updated successfully.');
     }
 }

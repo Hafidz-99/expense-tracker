@@ -12,7 +12,7 @@
                     <option value="">Select category</option>
 
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
+                        <option value="{{ $category->id }}" @selected(old('category_id', $setting?->default_category_id) == $category->id)>
                             {{ $category->name }}
                         </option>
                     @endforeach
@@ -48,17 +48,15 @@
                     Date
                 </label>
 
-                <input type="date" name="expense_date" value="{{ old('expense_date', now()->format('Y-m-d')) }}"
-                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                <x-ui.input id="expense_date" type="date" name="expense_date" :value="old('expense_date', ($setting?->default_expense_date ?? 'today') === 'today' ? now()->format('Y-m-d') : '')" required
+                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600" />
 
-                @error('expense_date')
-                    <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                @enderror
+                <x-ui.form-error field="expense_date" />
             </div>
         </div>
 
         <div class="flex justify-end mt-4">
-            <x-ui.button type="submit" loading loadingText="Saving...">
+            <x-ui.button type="submit">
                 Save Expense
             </x-ui.button>
         </div>

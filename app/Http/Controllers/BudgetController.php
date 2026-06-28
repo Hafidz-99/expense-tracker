@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Budget;
 use App\Models\Expense;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class BudgetController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $request->validate([
             'year' => ['nullable', 'integer', 'min:2020', 'max:2100'],
@@ -18,13 +21,13 @@ class BudgetController extends Controller
             'sort' => ['nullable', 'in:latest,oldest,highest,lowest'],
         ]);
 
-        $budgetCollection = Budget::where('user_id', auth()->id())
+        $budgetCollection = Budget::where('user_id', Auth::id())
             ->when($request->filled('year'), function ($query) use ($request) {
                 $query->where('year', $request->year);
             })
             ->get()
             ->map(function ($budget) {
-                $spent = Expense::where('user_id', auth()->id())
+                $spent = Expense::where('user_id', Auth::id())
                     ->whereYear('expense_date', $budget->year)
                     ->whereMonth('expense_date', $budget->month)
                     ->sum('amount');
@@ -83,12 +86,12 @@ class BudgetController extends Controller
         $currentMonth = now()->month;
         $currentYear = now()->year;
 
-        $currentBudget = Budget::where('user_id', auth()->id())
+        $currentBudget = Budget::where('user_id', Auth::id())
             ->where('month', $currentMonth)
             ->where('year', $currentYear)
             ->first();
 
-        $currentSpending = Expense::where('user_id', auth()->id())
+        $currentSpending = Expense::where('user_id', Auth::id())
             ->whereYear('expense_date', $currentYear)
             ->whereMonth('expense_date', $currentMonth)
             ->sum('amount');
@@ -104,7 +107,7 @@ class BudgetController extends Controller
         ));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
@@ -114,7 +117,7 @@ class BudgetController extends Controller
                 'between:1,12',
                 Rule::unique('budgets')->where(function ($query) use ($request) {
                     return $query
-                        ->where('user_id', auth()->id())
+                        ->where('user_id', Auth::id())
                         ->where('year', $request->year);
                 }),
             ],
@@ -125,7 +128,7 @@ class BudgetController extends Controller
 
         Budget::updateOrCreate(
             [
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'month' => $validated['month'],
                 'year' => $validated['year'],
             ],
@@ -139,9 +142,9 @@ class BudgetController extends Controller
             ->with('success', 'Budget saved successfully.');
     }
 
-    public function update(Request $request, Budget $budget)
+    public function update(Request $request, Budget $budget): RedirectResponse
     {
-        abort_if($budget->user_id !== auth()->id(), 403);
+        abort_if($budget->user_id !== Auth::id(), 403);
 
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
@@ -151,7 +154,7 @@ class BudgetController extends Controller
                 'between:1,12',
                 Rule::unique('budgets')->where(function ($query) use ($request) {
                     return $query
-                        ->where('user_id', auth()->id())
+                        ->where('user_id', Auth::id())
                         ->where('year', $request->year);
                 })->ignore($budget->id),
             ],
@@ -167,9 +170,9 @@ class BudgetController extends Controller
             ->with('success', 'Budget updated successfully.');
     }
 
-    public function destroy(Budget $budget)
+    public function destroy(Budget $budget): RedirectResponse
     {
-        abort_if($budget->user_id !== auth()->id(), 403);
+        abort_if($budget->user_id !== Auth::id(), 403);
 
         $budget->delete();
 

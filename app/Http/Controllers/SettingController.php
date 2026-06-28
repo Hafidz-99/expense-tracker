@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class SettingController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $user = $request->user();
 
         $setting = $user->setting()->firstOrCreate([
             'user_id' => $user->id,
         ]);
-
-        $categories = Category::where('user_id', $user->id)
-            ->orderBy('name')
-            ->get();
 
         $storageStats = [
             'categories' => $user->categories()->count(),
@@ -27,48 +25,20 @@ class SettingController extends Controller
 
         return view('settings.index', compact(
             'setting',
-            'categories',
             'storageStats',
         ));
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'theme' => ['sometimes', 'required', 'in:light,dark,system'],
             'currency' => ['sometimes', 'required', 'string', 'max:10'],
             'date_format' => ['sometimes', 'required', 'string'],
+            'first_day_of_week' => ['sometimes', 'required', 'integer', 'min:0', 'max:6'],
             'time_format' => ['sometimes', 'required', 'in:12,24'],
             'timezone' => ['sometimes', 'required', 'timezone'],
-
-            'default_category_id' => ['nullable', 'exists:categories,id'],
-            'default_expense_date' => ['sometimes', 'required', 'in:today,blank'],
-            'decimal_precision' => ['sometimes', 'required', 'integer', 'min:0', 'max:4'],
-            'first_day_of_week' => ['sometimes', 'required', 'integer', 'min:0', 'max:6'],
-            'monthly_budget_reminder' => ['nullable', 'boolean'],
-
-            'default_dashboard_period' => ['sometimes', 'required', 'in:monthly,yearly,all_time'],
-            'recent_expenses_count' => ['sometimes', 'required', 'integer', 'min:3', 'max:10'],
-            'show_budget_progress' => ['nullable', 'boolean'],
-            'show_category_breakdown' => ['nullable', 'boolean'],
-            'show_recent_expenses' => ['nullable', 'boolean'],
         ]);
-
-        // $validated['monthly_budget_reminder'] = $request->boolean('monthly_budget_reminder');
-
-        foreach ([
-            'monthly_budget_reminder',
-            'show_budget_progress',
-            'show_category_breakdown',
-            'show_recent_expenses',
-        ] as $checkbox) {
-            if ($request->has($checkbox) || $request->hasAny([
-                'default_dashboard_period',
-                'recent_expenses_count',
-            ])) {
-                $validated[$checkbox] = $request->boolean($checkbox);
-            }
-        }
 
         $request->user()
             ->setting()
@@ -78,5 +48,41 @@ class SettingController extends Controller
             );
 
         return back()->with('success', 'Preferences updated successfully.');
+    }
+
+    public function resetExpenses(): RedirectResponse
+    {
+        request()->user()->expenses()->delete();
+
+        return back()->with('success', 'All expenses have been deleted successfully.');
+    }
+
+    public function resetBudgets(): RedirectResponse
+    {
+        request()->user()->budgets()->delete();
+
+        return back()->with('success', 'All budgets have been deleted successfully.');
+    }
+
+    public function resetAll(): RedirectResponse
+    {
+        $user = request()->user();
+
+        DB::transaction(function () use ($user) {
+            $user->expenses()->delete();
+            $user->budgets()->delete();
+            $user->categories()->delete();
+
+            $user->setting()->update([
+                'theme' => 'light',
+                'currency' => 'MYR',
+                'date_format' => 'd/m/Y',
+                'time_format' => '24',
+                'timezone' => 'Asia/Kuala_Lumpur',
+                'first_day_of_week' => 1,
+            ]);
+        });
+
+        return back()->with('success', 'All application data has been reset successfully.');
     }
 }

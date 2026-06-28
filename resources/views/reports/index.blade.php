@@ -35,4 +35,7 @@
         @include('reports.partials.category-report')
         @include('reports.partials.expense-list')
     </div>
+
+    @include('reports.partials.export-modal')
+    @include('reports.partials.import-modal')
 </x-app-layout>

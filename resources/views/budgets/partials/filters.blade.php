@@ -15,7 +15,7 @@
                     Status
                 </x-ui.label>
 
-                <x-ui.select id="status" name="status">
+                <x-ui.select id="status" name="status" onchange="this.form.submit()">
                     <option value="all" @selected(request('status', 'all') === 'all')>
                         All Status
                     </option>
@@ -39,7 +39,7 @@
                     Sort
                 </x-ui.label>
 
-                <x-ui.select id="sort" name="sort">
+                <x-ui.select id="sort" name="sort" onchange="this.form.submit()">
                     <option value="latest" @selected(request('sort', 'latest') === 'latest')>
                         Latest
                     </option>

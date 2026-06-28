@@ -46,7 +46,7 @@
                     Cancel
                 </x-ui.button>
 
-                <x-ui.button type="submit" loading loadingText="Updating...">
+                <x-ui.button type="submit" form="editBudgetForm">
                     Save Changes
                 </x-ui.button>
             </div>

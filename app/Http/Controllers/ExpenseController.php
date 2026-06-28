@@ -4,24 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Expense;
+use App\Models\Setting;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ExpenseController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $userId = auth()->id();
+        $userId = Auth::id();
+
+        $setting = Setting::where('user_id', $userId)->first();
 
         $categories = Category::where('user_id', $userId)
             ->orderBy('name')
             ->get();
 
         $request->validate([
-            'search' => 'nullable|string|max:255',
-            'month' => 'nullable|integer|min:1|max:12',
-            'year' => 'nullable|integer|min:2000|max:'.now()->year,
-            'category_id' => 'nullable|integer',
-            'sort' => 'nullable|in:newest,oldest,highest,lowest',
+            'search' => ['nullable', 'string', 'max:255'],
+            'month' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:'.now()->year],
+            'category_id' => ['nullable', 'integer'],
+            'sort' => ['nullable', 'in:newest,oldest,highest,lowest'],
         ]);
 
         $selectedMonth = (int) ($request->month ?? now()->month);
@@ -64,19 +70,20 @@ class ExpenseController extends Controller
             'categories',
             'monthlySummary',
             'selectedMonth',
-            'selectedYear'
+            'selectedYear',
+            'setting',
         ));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $userId = auth()->id();
+        $userId = Auth::id();
 
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'nullable|string|max:255',
-            'expense_date' => 'required|date',
+            'category_id' => ['required', 'exists:categories,id'],
+            'amount' => ['required', 'numeric', 'min:0.01'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'expense_date' => ['required', 'date'],
         ]);
 
         Category::where('id', $request->category_id)
@@ -95,17 +102,17 @@ class ExpenseController extends Controller
             ->with('success', 'Expense added successfully.');
     }
 
-    public function update(Request $request, Expense $expense)
+    public function update(Request $request, Expense $expense): RedirectResponse
     {
-        $userId = auth()->id();
+        $userId = Auth::id();
 
         abort_if($expense->user_id !== $userId, 403);
 
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'nullable|string|max:255',
-            'expense_date' => 'required|date',
+            'category_id' => ['required', 'exists:categories,id'],
+            'amount' => ['required', 'numeric', 'min:0.01'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'expense_date' => ['required', 'date'],
         ]);
 
         Category::where('id', $request->category_id)
@@ -123,9 +130,9 @@ class ExpenseController extends Controller
             ->with('success', 'Expense updated successfully.');
     }
 
-    public function destroy(Expense $expense)
+    public function destroy(Expense $expense): RedirectResponse
     {
-        abort_if($expense->user_id !== auth()->id(), 403);
+        abort_if($expense->user_id !== Auth::id(), 403);
 
         $expense->delete();
 

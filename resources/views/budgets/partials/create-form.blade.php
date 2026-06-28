@@ -43,7 +43,7 @@
         </div>
 
         <div class="flex justify-end">
-            <x-ui.button type="submit" class="w-full sm:w-auto" loading loadingText="Saving...">
+            <x-ui.button type="submit" class="w-full sm:w-auto">
                 Save Budget
             </x-ui.button>
         </div>

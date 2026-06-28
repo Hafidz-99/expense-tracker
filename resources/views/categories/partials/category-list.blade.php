@@ -8,7 +8,7 @@
                     Sort
                 </x-ui.label>
 
-                <x-ui.select id="sort" name="sort" class="min-w-36">
+                <x-ui.select id="sort" name="sort" class="min-w-36" onchange="this.form.submit()">
                     <option value="az" @selected(request('sort', 'az') === 'az')>
                         A-Z
                     </option>
@@ -46,11 +46,7 @@
             </div>
 
             <div class="flex self-end w-full gap-2 shrink-0 sm:w-auto sm:self-center">
-                <x-ui.button
-                    size="sm"
-                    variant="ghost"
-                    type="button"
-                    class="flex-1 sm:flex-none"
+                <x-ui.button size="sm" variant="ghost" type="button" class="flex-1 sm:flex-none"
                     onclick="openEditCategoryModal(
                         '{{ route('categories.update', $category) }}',
                         '{{ addslashes($category->name) }}',
@@ -59,11 +55,7 @@
                     Edit
                 </x-ui.button>
 
-                <x-ui.button
-                    size="sm"
-                    variant="danger"
-                    type="button"
-                    class="flex-1 sm:flex-none"
+                <x-ui.button size="sm" variant="danger" type="button" class="flex-1 sm:flex-none"
                     onclick="openDeleteCategoryModal(
                         '{{ route('categories.destroy', $category) }}',
                         '{{ addslashes($category->name) }}'
@@ -74,8 +66,7 @@
         </div>
     @empty
         <div class="p-6">
-            <x-ui.empty-state
-                title="No categories found"
+            <x-ui.empty-state title="No categories found"
                 description="Try changing your search keyword or create a new category." />
         </div>
     @endforelse
