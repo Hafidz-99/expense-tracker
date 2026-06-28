@@ -81,6 +81,12 @@
                         {{ request()->routeIs('profile.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                         Profile
                     </a>
+
+                    <a href="{{ route('settings.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold transition
+                        {{ request()->routeIs('settings.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                        Setting
+                    </a>
                 </div>
             </nav>
 
@@ -206,6 +212,11 @@
                             <a href="{{ route('profile.edit') }}"
                                 class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('profile.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
                                 Profile
+                            </a>
+
+                            <a href="{{ route('settings.index') }}"
+                                class="block px-3 py-2.5 rounded-xl border-l-4 text-sm font-semibold {{ request()->routeIs('settings.*') ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-transparent text-slate-600 hover:bg-blue-50 hover:text-blue-600' }}">
+                                Setting
                             </a>
                         </div>
                     </nav>
