@@ -18,7 +18,6 @@
             @include('settings.partials.expense-preferences-card')
             @include('settings.partials.dashboard-preferences-card')
             @include('settings.partials.data-management-card')
-            @include('settings.partials.security-card')
         </div>
     </div>
 </x-app-layout>

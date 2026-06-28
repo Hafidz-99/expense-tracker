@@ -9,17 +9,26 @@ class SettingController extends Controller
 {
     public function index(Request $request)
     {
-        $setting = $request->user()->setting()->firstOrCreate([
-            'user_id' => $request->user()->id,
+        $user = $request->user();
+
+        $setting = $user->setting()->firstOrCreate([
+            'user_id' => $user->id,
         ]);
 
-        $categories = Category::where('user_id', $request->user()->id)
+        $categories = Category::where('user_id', $user->id)
             ->orderBy('name')
             ->get();
+
+        $storageStats = [
+            'categories' => $user->categories()->count(),
+            'expenses' => $user->expenses()->count(),
+            'budgets' => $user->budgets()->count(),
+        ];
 
         return view('settings.index', compact(
             'setting',
             'categories',
+            'storageStats',
         ));
     }
 
