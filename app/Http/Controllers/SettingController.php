@@ -37,9 +37,29 @@ class SettingController extends Controller
             'decimal_precision' => ['sometimes', 'required', 'integer', 'min:0', 'max:4'],
             'first_day_of_week' => ['sometimes', 'required', 'integer', 'min:0', 'max:6'],
             'monthly_budget_reminder' => ['nullable', 'boolean'],
+
+            'default_dashboard_period' => ['sometimes', 'required', 'in:monthly,yearly,all_time'],
+            'recent_expenses_count' => ['sometimes', 'required', 'integer', 'min:3', 'max:10'],
+            'show_budget_progress' => ['nullable', 'boolean'],
+            'show_category_breakdown' => ['nullable', 'boolean'],
+            'show_recent_expenses' => ['nullable', 'boolean'],
         ]);
 
-        $validated['monthly_budget_reminder'] = $request->boolean('monthly_budget_reminder');
+        // $validated['monthly_budget_reminder'] = $request->boolean('monthly_budget_reminder');
+
+        foreach ([
+            'monthly_budget_reminder',
+            'show_budget_progress',
+            'show_category_breakdown',
+            'show_recent_expenses',
+        ] as $checkbox) {
+            if ($request->has($checkbox) || $request->hasAny([
+                'default_dashboard_period',
+                'recent_expenses_count',
+            ])) {
+                $validated[$checkbox] = $request->boolean($checkbox);
+            }
+        }
 
         $request->user()
             ->setting()

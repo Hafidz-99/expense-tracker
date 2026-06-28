@@ -21,6 +21,10 @@ class Setting extends Model
         'dashboard_cards',
         'default_expense_date',
         'monthly_budget_reminder',
+        'recent_expenses_count',
+        'show_budget_progress',
+        'show_category_breakdown',
+        'show_recent_expenses',
     ];
 
     protected $casts = [
@@ -28,6 +32,10 @@ class Setting extends Model
         'first_day_of_week' => 'integer',
         'decimal_precision' => 'integer',
         'monthly_budget_reminder' => 'boolean',
+        'recent_expenses_count' => 'integer',
+        'show_budget_progress' => 'boolean',
+        'show_category_breakdown' => 'boolean',
+        'show_recent_expenses' => 'boolean',
     ];
 
     public function user(): BelongsTo
