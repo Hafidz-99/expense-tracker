@@ -6,7 +6,7 @@
         </x-ui.badge>
     </x-slot:actions>
 
-    <div class="mt-6 space-y-5">
+    <div class="space-y-5">
         @php
             $summaryTotal = $monthlySummary->sum('total');
         @endphp

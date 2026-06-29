@@ -1,38 +1,31 @@
-<x-ui.card title="Monthly Trend" description="Spending summary for each month." bodyClass="p-0">
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
-                <tr>
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500">
-                        Month
-                    </th>
+<x-ui.card title="Monthly Trend" description="Monthly spending compared across the selected year.">
+    @php
+        $highestMonthlyTotal = collect($monthlyTrend)->max('total') ?: 0;
+    @endphp
 
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-right uppercase text-slate-500">
-                        Total Spending
-                    </th>
-                </tr>
-            </thead>
+    <div class="space-y-4">
+        @forelse ($monthlyTrend as $trend)
+            @php
+                $percentage = $highestMonthlyTotal > 0 ? ($trend['total'] / $highestMonthlyTotal) * 100 : 0;
+            @endphp
 
-            <tbody class="bg-white divide-y divide-slate-100">
-                @forelse ($monthlyTrend as $trend)
-                    <tr class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm">
-                        <td class="px-6 py-4 text-sm font-medium text-slate-700">
-                            {{ $trend['month'] }}
-                        </td>
+            <div class="space-y-2">
+                <div class="flex items-center justify-between gap-4">
+                    <p class="text-sm font-medium text-slate-700">
+                        {{ $trend['month'] }}
+                    </p>
 
-                        <td class="px-6 py-4 text-sm font-semibold text-right text-slate-900">
-                            RM {{ number_format($trend['total'], 2) }}
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="2" class="p-6">
-                            <x-ui.empty-state title="No monthly trend"
-                                description="No spending data for the selected year." />
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                    <p class="text-sm font-semibold text-slate-900">
+                        RM {{ number_format($trend['total'], 2) }}
+                    </p>
+                </div>
+
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                    <div class="h-full bg-blue-600 rounded-full" style="width: {{ $percentage }}%"></div>
+                </div>
+            </div>
+        @empty
+            <x-ui.empty-state title="No monthly trend" description="No spending data for the selected year." />
+        @endforelse
     </div>
 </x-ui.card>

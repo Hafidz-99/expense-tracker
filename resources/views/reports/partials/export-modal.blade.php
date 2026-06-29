@@ -1,14 +1,14 @@
 <x-ui.modal id="reportExportModal" title="Export Report">
     <div class="space-y-3">
-        <x-ui.button :href="route('reports.excel')" variant="secondary" class="justify-center w-full">
+        <x-ui.button :href="route('reports.excel', request()->query())" variant="secondary" class="justify-center w-full">
             Export Excel
         </x-ui.button>
 
-        <x-ui.button :href="route('reports.pdf')" variant="secondary" class="justify-center w-full">
+        <x-ui.button :href="route('reports.pdf', request()->query())" variant="secondary" class="justify-center w-full">
             Export PDF
         </x-ui.button>
 
-        <x-ui.button :href="route('reports.print')" variant="secondary" class="justify-center w-full">
+        <x-ui.button :href="route('reports.print', request()->query())" variant="secondary" class="justify-center w-full">
             Print Report
         </x-ui.button>
     </div>

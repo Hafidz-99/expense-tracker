@@ -55,9 +55,12 @@
             </div>
 
             <div class="p-4 border rounded-xl border-slate-200">
-                <p class="text-sm text-slate-500">Average Daily Spending</p>
+                <p class="text-sm text-slate-500">
+                    Average Transaction
+                </p>
+
                 <p class="mt-1 text-xl font-bold">
-                    RM {{ number_format($averageDailySpending, 2) }}
+                    RM {{ number_format($averageTransaction, 2) }}
                 </p>
             </div>
 

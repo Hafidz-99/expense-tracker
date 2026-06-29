@@ -10,12 +10,15 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
@@ -36,26 +39,27 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('reports.pdf', $data)
             ->setPaper('a4', 'portrait');
 
-        $filename = 'expense-report-'.now()->format('Ymd-His').'.pdf';
-
-        return $pdf->download($filename);
+        return $pdf->download('expense-report-'.now()->format('Ymd-His').'.pdf');
     }
 
     public function excel(Request $request): BinaryFileResponse
     {
-        $data = $this->getReportData($request);
-
         return Excel::download(
-            new ExpenseReportExport($data),
+            new ExpenseReportExport($this->getReportData($request)),
             'expense-report-'.now()->format('Ymd-His').'.xlsx'
         );
     }
 
     private function getReportData(Request $request): array
     {
+        $userId = Auth::id();
+
         $request->validate([
             'month' => ['nullable', 'date_format:Y-m'],
-            'category_id' => ['nullable', 'exists:categories,id'],
+            'category_id' => [
+                'nullable',
+                Rule::exists('categories', 'id')->where('user_id', $userId),
+            ],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'search' => ['nullable', 'string', 'max:255'],
@@ -71,12 +75,12 @@ class ReportController extends Controller
 
         $selectedDate = Carbon::createFromFormat('Y-m', $selectedMonth);
 
-        $categories = Category::where('user_id', Auth::id())
+        $categories = Category::where('user_id', $userId)
             ->orderBy('name')
             ->get();
 
         $query = Expense::with('category')
-            ->where('user_id', Auth::id());
+            ->where('user_id', $userId);
 
         if ($startDate && $endDate) {
             $query->whereBetween('expense_date', [$startDate, $endDate]);
@@ -98,25 +102,17 @@ class ReportController extends Controller
             });
         }
 
-        $query = match ($sort) {
-            'oldest' => $query->orderBy('expense_date'),
-            'highest' => $query->orderByDesc('amount'),
-            'lowest' => $query->orderBy('amount'),
-            default => $query->orderByDesc('expense_date'),
+        match ($sort) {
+            'oldest' => $query->orderBy('expense_date')->orderBy('id'),
+            'highest' => $query->orderByDesc('amount')->orderByDesc('expense_date'),
+            'lowest' => $query->orderBy('amount')->orderByDesc('expense_date'),
+            default => $query->orderByDesc('expense_date')->orderByDesc('id'),
         };
 
         $expenses = $query->get();
 
         $totalSpending = $expenses->sum('amount');
         $totalTransactions = $expenses->count();
-
-        $daysCount = $startDate && $endDate
-            ? Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate)) + 1
-            : $selectedDate->daysInMonth;
-
-        $averageDailySpending = $daysCount > 0
-            ? $totalSpending / $daysCount
-            : 0;
 
         $categoryReports = $expenses
             ->groupBy('category_id')
@@ -143,30 +139,9 @@ class ReportController extends Controller
             ? $totalSpending / $totalTransactions
             : 0;
 
-        $largestExpense = $expenses
-            ->sortByDesc('amount')
-            ->first();
-
-        $mostUsedCategory = $categoryReports
-            ->sortByDesc('transactions')
-            ->first();
-
-        $previousMonth = $selectedDate->copy()->subMonth();
-
-        $previousMonthTotal = Expense::where('user_id', Auth::id())
-            ->whereYear('expense_date', $previousMonth->year)
-            ->whereMonth('expense_date', $previousMonth->month)
-            ->sum('amount');
-
-        $monthlyDifference = $totalSpending - $previousMonthTotal;
-
-        $monthlyDifferencePercentage = $previousMonthTotal > 0
-            ? ($monthlyDifference / $previousMonthTotal) * 100
-            : 0;
-
         $year = $selectedDate->year;
 
-        $monthlyTrend = Expense::where('user_id', Auth::id())
+        $monthlyTrend = Expense::where('user_id', $userId)
             ->whereYear('expense_date', $year)
             ->selectRaw('MONTH(expense_date) as month, SUM(amount) as total')
             ->groupBy('month')
@@ -179,9 +154,20 @@ class ReportController extends Controller
                 ];
             });
 
-        $highestSpendingMonth = $monthlyTrend
-            ->sortByDesc('total')
-            ->first();
+        $perPage = 5;
+        $currentPage = request()->input('trend_page', 1);
+
+        $monthlyTrend = new LengthAwarePaginator(
+            $monthlyTrend->forPage($currentPage, $perPage)->values(),
+            $monthlyTrend->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'pageName' => 'trend_page',
+                'query' => request()->query(),
+            ]
+        );
 
         $reportPeriod = $startDate && $endDate
             ? Carbon::parse($startDate)->format('d/m/Y').' - '.Carbon::parse($endDate)->format('d/m/Y')
@@ -198,17 +184,10 @@ class ReportController extends Controller
             'expenses' => $expenses,
             'totalSpending' => $totalSpending,
             'totalTransactions' => $totalTransactions,
-            'averageDailySpending' => $averageDailySpending,
             'categoryReports' => $categoryReports,
             'topCategory' => $topCategory,
             'averageTransaction' => $averageTransaction,
-            'largestExpense' => $largestExpense,
-            'mostUsedCategory' => $mostUsedCategory,
-            'previousMonthTotal' => $previousMonthTotal,
-            'monthlyDifference' => $monthlyDifference,
-            'monthlyDifferencePercentage' => $monthlyDifferencePercentage,
             'monthlyTrend' => $monthlyTrend,
-            'highestSpendingMonth' => $highestSpendingMonth,
             'reportPeriod' => $reportPeriod,
         ];
     }
@@ -247,9 +226,7 @@ class ReportController extends Controller
         $indexes = array_flip($header);
 
         DB::transaction(function () use ($rows, $indexes, $user) {
-
             foreach (array_slice($rows, 1) as $row) {
-
                 if (count($row) === 0 || empty(array_filter($row))) {
                     continue;
                 }
@@ -261,7 +238,7 @@ class ReportController extends Controller
                 ], [
                     'date' => ['required', 'date'],
                     'category' => ['required', 'string', 'max:255'],
-                    'amount' => ['required', 'numeric', 'min:0'],
+                    'amount' => ['required', 'numeric', 'min:0.01'],
                 ])->validate();
 
                 $category = Category::firstOrCreate(
@@ -284,13 +261,10 @@ class ReportController extends Controller
             }
         });
 
-        return back()->with(
-            'success',
-            'Expenses imported successfully.'
-        );
+        return back()->with('success', 'Expenses imported successfully.');
     }
 
-    public function downloadImportTemplate()
+    public function downloadImportTemplate(): StreamedResponse
     {
         $filename = 'expense-import-template.csv';
 

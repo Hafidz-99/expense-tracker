@@ -63,6 +63,7 @@ class ExpenseController extends Controller
             ->whereYear('expense_date', $selectedYear)
             ->groupBy('category_id')
             ->orderByDesc('total')
+            ->limit(7)
             ->get();
 
         return view('expenses.index', compact(

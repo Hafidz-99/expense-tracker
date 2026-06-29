@@ -112,8 +112,10 @@
                 <div class="value">{{ $totalTransactions }}</div>
             </td>
             <td>
-                <div class="label">Average Daily</div>
-                <div class="value">RM {{ number_format($averageDailySpending, 2) }}</div>
+                <div class="label">Average Transaction</div>
+                <div class="value">
+                    RM {{ number_format($averageTransaction, 2) }}
+                </div>
             </td>
             <td>
                 <div class="label">Top Category</div>
@@ -121,31 +123,6 @@
             </td>
         </tr>
     </table>
-
-    <div class="section">
-        <div class="section-title">Analytics</div>
-
-        <table class="cards">
-            <tr>
-                <td>
-                    <div class="label">Average Transaction</div>
-                    <div class="value">RM {{ number_format($averageTransaction, 2) }}</div>
-                </td>
-                <td>
-                    <div class="label">Largest Expense</div>
-                    <div class="value">RM {{ number_format($largestExpense->amount ?? 0, 2) }}</div>
-                </td>
-                <td>
-                    <div class="label">Most Used Category</div>
-                    <div class="value">{{ $mostUsedCategory['category']->name ?? 'No data' }}</div>
-                </td>
-                <td>
-                    <div class="label">Highest Spending Month</div>
-                    <div class="value">{{ $highestSpendingMonth['month'] ?? 'No data' }}</div>
-                </td>
-            </tr>
-        </table>
-    </div>
 
     <div class="section">
         <div class="section-title">Category Breakdown</div>
