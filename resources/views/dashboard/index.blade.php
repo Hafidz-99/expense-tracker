@@ -12,7 +12,7 @@
                 </p>
             </div>
 
-            <div class="flex flex-col my-2 w-full gap-3 sm:w-auto sm:flex-row">
+            <div class="flex flex-col w-full gap-3 my-2 sm:w-auto sm:flex-row">
                 <x-ui.button variant="secondary" type="button" onclick="openDashboardPreferencesModal()">
                     Customize
                 </x-ui.button>
@@ -31,7 +31,7 @@
     </x-slot>
 
     <div class="space-y-6">
-        @include('dashboard.partials.stat-cards')
+        @include('dashboard.widgets.statistics')
 
         @php
             $showBudgetProgress = $setting?->show_budget_progress ?? true;
@@ -42,28 +42,28 @@
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 @if ($showBudgetProgress && $showCategoryBreakdown)
                     <div class="lg:col-span-2">
-                        @include('dashboard.partials.budget-progress')
+                        @include('dashboard.widgets.budget-progress')
                     </div>
 
                     <div>
-                        @include('dashboard.partials.category-breakdown')
+                        @include('dashboard.widgets.category-breakdown')
                     </div>
                 @elseif ($showBudgetProgress)
                     <div class="lg:col-span-3">
-                        @include('dashboard.partials.budget-progress')
+                        @include('dashboard.widgets.budget-progress')
                     </div>
                 @elseif ($showCategoryBreakdown)
                     <div class="lg:col-span-3">
-                        @include('dashboard.partials.category-breakdown')
+                        @include('dashboard.widgets.category-breakdown')
                     </div>
                 @endif
             </div>
         @endif
 
         @if ($setting?->show_recent_expenses ?? true)
-            @include('dashboard.partials.recent-expenses')
+            @include('dashboard.widgets.recent-expenses')
         @endif
     </div>
 
-    @include('dashboard.partials.view-options-modal')
+    @include('dashboard.modals.view-options')
 </x-app-layout>

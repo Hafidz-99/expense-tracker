@@ -90,7 +90,7 @@ class DashboardController extends Controller
             }
         }
 
-        return view('dashboard', compact(
+        return view('dashboard.index', compact(
             'monthlyTotal',
             'todayTotal',
             'totalTransactions',
