@@ -32,12 +32,7 @@ class SettingController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'theme' => ['sometimes', 'required', 'in:light,dark,system'],
-            'currency' => ['sometimes', 'required', 'string', 'max:10'],
-            'date_format' => ['sometimes', 'required', 'string'],
-            'first_day_of_week' => ['sometimes', 'required', 'integer', 'min:0', 'max:6'],
-            'time_format' => ['sometimes', 'required', 'in:12,24'],
-            'timezone' => ['sometimes', 'required', 'timezone'],
+            'theme' => ['required', 'in:light,dark,system'],
         ]);
 
         $request->user()
@@ -75,11 +70,6 @@ class SettingController extends Controller
 
             $user->setting()->update([
                 'theme' => 'light',
-                'currency' => 'MYR',
-                'date_format' => 'd/m/Y',
-                'time_format' => '24',
-                'timezone' => 'Asia/Kuala_Lumpur',
-                'first_day_of_week' => 1,
             ]);
         });
 

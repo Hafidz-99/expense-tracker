@@ -70,7 +70,7 @@
                 </x-ui.button>
             </div>
 
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
                 <x-ui.button type="button" variant="secondary" onclick="openReportExportModal()">
                     Export
                 </x-ui.button>

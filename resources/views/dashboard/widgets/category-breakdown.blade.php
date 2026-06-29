@@ -11,17 +11,17 @@
 
         <div class="mb-5 last:mb-0">
             <div class="flex items-start justify-between gap-3">
-                <p class="text-sm font-semibold break-words text-slate-700">
+                <p class="text-sm font-semibold break-words text-slate-700 dark:text-slate-300">
                     {{ $category->category?->name ?? 'Unknown Category' }}
                 </p>
 
-                <p class="text-sm font-bold text-slate-900 shrink-0">
+                <p class="text-sm font-bold text-slate-900 dark:text-slate-100 shrink-0">
                     RM {{ number_format($category->total, 2) }}
                 </p>
             </div>
 
             <div class="flex items-center gap-3 mt-2">
-                <div class="flex-1 h-2 overflow-hidden rounded-full bg-slate-100">
+                <div class="flex-1 h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
                     <div class="h-full transition-all duration-700 rounded-full"
                         style="
                             width: {{ min($percentage, 100) }}%;
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <span class="w-10 text-xs font-semibold text-right text-slate-500">
+                <span class="w-10 text-xs font-semibold text-right text-slate-500 dark:text-slate-400">
                     {{ $percentage }}%
                 </span>
             </div>

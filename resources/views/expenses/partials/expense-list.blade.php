@@ -1,7 +1,7 @@
 <x-ui.card class="lg:col-span-2" title="Expense List" :description="$expenses->total() . ' records found.'" bodyClass="p-0">
     <x-slot:actions>
         <div class="flex items-center gap-3">
-            <span class="hidden text-sm font-medium text-slate-500 sm:block">
+            <span class="hidden text-sm font-medium text-slate-500 dark:text-slate-400 sm:block">
                 Sort
             </span>
 
@@ -10,7 +10,7 @@
                 <input type="hidden" name="category_id" value="{{ request('category_id') }}">
 
                 <x-ui.select name="sort" onchange="this.form.submit()"
-                    class="text-sm bg-white shadow-sm min-w-36 border-slate-300 rounded-xl focus:border-blue-500 focus:ring-blue-500">
+                    class="min-w-36 rounded-xl border-slate-300 bg-white text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
                     <option value="latest" @selected(request('sort', 'latest') === 'latest')>Latest</option>
                     <option value="oldest" @selected(request('sort') === 'oldest')>Oldest</option>
                     <option value="highest" @selected(request('sort') === 'highest')>Highest Amount</option>
@@ -22,10 +22,10 @@
 
     @forelse ($expenses as $expense)
         <div
-            class="flex flex-col gap-4 px-5 py-5 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between">
+            class="flex flex-col gap-4 px-5 py-5 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/40 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
-                    <p class="text-sm font-extrabold text-slate-900">
+                    <p class="text-sm font-extrabold text-slate-900 dark:text-slate-100">
                         RM {{ number_format($expense->amount, 2) }}
                     </p>
 
@@ -39,12 +39,12 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3 mt-1">
-                    <p class="text-xs text-slate-500">
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
                         {{ \Carbon\Carbon::parse($expense->expense_date)->format('d/m/Y') }}
                     </p>
 
                     <p
-                        class="max-w-sm text-xs break-words {{ $expense->description ? 'text-slate-500' : 'text-slate-400' }}">
+                        class="max-w-sm text-xs break-words {{ $expense->description ? 'text-slate-500 dark:text-slate-400' : 'text-slate-400 dark:text-slate-500' }}">
                         {{ $expense->description ?: 'No description' }}
                     </p>
                 </div>

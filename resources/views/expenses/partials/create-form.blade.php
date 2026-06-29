@@ -38,18 +38,17 @@
                 </x-ui.label>
 
                 <x-ui.input id="description" type="text" name="description" value="{{ old('description') }}"
-                    placeholder="Optional note..." />
+                    placeholder="Optional description..." />
 
                 <x-ui.form-error field="description" />
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-slate-700">
+                <x-ui.label for="expense_date">
                     Date
-                </label>
+                </x-ui.label>
 
-                <x-ui.input id="expense_date" type="date" name="expense_date" :value="old('expense_date', ($setting?->default_expense_date ?? 'today') === 'today' ? now()->format('Y-m-d') : '')" required
-                    class="w-full mt-2 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600" />
+                <x-ui.input id="expense_date" type="date" name="expense_date" :value="old('expense_date', ($setting?->default_expense_date ?? 'today') === 'today' ? now()->format('d-m-Y') : '')" required />
 
                 <x-ui.form-error field="expense_date" />
             </div>

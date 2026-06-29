@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,16 +17,18 @@
 <body class="font-sans antialiased bg-slate-50 text-slate-700">
     <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8">
 
-        <a href="/" class="mb-8 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"/>
-                </svg>
-            </div>
+        <a href="/" class="mb-8 space-y-2">
+            <h1 class="text-2xl font-black tracking-tight text-slate-900">
+                Expense<span class="italic text-blue-600">Tracker</span>
+            </h1>
 
-            <span class="text-xl font-extrabold text-slate-900">
-                ExpenseTracker
-            </span>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-px bg-blue-600"></div>
+
+                <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500">
+                    Personal Finance
+                </p>
+            </div>
         </a>
 
         <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
@@ -34,4 +37,5 @@
 
     </div>
 </body>
+
 </html>

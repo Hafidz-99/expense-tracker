@@ -1,9 +1,13 @@
-@props(['field'])
+@props([
+    'messages' => null,
+])
 
-@error($field)
-    <p {{ $attributes->merge([
-        'class' => 'mt-1 text-sm text-red-600',
+@if ($messages)
+    <ul {{ $attributes->merge([
+        'class' => 'mt-2 space-y-1 text-sm text-red-600 dark:text-red-400',
     ]) }}>
-        {{ $message }}
-    </p>
-@enderror
+        @foreach ((array) $messages as $message)
+            <li>{{ $message }}</li>
+        @endforeach
+    </ul>
+@endif
