@@ -9,50 +9,55 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::put('/dashboard/preferences', [DashboardController::class, 'updatePreferences'])
-        ->name('dashboard.preferences.update');
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index')->name('dashboard');
+        Route::put('/dashboard/preferences', 'updatePreferences')->name('dashboard.preferences.update');
+    });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::controller(ProfileController::class)
+        ->prefix('profile')
+        ->name('profile.')
+        ->group(function () {
+            Route::get('/', 'edit')->name('edit');
+            Route::patch('/', 'update')->name('update');
+            Route::delete('/', 'destroy')->name('destroy');
+        });
 
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store', 'update', 'destroy']);
+
     Route::resource('expenses', ExpenseController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 
-    Route::get('/budgets', [BudgetController::class, 'index'])->name('budgets.index');
-    Route::post('/budgets', [BudgetController::class, 'store'])->name('budgets.store');
-    Route::put('/budgets/{budget}', [BudgetController::class, 'update'])->name('budgets.update');
-    Route::delete('/budgets/{budget}', [BudgetController::class, 'destroy'])->name('budgets.destroy');
+    Route::resource('budgets', BudgetController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
-    Route::get('/reports/pdf', [ReportController::class, 'pdf'])->name('reports.pdf');
-    Route::get('/reports/excel', [ReportController::class, 'excel'])->name('reports.excel');
-    Route::post('/reports/import', [ReportController::class, 'import'])
-        ->name('reports.import');
-    Route::get('/reports/import/template', [ReportController::class, 'downloadImportTemplate'])
-        ->name('reports.import.template');
+    Route::controller(ReportController::class)
+        ->prefix('reports')
+        ->name('reports.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/print', 'print')->name('print');
+            Route::get('/pdf', 'pdf')->name('pdf');
+            Route::get('/excel', 'excel')->name('excel');
+            Route::post('/import', 'import')->name('import');
+            Route::get('/import/template', 'downloadImportTemplate')->name('import.template');
+        });
 
-    Route::get('/settings', [SettingController::class, 'index'])
-        ->name('settings.index');
-    Route::put('/settings', [SettingController::class, 'update'])
-        ->name('settings.update');
-    Route::delete('/settings/reset/expenses', [SettingController::class, 'resetExpenses'])
-        ->name('settings.reset.expenses');
+    Route::controller(SettingController::class)
+        ->prefix('settings')
+        ->name('settings.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/', 'update')->name('update');
 
-    Route::delete('/settings/reset/budgets', [SettingController::class, 'resetBudgets'])
-        ->name('settings.reset.budgets');
-
-    Route::delete('/settings/reset/all', [SettingController::class, 'resetAll'])
-        ->name('settings.reset.all');
+            Route::delete('/reset/expenses', 'resetExpenses')->name('reset.expenses');
+            Route::delete('/reset/budgets', 'resetBudgets')->name('reset.budgets');
+            Route::delete('/reset/all', 'resetAll')->name('reset.all');
+        });
 });
 
 require __DIR__.'/auth.php';

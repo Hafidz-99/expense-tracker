@@ -152,16 +152,16 @@
                             class="flex items-center justify-between pb-5 border-b border-slate-200 dark:border-slate-800">
                             <div>
                                 <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                    Monthly Budget
+                                    Dashboard
                                 </p>
                                 <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                    {{ now()->format('F Y') }}
+                                    {{ now()->format('F Y') }} overview
                                 </p>
                             </div>
 
                             <span
                                 class="px-3 py-1 text-xs font-bold text-blue-600 rounded-full bg-blue-50 dark:bg-blue-500/10 dark:text-blue-300">
-                                62% used
+                                Sample preview
                             </span>
                         </div>
 
@@ -169,10 +169,30 @@
                             <div
                                 class="p-4 border rounded-2xl border-slate-200 bg-slate-50 dark:bg-slate-800/60 dark:border-slate-700">
                                 <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                    Spent
+                                    Total Expenses
                                 </p>
                                 <p class="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
                                     RM 1,250
+                                </p>
+                            </div>
+
+                            <div
+                                class="p-4 border rounded-2xl border-slate-200 bg-slate-50 dark:bg-slate-800/60 dark:border-slate-700">
+                                <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                    Categories
+                                </p>
+                                <p class="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                    6
+                                </p>
+                            </div>
+
+                            <div
+                                class="p-4 border rounded-2xl border-slate-200 bg-slate-50 dark:bg-slate-800/60 dark:border-slate-700">
+                                <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                    Monthly Budget
+                                </p>
+                                <p class="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                    RM 2,000
                                 </p>
                             </div>
 
@@ -203,53 +223,65 @@
                             </div>
                         </div>
 
-                        <div class="mt-6 space-y-3">
-                            <div
-                                class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
-                                <div>
-                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                        Food
-                                    </p>
-                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                        Lunch, groceries
-                                    </p>
-                                </div>
-
+                        <div class="mt-6">
+                            <div class="flex items-center justify-between mb-3">
                                 <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                    RM 450
+                                    Recent Expenses
+                                </p>
+
+                                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                    Latest activity
                                 </p>
                             </div>
 
-                            <div
-                                class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
-                                <div>
+                            <div class="space-y-3">
+                                <div
+                                    class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                            Lunch
+                                        </p>
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                            Food • Today
+                                        </p>
+                                    </div>
+
                                     <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                        Transport
-                                    </p>
-                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                        Fuel, e-hailing
+                                        RM 18.50
                                     </p>
                                 </div>
 
-                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                    RM 200
-                                </p>
-                            </div>
+                                <div
+                                    class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                            Fuel
+                                        </p>
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                            Transport • Yesterday
+                                        </p>
+                                    </div>
 
-                            <div
-                                class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
-                                <div>
                                     <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                        Shopping
-                                    </p>
-                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                        Personal items
+                                        RM 60.00
                                     </p>
                                 </div>
 
-                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                    RM 300
-                                </p>
+                                <div
+                                    class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                            Groceries
+                                        </p>
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                            Food • Yesterday
+                                        </p>
+                                    </div>
+
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                        RM 95.20
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
