@@ -39,19 +39,7 @@
         {{-- Header --}}
         <header class="h-20 bg-white border-b border-slate-200 dark:bg-slate-900 dark:border-slate-800">
             <div class="flex items-center justify-between h-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <a href="/" class="space-y-2">
-                    <h1 class="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-                        Expense<span class="italic text-blue-600 dark:text-blue-400">Tracker</span>
-                    </h1>
-
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-px bg-blue-600 dark:bg-blue-400"></div>
-
-                        <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500 dark:text-slate-400">
-                            Personal Finance
-                        </p>
-                    </div>
-                </a>
+                <x-application-logo href="/" />
 
                 <nav class="flex items-center gap-2">
                     @auth

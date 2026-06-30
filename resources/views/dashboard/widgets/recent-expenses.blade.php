@@ -1,4 +1,4 @@
-<x-ui.card title="Recent Expenses" description="Latest expenses you recorded.">
+<x-ui.card title="Recent Expenses" description="Latest expenses you recorded." bodyClass="p-0 overflow-hidden">
     <x-slot:actions>
         <x-ui.button href="{{ route('expenses.index') }}" variant="secondary">
             View All
@@ -7,7 +7,7 @@
 
     @forelse ($recentExpenses as $expense)
         <div
-            class="flex flex-col gap-4 py-4 transition-all duration-200 border-b border-slate-100 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/50 last:border-b-0 last:pb-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between">
+            class="flex flex-col gap-4 px-6 py-4 transition-all duration-200 border-b border-slate-100 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/50 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
                 <div class="flex items-center gap-2">
                     <x-ui.badge
@@ -33,6 +33,8 @@
             </p>
         </div>
     @empty
-        <x-ui.empty-state title="No recent expenses" description="Your latest expenses will appear here." />
+        <div class="p-6">
+            <x-ui.empty-state title="No recent expenses" description="Your latest expenses will appear here." />
+        </div>
     @endforelse
 </x-ui.card>

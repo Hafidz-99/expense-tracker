@@ -38,19 +38,7 @@
 <body class="font-sans antialiased bg-slate-50 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
     <div class="flex flex-col items-center justify-center min-h-screen px-4 py-8">
 
-        <a href="/" class="mb-8 space-y-2">
-            <h1 class="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-                Expense<span class="italic text-blue-600 dark:text-blue-400">Tracker</span>
-            </h1>
-
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-px bg-blue-600 dark:bg-blue-400"></div>
-
-                <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500 dark:text-slate-400">
-                    Personal Finance
-                </p>
-            </div>
-        </a>
+        <x-application-logo href="/" class="mb-8" />
 
         <div
             class="w-full max-w-md p-8 bg-white border shadow-sm border-slate-200 rounded-2xl dark:bg-slate-800 dark:border-slate-700">
