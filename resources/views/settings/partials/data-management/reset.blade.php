@@ -1,19 +1,20 @@
 <div>
-    <h3 class="text-sm font-bold text-slate-900">
+    <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100">
         Reset Data
     </h3>
 
-    <p class="mt-1 text-sm text-slate-500">
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
         Permanently remove selected application data from your account.
     </p>
 
     <div class="grid gap-4 mt-4 md:grid-cols-3">
-        <div class="flex flex-col justify-between p-4 border rounded-xl border-slate-200">
+        <div
+            class="flex flex-col justify-between p-4 border rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-900/30">
             <div>
-                <h4 class="text-sm font-semibold text-slate-800">
+                <h4 class="text-sm font-semibold text-slate-800 dark:text-slate-100">
                     Reset Expenses
                 </h4>
-                <p class="mt-1 text-sm text-slate-500">
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     Delete all expenses while keeping categories and budgets.
                 </p>
             </div>
@@ -28,12 +29,13 @@
             </x-ui.button>
         </div>
 
-        <div class="flex flex-col justify-between p-4 border rounded-xl border-slate-200">
+        <div
+            class="flex flex-col justify-between p-4 border rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-900/30">
             <div>
-                <h4 class="text-sm font-semibold text-slate-800">
+                <h4 class="text-sm font-semibold text-slate-800 dark:text-slate-100">
                     Reset Budgets
                 </h4>
-                <p class="mt-1 text-sm text-slate-500">
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     Delete all budgets while keeping expenses and categories.
                 </p>
             </div>
@@ -48,12 +50,13 @@
             </x-ui.button>
         </div>
 
-        <div class="flex flex-col justify-between p-4 border border-red-200 rounded-xl bg-red-50">
+        <div
+            class="flex flex-col justify-between p-4 border border-red-200 rounded-xl bg-red-50 dark:border-red-500/30 dark:bg-red-500/10">
             <div>
-                <h4 class="text-sm font-semibold text-red-800">
+                <h4 class="text-sm font-semibold text-red-800 dark:text-red-300">
                     Reset Everything
                 </h4>
-                <p class="mt-1 text-sm text-red-600">
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                     Delete categories, expenses, budgets, and reset preferences while keeping your account.
                 </p>
             </div>

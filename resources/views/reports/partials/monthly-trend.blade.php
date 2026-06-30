@@ -11,16 +11,16 @@
 
             <div class="space-y-2">
                 <div class="flex items-center justify-between gap-4">
-                    <p class="text-sm font-medium text-slate-700">
+                    <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
                         {{ $trend['month'] }}
                     </p>
 
-                    <p class="text-sm font-semibold text-slate-900">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">
                         RM {{ number_format($trend['total'], 2) }}
                     </p>
                 </div>
 
-                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
                     <div class="h-full bg-blue-600 rounded-full" style="width: {{ $percentage }}%"></div>
                 </div>
             </div>

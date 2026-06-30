@@ -9,7 +9,7 @@
             : 'RM ' . number_format($currentRemaining, 2)"
             :subtitle="$currentRemaining < 0 ? 'You are over budget' : 'Available balance left'"
             :class="$currentRemaining < 0 ?
-                'ring-1 ring-red-100 sm:col-span-2 lg:col-span-1' :
+                'ring-1 ring-red-100 dark:ring-red-500/30 sm:col-span-2 lg:col-span-1' :
                 'sm:col-span-2 lg:col-span-1'" />
     </div>
 </x-ui.card>

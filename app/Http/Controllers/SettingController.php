@@ -32,7 +32,7 @@ class SettingController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'theme' => ['required', 'in:light,dark,system'],
+            'theme' => ['required', 'in:light,dark'],
         ]);
 
         $request->user()
@@ -69,7 +69,7 @@ class SettingController extends Controller
             $user->categories()->delete();
 
             $user->setting()->update([
-                'theme' => 'light',
+                'theme' => 'system',
             ]);
         });
 

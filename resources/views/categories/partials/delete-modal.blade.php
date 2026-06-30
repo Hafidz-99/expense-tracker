@@ -3,12 +3,12 @@
         @csrf
         @method('DELETE')
 
-        <p class="text-sm text-slate-600">
+        <p class="text-sm text-slate-600 dark:text-slate-400">
             Are you sure you want to delete
-            <span id="deleteCategoryName" class="font-semibold text-slate-900"></span>?
+            <span id="deleteCategoryName" class="font-semibold text-slate-900 dark:text-slate-100"></span>?
         </p>
 
-        <p class="mt-2 text-sm text-red-600">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-400">
             This action cannot be undone.
         </p>
 

@@ -38,7 +38,7 @@
 
         <div class="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
             @if (session('status') === 'password-updated')
-                <p class="text-sm font-semibold text-green-600">
+                <p class="text-sm font-semibold text-green-600 dark:text-green-300">
                     Saved.
                 </p>
             @endif

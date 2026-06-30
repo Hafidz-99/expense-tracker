@@ -1,5 +1,9 @@
+@php
+    $theme = auth()->check() ? auth()->user()->setting?->theme ?? 'system' : 'system';
+@endphp
+
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme === 'dark' ? 'dark' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -9,42 +13,60 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
+    <script>
+        (function() {
+            const theme = @json($theme);
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+            function applyTheme() {
+                const shouldUseDark = theme === 'dark' || (theme === 'system' && mediaQuery.matches);
+
+                document.documentElement.classList.toggle('dark', shouldUseDark);
+            }
+
+            applyTheme();
+
+            mediaQuery.addEventListener('change', applyTheme);
+        })();
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-slate-50 text-slate-700 overflow-hidden">
-    <div class="h-screen flex flex-col">
+<body class="overflow-hidden font-sans antialiased bg-slate-50 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+    <div class="flex flex-col h-screen">
 
-        <header class="h-16 bg-white border-b border-slate-200">
-            <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {{-- Header --}}
+        <header class="h-20 bg-white border-b border-slate-200 dark:bg-slate-900 dark:border-slate-800">
+            <div class="flex items-center justify-between h-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <a href="/" class="space-y-2">
-                    <h1 class="text-2xl font-black tracking-tight text-slate-900">
-                        Expense<span class="italic text-blue-600">Tracker</span>
+                    <h1 class="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+                        Expense<span class="italic text-blue-600 dark:text-blue-400">Tracker</span>
                     </h1>
 
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-px bg-blue-600"></div>
+                        <div class="w-8 h-px bg-blue-600 dark:bg-blue-400"></div>
 
-                        <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500">
+                        <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500 dark:text-slate-400">
                             Personal Finance
                         </p>
                     </div>
                 </a>
 
-                <nav class="flex items-center gap-3">
+                <nav class="flex items-center gap-2">
                     @auth
                         <a href="{{ route('dashboard') }}"
-                            class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
+                            class="px-4 py-2 text-sm font-bold text-white transition bg-blue-600 rounded-xl hover:bg-blue-700">
                             Dashboard
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition">
+                            class="px-4 py-2 text-sm font-semibold transition text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
                             Login
                         </a>
 
                         <a href="{{ route('register') }}"
-                            class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
+                            class="px-4 py-2 text-sm font-bold text-white transition bg-blue-600 rounded-xl hover:bg-blue-700">
                             Register
                         </a>
                     @endauth
@@ -52,114 +74,187 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-hidden">
-            <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-                <div class="h-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        {{-- Main --}}
+        <main class="flex items-center flex-1 overflow-hidden">
+            <div
+                class="grid items-center w-full h-full grid-cols-1 gap-10 px-4 mx-auto max-w-7xl sm:px-6 lg:grid-cols-2 lg:px-8">
 
-                    <section>
-                        <h1 class="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
-                            Track your expenses without the clutter.
-                        </h1>
+                {{-- Left content --}}
+                <section class="max-w-xl">
+                    <p class="text-sm font-bold tracking-wide text-blue-600 uppercase dark:text-blue-400">
+                        Simple spending tracker
+                    </p>
 
-                        <p class="mt-5 max-w-xl text-base sm:text-lg text-slate-600 leading-relaxed">
-                            A clean personal expense tracker for recording spending, managing categories, and viewing
-                            monthly summaries.
-                        </p>
+                    <h2
+                        class="mt-4 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl">
+                        Keep your daily expenses in one place.
+                    </h2>
 
-                        <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                            @auth
-                                <a href="{{ route('dashboard') }}"
-                                    class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition">
-                                    Go to Dashboard
-                                </a>
-                            @else
-                                <a href="{{ route('register') }}"
-                                    class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition">
-                                    Get Started
-                                </a>
+                    <p class="mt-5 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+                        ExpenseTracker helps you record spending, organize categories, set monthly budgets,
+                        and review your reports without making the process complicated.
+                    </p>
 
-                                <a href="{{ route('login') }}"
-                                    class="inline-flex justify-center items-center px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 text-sm font-bold rounded-xl border border-slate-200 transition">
-                                    Sign In
-                                </a>
-                            @endauth
+                    <div class="flex flex-col gap-3 mt-8 sm:flex-row">
+                        @auth
+                            <a href="{{ route('dashboard') }}"
+                                class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white transition bg-blue-600 rounded-xl hover:bg-blue-700">
+                                Open Dashboard
+                            </a>
+                        @else
+                            <a href="{{ route('register') }}"
+                                class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white transition bg-blue-600 rounded-xl hover:bg-blue-700">
+                                Create Account
+                            </a>
+
+                            <a href="{{ route('login') }}"
+                                class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold transition bg-white border text-slate-700 rounded-xl border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+                                Sign In
+                            </a>
+                        @endauth
+                    </div>
+
+                    <div class="grid max-w-lg grid-cols-3 gap-4 mt-10">
+                        <div>
+                            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                Budget
+                            </p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                Track monthly limits
+                            </p>
                         </div>
 
-                        <div class="mt-8 grid grid-cols-3 gap-4 max-w-md">
+                        <div>
+                            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                Reports
+                            </p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                Review spending
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                Export
+                            </p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                PDF and Excel
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {{-- Right preview --}}
+                <section class="hidden lg:block">
+                    <div
+                        class="p-6 bg-white border shadow-sm rounded-3xl border-slate-200 dark:bg-slate-900 dark:border-slate-800">
+                        <div
+                            class="flex items-center justify-between pb-5 border-b border-slate-200 dark:border-slate-800">
                             <div>
-                                <p class="text-2xl font-extrabold text-slate-900">CRUD</p>
-                                <p class="text-xs text-slate-500">Expenses</p>
+                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                    Monthly Budget
+                                </p>
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                    {{ now()->format('F Y') }}
+                                </p>
                             </div>
 
-                            <div>
-                                <p class="text-2xl font-extrabold text-slate-900">Auth</p>
-                                <p class="text-xs text-slate-500">Login/Register</p>
+                            <span
+                                class="px-3 py-1 text-xs font-bold text-blue-600 rounded-full bg-blue-50 dark:bg-blue-500/10 dark:text-blue-300">
+                                62% used
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                            <div
+                                class="p-4 border rounded-2xl border-slate-200 bg-slate-50 dark:bg-slate-800/60 dark:border-slate-700">
+                                <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                    Spent
+                                </p>
+                                <p class="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                    RM 1,250
+                                </p>
                             </div>
 
-                            <div>
-                                <p class="text-2xl font-extrabold text-slate-900">MVC</p>
-                                <p class="text-xs text-slate-500">Laravel Flow</p>
+                            <div
+                                class="p-4 border rounded-2xl border-slate-200 bg-slate-50 dark:bg-slate-800/60 dark:border-slate-700">
+                                <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                    Remaining
+                                </p>
+                                <p class="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                                    RM 750
+                                </p>
                             </div>
                         </div>
-                    </section>
 
-                    <section class="hidden lg:block">
-                        <div class="bg-white border border-slate-200 rounded-3xl shadow-xl p-6">
-                            <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+                        <div class="mt-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                                    Budget usage
+                                </p>
+
+                                <p class="text-sm font-bold text-blue-600 dark:text-blue-300">
+                                    62%
+                                </p>
+                            </div>
+
+                            <div class="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                                <div class="h-full bg-blue-600 rounded-full w-[62%]"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 space-y-3">
+                            <div
+                                class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
                                 <div>
-                                    <p class="text-sm font-bold text-slate-900">Monthly Summary</p>
-                                    <p class="text-xs text-slate-500">{{ now()->format('F Y') }}</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                        Food
+                                    </p>
+                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                        Lunch, groceries
+                                    </p>
                                 </div>
 
-                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-600">
-                                    Active
-                                </span>
+                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                    RM 450
+                                </p>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4 mt-6">
-                                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
-                                    <p class="text-xs text-slate-500">This Month</p>
-                                    <p class="mt-2 text-2xl font-extrabold text-slate-900">RM 1,250</p>
+                            <div
+                                class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                        Transport
+                                    </p>
+                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                        Fuel, e-hailing
+                                    </p>
                                 </div>
 
-                                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
-                                    <p class="text-xs text-slate-500">Today</p>
-                                    <p class="mt-2 text-2xl font-extrabold text-slate-900">RM 45</p>
-                                </div>
+                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                    RM 200
+                                </p>
                             </div>
 
-                            <div class="mt-6 space-y-3">
-                                <div
-                                    class="flex items-center justify-between p-4 rounded-2xl bg-blue-50 border border-blue-100">
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-900">Food</p>
-                                        <p class="text-xs text-slate-500">Lunch and groceries</p>
-                                    </div>
-                                    <p class="text-sm font-extrabold text-blue-600">RM 450</p>
+                            <div
+                                class="flex items-center justify-between p-4 border rounded-2xl border-slate-200 dark:border-slate-700">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                        Shopping
+                                    </p>
+                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                        Personal items
+                                    </p>
                                 </div>
 
-                                <div
-                                    class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-900">Transport</p>
-                                        <p class="text-xs text-slate-500">Fuel and e-hailing</p>
-                                    </div>
-                                    <p class="text-sm font-extrabold text-slate-900">RM 200</p>
-                                </div>
-
-                                <div
-                                    class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-900">Shopping</p>
-                                        <p class="text-xs text-slate-500">Personal items</p>
-                                    </div>
-                                    <p class="text-sm font-extrabold text-slate-900">RM 300</p>
-                                </div>
+                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                    RM 300
+                                </p>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                </div>
             </div>
         </main>
 

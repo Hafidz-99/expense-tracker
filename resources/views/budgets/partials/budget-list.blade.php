@@ -1,16 +1,16 @@
 <x-ui.card title="Budget History" :description="$budgets->total() . ' budgets found.'" bodyClass="p-0 overflow-hidden">
 
     {{-- Mobile cards --}}
-    <div class="divide-y divide-slate-100 md:hidden">
+    <div class="divide-y divide-slate-100 dark:divide-slate-700 md:hidden">
         @forelse ($budgets as $budget)
             <div class="p-5 space-y-4">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <p class="text-sm font-bold text-slate-900">
+                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
                             {{ \Carbon\Carbon::create()->month($budget->month)->format('F') }} {{ $budget->year }}
                         </p>
 
-                        <p class="mt-1 text-sm font-semibold text-slate-700">
+                        <p class="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-300">
                             RM {{ number_format($budget->amount, 2) }}
                         </p>
                     </div>
@@ -56,43 +56,49 @@
 
     {{-- Desktop table --}}
     <div class="hidden md:block">
-        <table class="w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
+        <table class="w-full divide-y divide-slate-200 dark:divide-slate-700">
+            <thead class="bg-slate-50 dark:bg-slate-900/40">
                 <tr>
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500">
+                    <th
+                        class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500 dark:text-slate-400">
                         Month
                     </th>
 
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500">
+                    <th
+                        class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500 dark:text-slate-400">
                         Year
                     </th>
 
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500">
+                    <th
+                        class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500 dark:text-slate-400">
                         Budget
                     </th>
 
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500">
+                    <th
+                        class="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-slate-500 dark:text-slate-400">
                         Status
                     </th>
 
-                    <th class="px-6 py-3 text-xs font-semibold tracking-wider text-right uppercase text-slate-500">
+                    <th
+                        class="px-6 py-3 text-xs font-semibold tracking-wider text-right uppercase text-slate-500 dark:text-slate-400">
                         Actions
                     </th>
                 </tr>
             </thead>
 
-            <tbody class="bg-white divide-y divide-slate-200">
+            <tbody class="bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700">
                 @forelse ($budgets as $budget)
-                    <tr class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm">
-                        <td class="px-6 py-4 text-slate-700">
+                    <tr
+                        class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm dark:hover:bg-slate-800/50">
+                        <td class="px-6 py-4 text-slate-700 dark:text-slate-300">
                             {{ \Carbon\Carbon::create()->month($budget->month)->format('F') }}
                         </td>
 
-                        <td class="px-6 py-4 text-slate-700">
+                        <td class="px-6 py-4 text-slate-700 dark:text-slate-300">
                             {{ $budget->year }}
                         </td>
 
-                        <td class="px-6 py-4 font-semibold text-slate-900">
+                        <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
                             RM {{ number_format($budget->amount, 2) }}
                         </td>
 

@@ -1,5 +1,9 @@
+@php
+    $theme = auth()->check() ? auth()->user()->setting?->theme ?? 'system' : 'system';
+@endphp
+
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme === 'dark' ? 'dark' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -11,27 +15,45 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
+    <script>
+        (function() {
+            const theme = @json($theme);
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+            function applyTheme() {
+                const shouldUseDark = theme === 'dark' || (theme === 'system' && mediaQuery.matches);
+
+                document.documentElement.classList.toggle('dark', shouldUseDark);
+            }
+
+            applyTheme();
+
+            mediaQuery.addEventListener('change', applyTheme);
+        })();
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-slate-50 text-slate-700">
-    <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8">
+<body class="font-sans antialiased bg-slate-50 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+    <div class="flex flex-col items-center justify-center min-h-screen px-4 py-8">
 
         <a href="/" class="mb-8 space-y-2">
-            <h1 class="text-2xl font-black tracking-tight text-slate-900">
-                Expense<span class="italic text-blue-600">Tracker</span>
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+                Expense<span class="italic text-blue-600 dark:text-blue-400">Tracker</span>
             </h1>
 
             <div class="flex items-center gap-3">
-                <div class="w-8 h-px bg-blue-600"></div>
+                <div class="w-8 h-px bg-blue-600 dark:bg-blue-400"></div>
 
-                <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500">
+                <p class="text-xs font-medium tracking-[0.2em] uppercase text-slate-500 dark:text-slate-400">
                     Personal Finance
                 </p>
             </div>
         </a>
 
-        <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+        <div
+            class="w-full max-w-md p-8 bg-white border shadow-sm border-slate-200 rounded-2xl dark:bg-slate-800 dark:border-slate-700">
             {{ $slot }}
         </div>
 

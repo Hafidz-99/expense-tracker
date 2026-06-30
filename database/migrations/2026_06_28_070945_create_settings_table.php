@@ -18,7 +18,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->string('theme')->default('light');
+            $table->string('theme')->default('system');
             $table->string('currency')->default('MYR');
             $table->string('date_format')->default('d/m/Y');
             $table->string('time_format')->default('24');

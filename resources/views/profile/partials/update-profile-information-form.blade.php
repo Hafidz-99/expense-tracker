@@ -30,17 +30,19 @@
             <x-ui.form-error field="email" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
-                <div class="px-4 py-3 mt-3 border rounded-xl border-amber-200 bg-amber-50">
-                    <p class="text-sm text-amber-700">
+                <div
+                    class="px-4 py-3 mt-3 border rounded-xl border-amber-200 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
+                    <p class="text-sm text-amber-700 dark:text-amber-300">
                         Your email address is unverified.
 
-                        <button form="send-verification" class="font-semibold underline hover:text-amber-800">
+                        <button form="send-verification"
+                            class="font-semibold underline hover:text-amber-800 dark:hover:text-amber-200">
                             Resend verification email.
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 text-sm font-semibold text-green-700">
+                        <p class="mt-2 text-sm font-semibold text-green-700 dark:text-green-300">
                             A new verification link has been sent.
                         </p>
                     @endif
@@ -50,7 +52,7 @@
 
         <div class="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
             @if (session('status') === 'profile-updated')
-                <p class="text-sm font-semibold text-green-600">
+                <p class="text-sm font-semibold text-green-600 dark:text-green-300">
                     Saved.
                 </p>
             @endif

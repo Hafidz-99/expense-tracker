@@ -1,5 +1,9 @@
+@php
+    $theme = auth()->check() ? auth()->user()->setting?->theme ?? 'system' : 'system';
+@endphp
+
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ ($theme ?? 'light') === 'dark' ? 'dark' : '' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme === 'dark' ? 'dark' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -11,15 +15,24 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        (function() {
+            const theme = @json($theme);
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    @if (($theme ?? 'light') === 'system')
-        <script>
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
+            function applyTheme() {
+                const shouldUseDark = theme === 'dark' || (theme === 'system' && mediaQuery.matches);
+
+                document.documentElement.classList.toggle('dark', shouldUseDark);
             }
-        </script>
-    @endif
+
+            applyTheme();
+
+            mediaQuery.addEventListener('change', applyTheme);
+        })();
+    </script>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased bg-slate-50 text-slate-700 dark:bg-slate-950 dark:text-slate-200">

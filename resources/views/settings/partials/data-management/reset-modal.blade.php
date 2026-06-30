@@ -3,7 +3,7 @@
         @csrf
         @method('DELETE')
 
-        <p id="resetDataMessage" class="text-sm text-slate-600"></p>
+        <p id="resetDataMessage" class="text-sm text-slate-600 dark:text-slate-400"></p>
     </form>
 
     <x-slot:footer>

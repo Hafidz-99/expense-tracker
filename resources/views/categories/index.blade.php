@@ -2,11 +2,11 @@
     <x-slot name="header">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">
                     Categories
                 </h1>
 
-                <p class="mt-1 text-sm text-slate-500">
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     Organize your expenses using names and colors.
                 </p>
             </div>

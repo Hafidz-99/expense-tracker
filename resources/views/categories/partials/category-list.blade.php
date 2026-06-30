@@ -31,7 +31,7 @@
 
     @forelse ($categories as $category)
         <div
-            class="flex flex-col gap-4 px-6 py-4 transition-all duration-200 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 hover:shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            class="flex flex-col gap-4 px-6 py-4 transition-all duration-200 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 hover:shadow-sm dark:border-slate-700 dark:hover:bg-slate-800/40 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center min-w-0 gap-4">
                 <div class="flex items-center justify-center w-12 h-12 font-bold text-white shadow-sm rounded-xl"
                     style="background-color: {{ $category->color ?? '#2563EB' }}">
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="min-w-0">
-                    <p class="text-sm font-bold break-words text-slate-900">
+                    <p class="text-sm font-bold break-words text-slate-900 dark:text-slate-100">
                         {{ $category->name }}
                     </p>
                 </div>

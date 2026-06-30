@@ -3,8 +3,8 @@
         @csrf
         @method('DELETE')
 
-        <div class="p-4 border border-red-100 rounded-2xl bg-red-50">
-            <p class="text-sm text-red-700">
+        <div class="p-4 border border-red-100 rounded-2xl bg-red-50 dark:border-red-500/30 dark:bg-red-500/10">
+            <p class="text-sm text-red-700 dark:text-red-300">
                 You are about to delete
                 <span id="deleteBudgetName" class="font-bold"></span>.
 

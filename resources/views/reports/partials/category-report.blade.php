@@ -9,11 +9,11 @@
                             style="background-color: {{ $report['category']?->color ?? '#2563EB' }}"></span>
 
                         <div class="min-w-0">
-                            <p class="font-semibold break-words text-slate-900">
+                            <p class="font-semibold break-words text-slate-900 dark:text-slate-100">
                                 {{ $report['category']?->name ?? 'Uncategorized' }}
                             </p>
 
-                            <p class="text-sm text-slate-500">
+                            <p class="text-sm text-slate-500 dark:text-slate-400">
                                 {{ $report['transactions'] }} transaction(s)
                                 · Avg RM {{ number_format($report['average'], 2) }}
                             </p>
@@ -21,17 +21,17 @@
                     </div>
 
                     <div class="text-left sm:text-right shrink-0">
-                        <p class="font-bold text-slate-900">
+                        <p class="font-bold text-slate-900 dark:text-slate-100">
                             RM {{ number_format($report['total'], 2) }}
                         </p>
 
-                        <p class="text-sm text-slate-500">
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
                             {{ number_format($report['percentage'], 1) }}%
                         </p>
                     </div>
                 </div>
 
-                <div class="w-full h-2 mt-3 overflow-hidden rounded-full bg-slate-100">
+                <div class="w-full h-2 mt-3 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
                     <div class="h-2 transition-all duration-700 rounded-full"
                         style="
                             width: {{ min($report['percentage'], 100) }}%;

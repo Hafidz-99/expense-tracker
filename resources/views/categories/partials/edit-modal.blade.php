@@ -20,11 +20,11 @@
 
             <div class="relative mt-2">
                 <div id="editSelectedColorPreview"
-                    class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300">
+                    class="absolute w-4 h-4 -translate-y-1/2 border rounded-full left-3 top-1/2 border-slate-300 dark:border-slate-600">
                 </div>
 
                 <select id="editCategoryColor" name="color"
-                    class="w-full pl-10 shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600">
+                    class="w-full pl-10 bg-white shadow-sm rounded-xl border-slate-300 text-slate-700 focus:border-blue-600 focus:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-400">
                     @foreach ($colors as $hex => $label)
                         <option value="{{ $hex }}">
                             {{ $label }}

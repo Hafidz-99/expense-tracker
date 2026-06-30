@@ -1,15 +1,16 @@
-<section class="overflow-hidden bg-white border border-red-200 shadow-sm rounded-2xl">
-    <div class="px-6 py-4 border-b border-red-100 bg-red-50">
-        <h2 class="text-base font-bold text-red-700">
+<section
+    class="overflow-hidden bg-white border border-red-200 shadow-sm rounded-2xl dark:bg-slate-800 dark:border-red-500/30">
+    <div class="px-6 py-4 border-b border-red-100 bg-red-50 dark:border-red-500/30 dark:bg-red-500/10">
+        <h2 class="text-base font-bold text-red-700 dark:text-red-300">
             Danger Zone
         </h2>
-        <p class="mt-1 text-sm text-red-600">
+        <p class="mt-1 text-sm text-red-600 dark:text-red-400">
             Permanently delete your account and all related data.
         </p>
     </div>
 
     <div class="p-6">
-        <p class="text-sm text-slate-600">
+        <p class="text-sm text-slate-600 dark:text-slate-400">
             Once your account is deleted, all categories, expenses, and dashboard history will be permanently removed.
             This action cannot be undone.
         </p>
@@ -28,20 +29,21 @@
         @csrf
         @method('DELETE')
 
-        <div class="p-4 border border-red-200 rounded-xl bg-red-50">
+        <div class="p-4 border border-red-200 rounded-xl bg-red-50 dark:border-red-500/30 dark:bg-red-500/10">
             <div class="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600 dark:text-red-300" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 9v4m0 4h.01M10.29 3.86l-7.5 13A2 2 0 004.5 20h15a2 2 0 001.71-3.14l-7.5-13a2 2 0 00-3.42 0z" />
                 </svg>
 
                 <div>
-                    <h3 class="font-semibold text-red-700">
+                    <h3 class="font-semibold text-red-700 dark:text-red-300">
                         This action is permanent
                     </h3>
 
-                    <p class="mt-2 text-sm leading-6 text-red-700">
+                    <p class="mt-2 text-sm leading-6 text-red-700 dark:text-red-300">
                         Deleting your account will permanently remove:
 
                         <span class="block mt-2">

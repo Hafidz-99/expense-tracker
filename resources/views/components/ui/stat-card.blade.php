@@ -1,7 +1,10 @@
 @props(['title', 'value', 'subtitle' => null])
 
 <div
-    class="p-6 transition-all duration-200 bg-white border shadow-sm border-slate-200 rounded-2xl hover:shadow-md hover:-translate-y-1 dark:bg-slate-800 dark:border-slate-700">
+    {{ $attributes->merge([
+        'class' =>
+            'p-6 transition-all duration-200 bg-white border shadow-sm border-slate-200 rounded-2xl hover:shadow-md hover:-translate-y-1 dark:bg-slate-800 dark:border-slate-700',
+    ]) }}>
     <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">
         {{ $title }}
     </p>
