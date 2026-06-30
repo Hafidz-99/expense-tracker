@@ -7,7 +7,7 @@
                 Total Spending
             </p>
 
-            <h2 class="mt-2 text-3xl font-bold text-slate-900">
+            <h2 class="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
                 RM {{ number_format($totalSpending, 2) }}
             </h2>
         </div>

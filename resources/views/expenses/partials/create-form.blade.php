@@ -48,7 +48,7 @@
                     Date
                 </x-ui.label>
 
-                <x-ui.input id="expense_date" type="date" name="expense_date" :value="old('expense_date', ($setting?->default_expense_date ?? 'today') === 'today' ? now()->format('d-m-Y') : '')" required />
+                <x-ui.input id="expense_date" type="date" name="expense_date" :value="old('expense_date', now()->toDateString())" required />
 
                 <x-ui.form-error field="expense_date" />
             </div>
