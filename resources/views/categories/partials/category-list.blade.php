@@ -71,9 +71,9 @@
         </div>
     @endforelse
 
-    @if ($categories->hasPages())
+    @if ($categories->total() > 0)
         <x-slot:footer>
-            <div class="flex justify-end">
+            <div class="flex justify-end" data-ajax-pagination>
                 {{ $categories->links('vendor.pagination.custom') }}
             </div>
         </x-slot:footer>

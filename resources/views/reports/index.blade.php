@@ -34,9 +34,74 @@
 
         @include('reports.partials.category-report')
 
-        @include('reports.partials.expense-list')
+        <div id="report-expense-list-section">
+            @include('reports.partials.expense-list')
+        </div>
     </div>
 
     @include('reports.partials.export-modal')
     @include('reports.partials.import-modal')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reportExpenseListSection = document.getElementById('report-expense-list-section');
+
+            if (!reportExpenseListSection) {
+                return;
+            }
+
+            reportExpenseListSection.addEventListener('click', async (event) => {
+                const link = event.target.closest('[data-ajax-pagination] a');
+
+                if (!link) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                try {
+                    reportExpenseListSection.classList.add('opacity-60', 'pointer-events-none');
+
+                    const response = await fetch(link.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        window.location.href = link.href;
+                        return;
+                    }
+
+                    reportExpenseListSection.innerHTML = await response.text();
+                    window.history.pushState({}, '', link.href);
+
+                    reportExpenseListSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                } catch (error) {
+                    window.location.href = link.href;
+                } finally {
+                    reportExpenseListSection.classList.remove('opacity-60', 'pointer-events-none');
+                }
+            });
+
+            window.addEventListener('popstate', async () => {
+                try {
+                    const response = await fetch(window.location.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (response.ok) {
+                        reportExpenseListSection.innerHTML = await response.text();
+                    }
+                } catch (error) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
 </x-app-layout>

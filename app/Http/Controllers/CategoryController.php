@@ -23,13 +23,17 @@ class CategoryController extends Controller
             });
 
         match ($request->sort) {
+            'latest' => $categoriesQuery->latest(),
             'oldest' => $categoriesQuery->oldest(),
-            'az' => $categoriesQuery->orderBy('name'),
             'za' => $categoriesQuery->orderByDesc('name'),
-            default => $categoriesQuery->latest(),
+            default => $categoriesQuery->orderBy('name'),
         };
 
         $categories = $categoriesQuery->paginate(5)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('categories.partials.category-list', compact('categories'));
+        }
 
         return view('categories.index', compact('categories'));
     }

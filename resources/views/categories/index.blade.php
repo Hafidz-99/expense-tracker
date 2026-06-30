@@ -34,8 +34,73 @@
     <div class="space-y-6">
         @include('categories.partials.create-form')
         @include('categories.partials.filters')
-        @include('categories.partials.category-list')
+        <div id="category-list-section">
+            @include('categories.partials.category-list')
+        </div>
         @include('categories.partials.edit-modal')
         @include('categories.partials.delete-modal')
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryListSection = document.getElementById('category-list-section');
+
+            if (!categoryListSection) {
+                return;
+            }
+
+            categoryListSection.addEventListener('click', async (event) => {
+                const link = event.target.closest('[data-ajax-pagination] a');
+
+                if (!link) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                try {
+                    categoryListSection.classList.add('opacity-60', 'pointer-events-none');
+
+                    const response = await fetch(link.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        window.location.href = link.href;
+                        return;
+                    }
+
+                    categoryListSection.innerHTML = await response.text();
+                    window.history.pushState({}, '', link.href);
+
+                    categoryListSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                } catch (error) {
+                    window.location.href = link.href;
+                } finally {
+                    categoryListSection.classList.remove('opacity-60', 'pointer-events-none');
+                }
+            });
+
+            window.addEventListener('popstate', async () => {
+                try {
+                    const response = await fetch(window.location.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (response.ok) {
+                        categoryListSection.innerHTML = await response.text();
+                    }
+                } catch (error) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
 </x-app-layout>

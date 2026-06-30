@@ -25,11 +25,76 @@
         @include('expenses.partials.filters')
 
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
-            @include('expenses.partials.expense-list')
+            <div id="expense-list-section" class="lg:col-span-2">
+                @include('expenses.partials.expense-list')
+            </div>
             @include('expenses.partials.monthly-summary')
         </div>
 
         @include('expenses.partials.delete-modal')
         @include('expenses.partials.edit-modal')
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const expenseListSection = document.getElementById('expense-list-section');
+
+            if (!expenseListSection) {
+                return;
+            }
+
+            expenseListSection.addEventListener('click', async (event) => {
+                const link = event.target.closest('[data-ajax-pagination] a');
+
+                if (!link) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                try {
+                    expenseListSection.classList.add('opacity-60', 'pointer-events-none');
+
+                    const response = await fetch(link.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        window.location.href = link.href;
+                        return;
+                    }
+
+                    expenseListSection.innerHTML = await response.text();
+                    window.history.pushState({}, '', link.href);
+
+                    expenseListSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                } catch (error) {
+                    window.location.href = link.href;
+                } finally {
+                    expenseListSection.classList.remove('opacity-60', 'pointer-events-none');
+                }
+            });
+
+            window.addEventListener('popstate', async () => {
+                try {
+                    const response = await fetch(window.location.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (response.ok) {
+                        expenseListSection.innerHTML = await response.text();
+                    }
+                } catch (error) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
 </x-app-layout>

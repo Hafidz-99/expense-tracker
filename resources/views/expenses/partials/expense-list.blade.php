@@ -1,4 +1,4 @@
-<x-ui.card class="lg:col-span-2" title="Expense List" :description="$expenses->total() . ' records found.'" bodyClass="p-0">
+<x-ui.card title="Expense List" :description="$expenses->total() . ' records found.'" bodyClass="p-0">
     <x-slot:actions>
         <div class="flex items-center gap-3">
             <span class="hidden text-sm font-medium text-slate-500 dark:text-slate-400 sm:block">
@@ -7,6 +7,8 @@
 
             <form method="GET" action="{{ route('expenses.index') }}">
                 <input type="hidden" name="search" value="{{ request('search') }}">
+                <input type="hidden" name="month" value="{{ request('month', now()->month) }}">
+                <input type="hidden" name="year" value="{{ request('year', now()->year) }}">
                 <input type="hidden" name="category_id" value="{{ request('category_id') }}">
 
                 <x-ui.select name="sort" onchange="this.form.submit()"
@@ -78,9 +80,9 @@
                 description="Try adjusting your filters or add your first expense." />
         </div>
     @endforelse
-    @if ($expenses->hasPages())
+    @if ($expenses->total() > 0)
         <x-slot:footer>
-            <div class="flex justify-end">
+            <div class="flex justify-end" data-ajax-pagination>
                 {{ $expenses->links('vendor.pagination.custom') }}
             </div>
         </x-slot:footer>

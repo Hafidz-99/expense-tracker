@@ -27,7 +27,7 @@ class ExpenseController extends Controller
             'month' => ['nullable', 'integer', 'min:1', 'max:12'],
             'year' => ['nullable', 'integer', 'min:2000', 'max:'.now()->year],
             'category_id' => ['nullable', 'integer'],
-            'sort' => ['nullable', 'in:newest,oldest,highest,lowest'],
+            'sort' => ['nullable', 'in:latest,oldest,highest,lowest'],
         ]);
 
         $selectedMonth = (int) ($request->month ?? now()->month);
@@ -55,6 +55,10 @@ class ExpenseController extends Controller
         };
 
         $expenses = $expensesQuery->paginate(5)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('expenses.partials.expense-list', compact('expenses'));
+        }
 
         $monthlySummary = Expense::selectRaw('category_id, SUM(amount) as total')
             ->with('category')

@@ -3,7 +3,7 @@
     {{-- Mobile cards --}}
     <div class="divide-y divide-slate-100 dark:divide-slate-700 md:hidden">
         @forelse ($budgets as $budget)
-            <div class="p-5 space-y-4">
+            <div class="p-5 space-y-4 transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -55,7 +55,7 @@
     </div>
 
     {{-- Desktop table --}}
-    <div class="hidden md:block">
+    <div class="hidden overflow-x-auto md:block">
         <table class="w-full divide-y divide-slate-200 dark:divide-slate-700">
             <thead class="bg-slate-50 dark:bg-slate-900/40">
                 <tr>
@@ -88,8 +88,7 @@
 
             <tbody class="bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700">
                 @forelse ($budgets as $budget)
-                    <tr
-                        class="transition-all duration-200 hover:bg-slate-50 hover:shadow-sm dark:hover:bg-slate-800/50">
+                    <tr class="transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                         <td class="px-6 py-4 text-slate-700 dark:text-slate-300">
                             {{ \Carbon\Carbon::create()->month($budget->month)->format('F') }}
                         </td>
@@ -146,9 +145,9 @@
         </table>
     </div>
 
-    @if ($budgets->hasPages())
+    @if ($budgets->total() > 0)
         <x-slot:footer>
-            <div class="flex justify-end">
+            <div class="flex justify-end" data-ajax-pagination>
                 {{ $budgets->links('vendor.pagination.custom') }}
             </div>
         </x-slot:footer>

@@ -1,9 +1,10 @@
-<x-ui.card title="Expense List" :description="Str::plural('record', $expenses->count(), true) . ' found.'" bodyClass="p-0 overflow-hidden">
+<x-ui.card title="Expense List" :description="Str::plural('record', method_exists($expenses, 'total') ? $expenses->total() : $expenses->count(), true) .
+    ' found.'" bodyClass="p-0 overflow-hidden">
 
     {{-- Mobile cards --}}
     <div class="divide-y divide-slate-100 dark:divide-slate-700 md:hidden">
         @forelse ($expenses as $expense)
-            <div class="p-5 space-y-3">
+            <div class="p-5 space-y-3 transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
                         <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -56,7 +57,7 @@
 
             <tbody class="bg-white divide-y divide-slate-100 dark:divide-slate-700 dark:bg-slate-800">
                 @forelse ($expenses as $expense)
-                    <tr class="transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <tr class="transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                         <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
                             {{ \Carbon\Carbon::parse($expense->expense_date)->format('d/m/Y') }}
                         </td>
@@ -84,4 +85,11 @@
             </tbody>
         </table>
     </div>
+    @if (method_exists($expenses, 'total') && $expenses->total() > 0)
+        <x-slot:footer>
+            <div class="flex justify-end" data-ajax-pagination>
+                {{ $expenses->links('vendor.pagination.custom') }}
+            </div>
+        </x-slot:footer>
+    @endif
 </x-ui.card>

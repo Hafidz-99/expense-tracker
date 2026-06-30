@@ -83,6 +83,10 @@ class BudgetController extends Controller
             ]
         );
 
+        if ($request->ajax()) {
+            return view('budgets.partials.budget-list', compact('budgets'));
+        }
+
         $currentMonth = now()->month;
         $currentYear = now()->year;
 

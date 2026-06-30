@@ -24,7 +24,13 @@ class ReportController extends Controller
 {
     public function index(Request $request): View
     {
-        return view('reports.index', $this->getReportData($request));
+        $data = $this->getReportData($request, true);
+
+        if ($request->ajax()) {
+            return view('reports.partials.expense-list', $data);
+        }
+
+        return view('reports.index', $data);
     }
 
     public function print(Request $request): View
@@ -50,7 +56,7 @@ class ReportController extends Controller
         );
     }
 
-    private function getReportData(Request $request): array
+    private function getReportData(Request $request, bool $paginateExpenses = false): array
     {
         $userId = Auth::id();
 
@@ -109,12 +115,16 @@ class ReportController extends Controller
             default => $query->orderByDesc('expense_date')->orderByDesc('id'),
         };
 
-        $expenses = $query->get();
+        $allExpenses = (clone $query)->get();
 
-        $totalSpending = $expenses->sum('amount');
-        $totalTransactions = $expenses->count();
+        $expenses = $paginateExpenses
+            ? (clone $query)->paginate(10, ['*'], 'expense_page')->withQueryString()
+            : $allExpenses;
 
-        $categoryReports = $expenses
+        $totalSpending = $allExpenses->sum('amount');
+        $totalTransactions = $allExpenses->count();
+
+        $categoryReports = $allExpenses
             ->groupBy('category_id')
             ->map(function ($items) use ($totalSpending) {
                 $category = $items->first()->category;
