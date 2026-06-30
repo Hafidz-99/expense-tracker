@@ -7,7 +7,7 @@
 
     @forelse ($recentExpenses as $expense)
         <div
-            class="flex flex-col gap-4 px-6 py-4 transition-all duration-200 border-b border-slate-100 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/50 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
+            class="flex flex-col gap-4 px-5 py-5 transition-colors duration-150 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/40 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
                 <div class="flex items-center gap-2">
                     <x-ui.badge

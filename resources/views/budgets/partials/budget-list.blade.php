@@ -3,7 +3,7 @@
     {{-- Mobile cards --}}
     <div class="divide-y divide-slate-100 dark:divide-slate-700 md:hidden">
         @forelse ($budgets as $budget)
-            <div class="p-5 space-y-4 transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40">
+            <div class="p-5 space-y-4 transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-700/40">
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -86,9 +86,9 @@
                 </tr>
             </thead>
 
-            <tbody class="bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700">
+            <tbody class="bg-white divide-y divide-slate-100 dark:divide-slate-700 dark:bg-slate-800">
                 @forelse ($budgets as $budget)
-                    <tr class="transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                    <tr class="transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-700/40">
                         <td class="px-6 py-4 text-slate-700 dark:text-slate-300">
                             {{ \Carbon\Carbon::create()->month($budget->month)->format('F') }}
                         </td>

@@ -30,7 +30,7 @@
         </div>
     </x-slot>
 
-    <div class="space-y-6">
+    <div class="space-y-4">
         @include('dashboard.widgets.statistics')
 
         @php
@@ -39,13 +39,13 @@
         @endphp
 
         @if ($showBudgetProgress || $showCategoryBreakdown)
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div class="grid items-stretch grid-cols-1 gap-6 lg:grid-cols-3">
                 @if ($showBudgetProgress && $showCategoryBreakdown)
-                    <div class="lg:col-span-2">
+                    <div class="h-full lg:col-span-2">
                         @include('dashboard.widgets.budget-progress')
                     </div>
 
-                    <div>
+                    <div class="h-full">
                         @include('dashboard.widgets.category-breakdown')
                     </div>
                 @elseif ($showBudgetProgress)

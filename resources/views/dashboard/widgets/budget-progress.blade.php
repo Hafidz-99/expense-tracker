@@ -1,4 +1,4 @@
-<x-ui.card title="Monthly Budget" :description="'Budget usage for ' . now()->format('F Y')">
+<x-ui.card title="Monthly Budget" :description="'Budget usage for ' . now()->format('F Y')" class="h-full">
     <x-slot:actions>
         <x-ui.button href="{{ route('budgets.index') }}" variant="secondary" class="w-full sm:w-auto">
             Manage
