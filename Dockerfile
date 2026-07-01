@@ -25,10 +25,13 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install Laravel dependencies and build frontend assets
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist \
-    && if [ -f package-lock.json ]; then npm ci; else npm install; fi \
-    && npm run build \
-    && rm -rf node_modules \
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+RUN npm run build
+
+RUN rm -rf node_modules \
     && mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
