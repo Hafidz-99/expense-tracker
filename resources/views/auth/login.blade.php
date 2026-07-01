@@ -16,6 +16,13 @@
         </div>
     @endif
 
+    @error('login')
+        <div
+            class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
+            {{ $message }}
+        </div>
+    @enderror
+
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
 
@@ -34,18 +41,9 @@
         </div>
 
         <div>
-            <div class="flex items-center justify-between">
-                <label for="password" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
-                    Password
-                </label>
-
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}"
-                        class="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-                        Forgot?
-                    </a>
-                @endif
-            </div>
+            <label for="password" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                Password
+            </label>
 
             <input id="password" type="password" name="password" required autocomplete="current-password"
                 placeholder="Enter your password"
@@ -56,14 +54,23 @@
             @enderror
         </div>
 
-        <label class="flex items-center gap-2">
-            <input id="remember_me" type="checkbox" name="remember" value="1" @checked(old('remember'))
-                class="text-blue-600 bg-white rounded border-slate-300 focus:ring-blue-600 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-blue-400">
+        <div class="flex items-center justify-between gap-4">
+            <label class="flex items-center gap-2">
+                <input id="remember_me" type="checkbox" name="remember" value="1" @checked(old('remember'))
+                    class="text-blue-600 bg-white rounded border-slate-300 focus:ring-blue-600 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-blue-400">
 
-            <span class="text-sm text-slate-600 dark:text-slate-400">
-                Remember me
-            </span>
-        </label>
+                <span class="text-sm text-slate-600 dark:text-slate-400">
+                    Remember me
+                </span>
+            </label>
+
+            @if (Route::has('password.request'))
+                <a href="{{ route('password.request') }}"
+                    class="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                    Forgot password?
+                </a>
+            @endif
+        </div>
 
         <button type="submit"
             class="w-full px-4 py-3 text-sm font-bold text-white transition bg-blue-600 hover:bg-blue-700 rounded-xl">
