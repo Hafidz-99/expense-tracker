@@ -57,7 +57,7 @@
         </div>
 
         <label class="flex items-center gap-2">
-            <input id="remember_me" type="checkbox" name="remember"
+            <input id="remember_me" type="checkbox" name="remember" value="1" @checked(old('remember'))
                 class="text-blue-600 bg-white rounded border-slate-300 focus:ring-blue-600 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-blue-400">
 
             <span class="text-sm text-slate-600 dark:text-slate-400">

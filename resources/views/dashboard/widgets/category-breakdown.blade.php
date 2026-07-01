@@ -42,7 +42,7 @@
             @endforeach
         </div>
     @else
-        <div class="flex flex-1 items-center">
+        <div class="flex flex-1 items-center justify-center">
             <x-ui.empty-state title="No category data" description="Add expenses to see your spending breakdown." />
         </div>
     @endif
