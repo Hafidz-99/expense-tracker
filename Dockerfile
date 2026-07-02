@@ -1,18 +1,28 @@
 FROM php:8.4-fpm-bookworm
 
-# Install system packages, Nginx, PostgreSQL/MySQL PHP drivers, and Node.js 22
+# Install system packages, Node.js, and PHP extension dependencies
 RUN apt-get update && apt-get install -y ca-certificates curl gnupg \
     && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get update && apt-get install -y \
-    nginx \
-    git \
-    zip \
-    unzip \
-    libpq-dev \
-    libzip-dev \
-    gettext-base \
-    nodejs \
-    && docker-php-ext-install pdo_mysql pdo_pgsql zip \
+        nginx \
+        git \
+        zip \
+        unzip \
+        libpq-dev \
+        libzip-dev \
+        libicu-dev \
+        libonig-dev \
+        libxml2-dev \
+        gettext-base \
+        nodejs \
+    && docker-php-ext-install \
+        pdo_mysql \
+        pdo_pgsql \
+        zip \
+        mbstring \
+        intl \
+        bcmath \
+        opcache \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,13 +34,15 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
-# Install Laravel dependencies and build frontend assets
+# Install Laravel dependencies without running artisan scripts during image build
 RUN composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --prefer-dist
 
+# Build frontend assets
 RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
 RUN npm run build
 
+# Prepare Laravel writable directories
 RUN rm -rf node_modules \
     && mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
