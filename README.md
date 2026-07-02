@@ -162,34 +162,18 @@ The project includes authentication, password reset, reusable Blade components, 
 
 ## Screenshots
 
-Screenshots will be added after final UI testing.
+Screenshots from the current deployed version of the application.
 
-Suggested folder:
-
-```txt
-docs/screenshots/
-```
-
-Suggested screenshots:
-
-| Page         | Preview                           |
-| ------------ | --------------------------------- |
-| Welcome Page | `docs/screenshots/welcome.png`    |
-| Login Page   | `docs/screenshots/login.png`      |
-| Dashboard    | `docs/screenshots/dashboard.png`  |
-| Expenses     | `docs/screenshots/expenses.png`   |
-| Categories   | `docs/screenshots/categories.png` |
-| Budgets      | `docs/screenshots/budgets.png`    |
-| Reports      | `docs/screenshots/reports.png`    |
-| Settings     | `docs/screenshots/settings.png`   |
-| Dark Mode    | `docs/screenshots/dark-mode.png`  |
-| Mobile View  | `docs/screenshots/mobile.png`     |
-
-Example usage after adding screenshots:
-
-```md
-![Dashboard Screenshot](docs/screenshots/dashboard.png)
-```
+| Page         | Screenshot                                     |
+| ------------ | ---------------------------------------------- |
+| Welcome Page | ![Welcome Page](docs/screenshots/welcome.png)  |
+| Login Page   | ![Login Page](docs/screenshots/login.png)      |
+| Dashboard    | ![Dashboard](docs/screenshots/dashboard.png)   |
+| Expenses     | ![Expenses](docs/screenshots/expenses.png)     |
+| Categories   | ![Categories](docs/screenshots/categories.png) |
+| Budgets      | ![Budgets](docs/screenshots/budgets.png)       |
+| Reports      | ![Reports](docs/screenshots/reports.png)       |
+| Settings     | ![Settings](docs/screenshots/settings.png)     |
 
 ---
 
@@ -652,54 +636,6 @@ Allows users to manage app preferences such as theme, currency, dashboard displa
 ### Authentication Module
 
 Handles user registration, login, logout, remember me, forgot password, reset password, and Mailtrap-based email testing.
-
----
-
-## Development Progress
-
-Current status: **Phase 9 — Testing, Optimization, Deployment, and Final Portfolio Polish**
-
-Completed phases:
-
-- Phase 1 — Project Setup
-- Phase 2 — Categories and Expenses
-- Phase 3 — Dashboard
-- Phase 4 — Budget Management
-- Phase 5 — Reports and Export
-- Phase 6 — Search, Filtering, Sorting, and Pagination
-- Phase 7 — UI / UX Polish
-- Phase 8 — Settings
-- Phase 9 — Auth flow polish, dark mode support, pagination polish, deployment, demo data, and final QA
-
-Remaining final polish:
-
-- Final validation message check
-- Final empty state check
-- Final dark mode scan
-- Final mobile responsive scan
-- Screenshots
-- Portfolio write-up
-
----
-
-## Git Commit Style
-
-This project follows a clean commit message style:
-
-```txt
-chore: setup/configuration changes
-feat: new functionality
-refactor: code restructuring
-style: UI/UX or visual polish
-fix: bug fixes
-docs: documentation updates
-```
-
-Example:
-
-```bash
-git commit -m "docs: update project readme"
-```
 
 ---
 
