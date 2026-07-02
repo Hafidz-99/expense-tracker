@@ -14,7 +14,7 @@ This project helps users record daily expenses, manage categories, track monthly
 
 ## Live Demo
 
-**Live URL:** `https://expense-tracker-0thm.onrender.com`
+**Live URL:** https://expense-tracker-0thm.onrender.com
 
 The application is hosted on Render free tier, so the first visit may take a short moment to load if the service is sleeping.
 
