@@ -25,7 +25,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install Laravel dependencies and build frontend assets
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+RUN composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --prefer-dist
 
 RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
