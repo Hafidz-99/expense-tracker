@@ -41,8 +41,6 @@ Password: password
 - [Deployment Notes](#deployment-notes)
 - [Useful Commands](#useful-commands)
 - [Project Structure](#project-structure)
-- [Development Progress](#development-progress)
-- [Git Commit Style](#git-commit-style)
 - [Security Notes](#security-notes)
 - [Portfolio Purpose](#portfolio-purpose)
 
