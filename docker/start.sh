@@ -7,8 +7,10 @@ envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.
 
 cd /var/www/html
 
+php artisan package:discover --ansi
 php artisan storage:link || true
 php artisan migrate --force
+
 php artisan config:cache
 php artisan view:cache
 
