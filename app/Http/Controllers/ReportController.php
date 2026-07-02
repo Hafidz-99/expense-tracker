@@ -151,18 +151,22 @@ class ReportController extends Controller
 
         $year = $selectedDate->year;
 
-        $monthlyTrend = Expense::where('user_id', $userId)
+        $monthlyExpenses = Expense::where('user_id', $userId)
             ->whereYear('expense_date', $year)
-            ->selectRaw('MONTH(expense_date) as month, SUM(amount) as total')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get()
-            ->map(function ($item) use ($year) {
+            ->get(['expense_date', 'amount']);
+
+        $monthlyTrend = $monthlyExpenses
+            ->groupBy(function ($expense) {
+                return Carbon::parse($expense->expense_date)->month;
+            })
+            ->map(function ($items, $month) use ($year) {
                 return [
-                    'month' => Carbon::create($year, $item->month, 1)->format('F'),
-                    'total' => $item->total,
+                    'month' => Carbon::create($year, (int) $month, 1)->format('F'),
+                    'total' => $items->sum('amount'),
                 ];
-            });
+            })
+            ->sortKeys()
+            ->values();
 
         $perPage = 5;
         $currentPage = request()->input('trend_page', 1);
