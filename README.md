@@ -98,14 +98,16 @@ The project includes authentication, password reset, reusable Blade components, 
 
 - Laravel 13
 - PHP
-- MySQL
 - Blade
 - Tailwind CSS
 - Laravel Breeze
 - Mailtrap SMTP Sandbox
 - Git
 - GitHub
-- Docker for local database services
+- MySQL for local development
+- PostgreSQL via Neon for production database
+- Render for deployment
+- Docker for deployment setup
 
 ## Requirements
 
@@ -169,21 +171,35 @@ php artisan key:generate
 
 Update your `.env` file.
 
-Example local configuration:
+## Local Development Database
+
+```md
+## Deployment Notes
+
+The application is deployed on Render using Docker. Frontend assets are built during deployment, and Laravel migrations are executed automatically when the service starts.
+
+Because production uses PostgreSQL, database queries are written to avoid MySQL-only functions where possible.
+```
+
+
+This project uses MySQL locally through Docker.
+The deployed version uses PostgreSQL through Neon.
 
 ```env
-APP_NAME="Personal Expense Tracker"
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://expense-tracker.test
-
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=expense_tracker
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD=secret
+
+DB_CONNECTION=pgsql
+DB_HOST=your-neon-direct-host
+DB_PORT=5432
+DB_DATABASE=expense_tracker
+DB_USERNAME=your-neon-username
+DB_PASSWORD=your-neon-password
+DB_SSLMODE=require
 
 MAIL_MAILER=smtp
 MAIL_SCHEME=null
