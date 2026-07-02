@@ -13,8 +13,12 @@ RUN apt-get update && apt-get install -y ca-certificates curl gnupg \
         libicu-dev \
         libonig-dev \
         libxml2-dev \
+        libpng-dev \
+        libjpeg62-turbo-dev \
+        libfreetype6-dev \
         gettext-base \
         nodejs \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo_mysql \
         pdo_pgsql \
@@ -23,6 +27,7 @@ RUN apt-get update && apt-get install -y ca-certificates curl gnupg \
         intl \
         bcmath \
         opcache \
+        gd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
