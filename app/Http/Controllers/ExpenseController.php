@@ -30,13 +30,17 @@ class ExpenseController extends Controller
             'sort' => ['nullable', 'in:latest,oldest,highest,lowest'],
         ]);
 
-        $selectedMonth = (int) ($request->month ?? now()->month);
-        $selectedYear = (int) ($request->year ?? now()->year);
+        $selectedMonth = $request->filled('month') ? (int) $request->month : null;
+        $selectedYear = $request->filled('year') ? (int) $request->year : null;
 
         $expensesQuery = Expense::with('category')
             ->where('user_id', $userId)
-            ->whereMonth('expense_date', $selectedMonth)
-            ->whereYear('expense_date', $selectedYear)
+            ->when($selectedMonth, function ($query) use ($selectedMonth) {
+                $query->whereMonth('expense_date', $selectedMonth);
+            })
+            ->when($selectedYear, function ($query) use ($selectedYear) {
+                $query->whereYear('expense_date', $selectedYear);
+            })
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->where('description', 'like', '%'.$request->search.'%');
             })
@@ -63,8 +67,21 @@ class ExpenseController extends Controller
         $monthlySummary = Expense::selectRaw('category_id, SUM(amount) as total')
             ->with('category')
             ->where('user_id', $userId)
-            ->whereMonth('expense_date', $selectedMonth)
-            ->whereYear('expense_date', $selectedYear)
+            ->when($selectedMonth, function ($query) use ($selectedMonth) {
+                $query->whereMonth('expense_date', $selectedMonth);
+            })
+            ->when($selectedYear, function ($query) use ($selectedYear) {
+                $query->whereYear('expense_date', $selectedYear);
+            })
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('description', 'like', '%'.$request->search.'%');
+            })
+            ->when($request->filled('category_id'), function ($query) use ($request, $userId) {
+                $query->whereHas('category', function ($categoryQuery) use ($request, $userId) {
+                    $categoryQuery->where('id', $request->category_id)
+                        ->where('user_id', $userId);
+                });
+            })
             ->groupBy('category_id')
             ->orderByDesc('total')
             ->limit(7)

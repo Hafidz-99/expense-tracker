@@ -9,6 +9,19 @@ Personal Expense Tracker is a Laravel portfolio project focused on practical per
 
 The project includes authentication, password reset, reusable Blade components, responsive layouts, dark mode support, AJAX pagination, settings management, and Mailtrap SMTP integration for development email testing.
 
+## Live Demo
+
+Live URL: https://your-app-name.onrender.com
+
+Note: The app is hosted on Render free tier, so the first load may take a short moment if the service is sleeping.
+
+## Demo Account
+
+Email: demo@example.com  
+Password: password
+
+Note: The app is hosted on Render free tier, so the first visit may take a short moment to load if the service is sleeping.
+
 ## Features
 
 ### Authentication
@@ -180,7 +193,6 @@ The application is deployed on Render using Docker. Frontend assets are built du
 
 Because production uses PostgreSQL, database queries are written to avoid MySQL-only functions where possible.
 ```
-
 
 This project uses MySQL locally through Docker.
 The deployed version uses PostgreSQL through Neon.

@@ -1,6 +1,6 @@
 <x-ui.card title="Search & Filter" description="Search expenses, refine the report, and export the results.">
     <form method="GET" action="{{ route('reports.index') }}">
-        <div class="grid grid-cols-1 gap-5 lg:grid-cols-6">
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-7">
             <div class="lg:col-span-2">
                 <x-ui.label for="search">
                     Search
@@ -15,7 +15,27 @@
                     Month
                 </x-ui.label>
 
-                <x-ui.input id="month" type="month" name="month" value="{{ $selectedMonth }}" />
+                <x-ui.select id="month" name="month">
+                    @foreach (range(1, 12) as $month)
+                        <option value="{{ $month }}" @selected((int) $selectedMonth === $month)>
+                            {{ \Carbon\Carbon::create(null, $month, 1)->format('F') }}
+                        </option>
+                    @endforeach
+                </x-ui.select>
+            </div>
+
+            <div>
+                <x-ui.label for="year">
+                    Year
+                </x-ui.label>
+
+                <x-ui.select id="year" name="year">
+                    @foreach (range(now()->year, 2000) as $year)
+                        <option value="{{ $year }}" @selected((int) $selectedYear === $year)>
+                            {{ $year }}
+                        </option>
+                    @endforeach
+                </x-ui.select>
             </div>
 
             <div>

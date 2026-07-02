@@ -61,7 +61,8 @@ class ReportController extends Controller
         $userId = Auth::id();
 
         $request->validate([
-            'month' => ['nullable', 'date_format:Y-m'],
+            'month' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:'.now()->year],
             'category_id' => [
                 'nullable',
                 Rule::exists('categories', 'id')->where('user_id', $userId),
@@ -72,14 +73,15 @@ class ReportController extends Controller
             'sort' => ['nullable', 'in:latest,oldest,highest,lowest'],
         ]);
 
-        $selectedMonth = $request->input('month', now()->format('Y-m'));
+        $selectedMonth = (int) ($request->month ?? now()->month);
+        $selectedYear = (int) ($request->year ?? now()->year);
         $selectedCategory = $request->input('category_id');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $search = $request->input('search');
         $sort = $request->input('sort', 'latest');
 
-        $selectedDate = Carbon::createFromFormat('Y-m', $selectedMonth);
+        $selectedDate = Carbon::create($selectedYear, $selectedMonth, 1);
 
         $categories = Category::where('user_id', $userId)
             ->orderBy('name')
@@ -189,6 +191,7 @@ class ReportController extends Controller
 
         return [
             'selectedMonth' => $selectedMonth,
+            'selectedYear' => $selectedYear,
             'selectedCategory' => $selectedCategory,
             'startDate' => $startDate,
             'endDate' => $endDate,
