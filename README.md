@@ -132,16 +132,13 @@ The project includes authentication, password reset, reusable Blade components, 
 - Search and sort report records
 - PDF export
 - Excel export
-- CSV import
+- CSV expense import
 - Downloadable CSV import template
 - AJAX pagination
 
 ### Settings
 
-- User preference settings
 - Theme preference support
-- Currency setting
-- Dashboard display options
 - Reset settings option
 
 ### UI / UX
@@ -451,21 +448,23 @@ To test the password reset flow:
 
 ---
 
-## Email Verification Note
+## Email Features Note
 
-Email verification is currently postponed.
+Email-related features are currently postponed for production use.
 
 Reason:
 
-- The project currently uses Mailtrap Sandbox for development testing
-- Live email sending usually requires a verified sending domain
-- Email verification can be enabled later during deployment or production mail setup
+- The project currently uses Mailtrap Sandbox for development email testing
+- Production email delivery requires additional SMTP configuration and a verified sending domain
+- Email services will be fully enabled in a future update after configuring a production mail provider
 
 Current behavior:
 
-- Users can register and access the app after logging in
-- Forgot Password and Reset Password still work through Mailtrap Sandbox
-
+- Users can register and access the application without email verification
+- Email verification is currently disabled
+- Forgot Password and Reset Password features are implemented but depend on Mailtrap Sandbox for testing
+- Real email delivery is not configured for production yet
+  
 ---
 
 ## Deployment Notes
@@ -681,6 +680,16 @@ This project was built as a Laravel portfolio project to demonstrate:
 - Git and GitHub workflow
 
 ---
+
+## Future Improvements
+
+- Email Verification
+- Recurring Expenses
+- Expense Attachments
+- Multi-currency Support
+- Dashboard Charts
+- REST API
+- Progressive Web App
 
 ## License
 
